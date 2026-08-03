@@ -2,42 +2,140 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Pro Portfolio</title>
+    <title>Kabir Bhuchar | Portfolio</title>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        :root { --primary: #2563eb; --bg: #f8fafc; --text: #1e293b; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background-color: var(--bg); color: var(--text); }
-        header { background: var(--primary); color: white; padding: 3rem 1rem; text-align: center; }
-        .container { max-width: 800px; margin: -2rem auto 2rem auto; padding: 0 1rem; }
-        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        button { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 5px; font-weight: bold; transition: 0.2s;}
-        button:hover { background: #1d4ed8; transform: translateY(-2px); }
-        #display-area { margin-top: 25px; padding: 20px; background: #f1f5f9; border-left: 5px solid var(--primary); border-radius: 0 8px 8px 0; }
+        /* Full black background and white text styling */
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        /* Navigation bar styling */
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
+        .nav-btn {
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-btn:hover {
+            background-color: #444;
+        }
+        .card {
+            background-color: #111;
+            border: 1px solid #333;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(255,255,255,0.05);
+        }
+        .activity-item {
+            background: #1a1a1a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Portfolio</h1>
-        <p>Interactive, fast, and powered entirely by Python.</p>
-    </header>
 
     <div class="container">
-        <div class="card">
-            <h2>My Projects</h2>
-            <p>Click the buttons below to load my projects dynamically using Python:</p>
-            
-            <button py-click="load_project_1">Project 1</button>
-            <button py-click="load_project_2">Project 2</button>
-            <button py-click="load_project_3">Project 3</button>
-            
-            <div id="display-area">
-                <em>Select a project above to see details...</em>
-            </div>
+        <header>
+            <h1>Kabir Bhuchar</h1>
+            <p>Student | 1545 FIDE Chess Player | 6'0" Center</p>
+        </header>
+
+        <div class="nav-bar">
+            <button class="nav-btn" py-click="show_home">Home</button>
+            <button class="nav-btn" py-click="show_links">My Links</button>
+            <button class="nav-btn" py-click="show_activities">Activities</button>
+        </div>
+
+        <div class="card" id="content-area">
+            Loading Python environment...
         </div>
     </div>
 
-    <script type="py" src="./main.py"></script>
+    <script type="py">
+        from pyscript import document
+
+        # Data for pages
+        pages = {
+            "home": """
+                <h2>Welcome to My World</h2>
+                <p>I balance my time between competitive sports, strategic board games, and writing code.</p>
+                <ul>
+                    <li><strong>Chess Rating:</strong> 1545 FIDE</li>
+                    <li><strong>Basketball:</strong> 6'0" Center</li>
+                    <li><strong>Music:</strong> Violin (Suzuki Book 3)</li>
+                </ul>
+            """,
+            "links": """
+                <h2>Connect With Me</h2>
+                <p><a href="http://ratings.fide.com/profile/498777" target="_blank" style="color: #60a5fa;">♟️ FIDE Profile (1545)</a></p>
+                <p><a href="http://chess.com/member/aajukubaa" target="_blank" style="color: #60a5fa;">♞ Chess.com Profile</a></p>
+                <p><a href="https://github.com/Aajukubaaa" target="_blank" style="color: #60a5fa;">💻 GitHub Repository</a></p>
+                <p><a href="https://www.youtube.com/@Aajukubaa" target="_blank" style="color: #60a5fa;">▶️ YouTube Channel</a></p>
+            """,
+            "activities": """
+                <h2>Extracurricular Activities</h2>
+                <p>Here are some highlights of my achievements outside the classroom:</p>
+                <div class="activity-item">
+                    <h3>🏀 Basketball Tournaments</h3>
+                    <p>Playing competitive matches as a 6'0" Center, focusing on team coordination, defense, and high-pressure tournament performance.</p>
+                </div>
+                <div class="activity-item">
+                    <h3>♟️ Chess Competitions</h3>
+                    <p>Active competitive player maintaining a 1545 FIDE rating, analyzing complex openings, and playing strategic tournament games.</p>
+                </div>
+                <div class="activity-item">
+                    <h3>💻 Coding & Development</h3>
+                    <p>Building automated python scripts, web applications, and deploying custom static pages directly to GitHub Pages.</p>
+                </div>
+            """
+        }
+
+        def update_page(content):
+            content_box = document.querySelector("#content-area")
+            content_box.innerHTML = content
+
+        # Event handlers for navigation buttons
+        def show_home(event):
+            update_page(pages["home"])
+
+        def show_links(event):
+            update_page(pages["links"])
+
+        def show_activities(event):
+            update_page(pages["activities"])
+
+        # Load home page by default when the site opens
+        update_page(pages["home"])
+    </script>
+
 </body>
 </html>
