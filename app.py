@@ -30,8 +30,29 @@ if page == "Home":
 
 # --- PAGE 2: MY LINKS ---
 elif page == "My Links":
-    st.title("Connect With Me")
-    st.write("This is where you will add your Python code to display your Github, YouTube, and Chess profiles!")
+    st.title("🔗 Connect With Me")
+    st.write("Find me across the web on these platforms. Click any button to visit my profile.")
+    
+    # We create a 3-column grid to keep the links organized and visually impressive
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.subheader("Chess")
+        # use_container_width=True makes the buttons expand to fill the column perfectly
+        st.link_button("♟️ FIDE Profile (1545)", "http://ratings.fide.com/profile/498777", use_container_width=True)
+        st.link_button("♞ Chess.com", "http://chess.com/member/aajukubaa", use_container_width=True)
+        st.link_button("♘ Lichess", "http://lichess.org/@/onesandzeros", use_container_width=True)
+        
+    with col2:
+        st.subheader("Coding & Content")
+        st.link_button("💻 GitHub", "https://github.com/Aajukubaaa", use_container_width=True)
+        st.link_button("▶️ YouTube", "https://www.youtube.com/@Aajukubaa", use_container_width=True)
+        
+    with col3:
+        st.subheader("Other Profiles")
+        st.link_button("🎮 Roblox", "http://roblox.com/users/6007529811/profile", use_container_width=True)
+        st.link_button("👕 Vinted", "http://vinted.co.uk/member/284456392", use_container_width=True)
+        st.link_button("📧 Email Me", "mailto:kabirbhuchar@gmail.com", use_container_width=True)
 
 # --- PAGE 3: ACTIVITIES ---
 elif page == "Activities":
