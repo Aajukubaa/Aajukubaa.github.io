@@ -2,10 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>My Python Portfolio</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+        .python-box { background: #f0f8ff; padding: 15px; border-radius: 8px; margin-top: 20px;}
+    </style>
 </head>
 <body>
     <h1>Hello, World!</h1>
     <p>Welcome to my website hosted on GitHub Pages!</p>
+    
+    <div class="python-box">
+        <h3>Live Python Output:</h3>
+        <div id="python-output">Loading Python magic...</div>
+    </div>
+
+    <script type="py">
+        from pyscript import display
+        import datetime
+
+        # Get the current time using standard Python
+        now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Display the result directly on the webpage
+        message = f"🚀 Python is running live in your browser! The time is {now}."
+        display(message, target="python-output")
+    </script>
 </body>
 </html>
