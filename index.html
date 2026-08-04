@@ -31,7 +31,6 @@
         }
         @media (pointer: coarse) {
             #custom-cursor { display: none !important; }
-            #ambient-glow { display: none !important; }
         }
 
         #custom-cursor {
@@ -45,18 +44,6 @@
             z-index: 99999;
             will-change: transform;
             transition: transform 0.05s ease-out;
-        }
-
-        #ambient-glow {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(41, 151, 255, 0.12) 0%, rgba(255, 215, 0, 0.05) 40%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            will-change: transform;
-            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         /* PyScript Loading Splash Screen */
@@ -103,6 +90,7 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
+        /* Fixed Hero Container & Padding to protect the 'r' in Bhuchar */
         .hero-container {
             height: 100vh;
             width: 100%;
@@ -184,27 +172,46 @@
             margin-bottom: 45px;
         }
 
-        /* 2x2 Domain Grid with Glitch-Free In-Place Corner Expansion */
+        /* 2x2 Domain Grid with Smooth CSS Grid Track Expansion (Inverted L-Shape retention) */
         .domain-grid-wrapper {
             position: relative;
             max-width: 1000px;
             margin: 0 auto;
-            min-height: 620px;
         }
 
         .domain-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 290px);
-            gap: 24px;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 290px 290px;
+            gap: 20px;
             width: 100%;
+            transition: grid-template-columns 0.45s cubic-bezier(0.25, 1, 0.5, 1),
+                        grid-template-rows 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Dynamic track expansion on hover keeping all 4 cards visible in an L-shape */
+        .domain-grid:has(#chess:hover) {
+            grid-template-columns: 2.2fr 1fr;
+            grid-template-rows: 2.2fr 1fr;
+        }
+        .domain-grid:has(#basketball:hover) {
+            grid-template-columns: 1fr 2.2fr;
+            grid-template-rows: 2.2fr 1fr;
+        }
+        .domain-grid:has(#coding:hover) {
+            grid-template-columns: 2.2fr 1fr;
+            grid-template-rows: 1fr 2.2fr;
+        }
+        .domain-grid:has(#music:hover) {
+            grid-template-columns: 1fr 2.2fr;
+            grid-template-rows: 1fr 2.2fr;
         }
 
         .pro-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 28px;
-            padding: 36px 28px;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -213,10 +220,8 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             outline: none;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1;
+            /* Smooth transition for expansion & style changes */
+            transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .pro-card:focus-visible {
@@ -244,6 +249,7 @@
             color: #ffffff;
         }
 
+        /* Hidden by default, appears ONLY on hover */
         .card-preview {
             max-height: 0;
             opacity: 0;
@@ -286,44 +292,9 @@
             transition: opacity 0.2s;
         }
 
-        /* Glitch-Free Corner-Anchored Expansion Rules */
-        .pro-card:nth-child(1):hover, .pro-card:nth-child(1):focus {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 50;
+        .pro-card:hover, .pro-card:focus {
             border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
-            background: rgba(18, 18, 20, 0.95);
-        }
-
-        .pro-card:nth-child(2):hover, .pro-card:nth-child(2):focus {
-            position: absolute;
-            top: 0; right: 0;
-            width: 100%; height: 100%;
-            z-index: 50;
-            border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
-            background: rgba(18, 18, 20, 0.95);
-        }
-
-        .pro-card:nth-child(3):hover, .pro-card:nth-child(3):focus {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 50;
-            border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
-            background: rgba(18, 18, 20, 0.95);
-        }
-
-        .pro-card:nth-child(4):hover, .pro-card:nth-child(4):focus {
-            position: absolute;
-            bottom: 0; right: 0;
-            width: 100%; height: 100%;
-            z-index: 50;
-            border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.15);
             background: rgba(18, 18, 20, 0.95);
         }
 
@@ -337,6 +308,7 @@
             opacity: 0;
         }
 
+        /* Standard 3-column or responsive grid for other sections */
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -364,6 +336,7 @@
             transform: translateY(-6px);
         }
 
+        /* Placeholder image / media container */
         .media-placeholder {
             width: 100%;
             height: 160px;
@@ -385,6 +358,7 @@
             color: #ffd700;
         }
 
+        /* Connect Grid Layout */
         .connect-section {
             padding: 70px 5vw;
             background: #050505;
@@ -435,6 +409,7 @@
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
 
+        /* Enhanced Prominent Modal View */
         #detail-view {
             display: none;
             position: fixed;
@@ -535,7 +510,6 @@
 </head>
 <body>
 
-    <div id="ambient-glow"></div>
     <div id="custom-cursor"></div>
 
     <div id="pyscript-loader">
@@ -883,13 +857,14 @@
     </script>
 
     <script>
+        // Hide Loader once window & PyScript runtime initialize
         window.addEventListener('load', () => {
             const loader = document.getElementById('pyscript-loader');
             if (loader) loader.classList.add('loaded');
         });
 
+        // Hardware Accelerated Cursor
         const cursor = document.getElementById("custom-cursor");
-        const glow = document.getElementById("ambient-glow");
         
         document.addEventListener("mousemove", (e) => {
             if (cursor) {
@@ -900,6 +875,7 @@
             }
         });
 
+        // Keyboard Accessibility & Shortcuts (Enter/Space opens cards, Escape closes modal)
         document.querySelectorAll('.pro-card, .standard-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -919,6 +895,7 @@
             }
         });
 
+        // Intersection Observer for Scroll Fade-Ins
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
