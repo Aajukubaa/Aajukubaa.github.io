@@ -23,7 +23,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* 1. TOUCH DEVICE & CURSOR HANDLING */
+        /* Touch Device & Cursor Handling */
         @media (pointer: fine) {
             body, html { cursor: none; }
             a, button, .pro-card, .connect-row { cursor: none !important; }
@@ -31,6 +31,7 @@
         }
         @media (pointer: coarse) {
             #custom-cursor { display: none !important; }
+            #ambient-glow { display: none !important; }
         }
 
         #custom-cursor {
@@ -46,7 +47,20 @@
             transition: transform 0.05s ease-out;
         }
 
-        /* 4. PYSCRIPT LOADING SPLASH SCREEN */
+        /* Ambient Background Glow */
+        #ambient-glow {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(41, 151, 255, 0.12) 0%, rgba(255, 215, 0, 0.05) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* PyScript Loading Splash Screen */
         #pyscript-loader {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -89,7 +103,6 @@
         }
         .card-pressed { animation: pressAnim 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* 5. FINE-TUNED RESPONSIVE HERO & SPECS */
         .hero-container {
             height: 100vh;
             width: 100%;
@@ -97,7 +110,9 @@
             flex-direction: column;
             justify-content: center;
             padding: 0 5vw;
-            background-color: #000000;
+            background-color: transparent;
+            position: relative;
+            z-index: 1;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
@@ -125,6 +140,8 @@
             background: rgba(15, 15, 15, 0.8);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 1;
         }
         .spec-item { text-align: center; flex: 1; min-width: 130px; }
         .spec-value {
@@ -145,6 +162,8 @@
             padding: 90px 5vw;
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .section-header-title {
@@ -168,7 +187,7 @@
             gap: 24px;
         }
 
-        /* 3. ACCESSIBLE CARDS */
+        /* 3D Tilt Cards */
         .pro-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -178,12 +197,14 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(20px);
             outline: none;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
         .pro-card:focus-visible {
             border-color: #ffd700;
@@ -221,7 +242,6 @@
         }
 
         .pro-card:hover, .pro-card:focus {
-            transform: translateY(-6px) scale(1.01);
             border-color: rgba(255, 215, 0, 0.4);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.15);
             background: rgba(255, 255, 255, 0.06);
@@ -232,7 +252,6 @@
         }
 
         .pro-card.card-active {
-            transform: translateY(-8px) scale(1.02);
             box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,215,0,0.12);
             border-color: rgba(255,215,0,0.25);
         }
@@ -241,6 +260,8 @@
             padding: 70px 2.5vw;
             background: #050505;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 1;
         }
 
         .connect-row {
@@ -283,7 +304,7 @@
         .connect-arrow { font-size: 1.3rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-row:hover .connect-arrow { color: #ffd700; transform: translateX(4px); }
 
-        /* 2. ENHANCED MODAL WITH DEEP CONTENT & ACTION BUTTONS */
+        /* Enhanced Modal Styles */
         #detail-view {
             display: none;
             position: fixed;
@@ -343,9 +364,16 @@
             color: #ffffff;
         }
         #detail-content {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             line-height: 1.7;
             color: #a1a1a6;
+        }
+        #detail-content h4 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
         .modal-action-btn {
             display: inline-flex;
@@ -377,12 +405,13 @@
 </head>
 <body>
 
+    <div id="ambient-glow"></div>
+    <div id="custom-cursor"></div>
+
     <div id="pyscript-loader">
         <div class="spinner"></div>
         <div style="font-weight: 600; letter-spacing: 1px; color: #86868b; font-size: 0.9rem;">INITIALIZING PYTHON ENGINE...</div>
     </div>
-
-    <div id="custom-cursor"></div>
 
     <div id="main-view">
         
@@ -417,6 +446,7 @@
             <p class="section-subtitle">Select a capability card below to inspect full specifications.</p>
 
             <div class="tiles-grid">
+                
                 <div class="pro-card" id="chess" tabindex="0" role="button" aria-label="Inspect Chess Profile" py-click="open_category">
                     <span class="card-pill">Strategy</span>
                     <div>
@@ -534,8 +564,20 @@
         categories = {
             "chess": {
                 "title": "CHESS PROFILE",
-                "badge": "STRATEGY & TOURNAMENTS",
-                "content": "<p>Maintains an official 1545 FIDE tournament rating. Focuses heavily on tactical calculation speed, positional structure understanding, and deep opening preparation under tight classical and rapid time controls.</p><a href='http://ratings.fide.com/profile/498777' target='_blank' class='modal-action-btn'>View Official FIDE Record ↗</a>"
+                "badge": "STRATEGY & TOURNAMENTS (1545 FIDE)",
+                "content": """
+                    <h4>1. Opening Repertoire: Aggressive and Direct</h4>
+                    <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.</p>
+                    <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
+                    
+                    <h4>2. Tactical & Dynamic Temperament</h4>
+                    <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
+                    
+                    <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
+                    <p>A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p>
+                    
+                    <a href='http://ratings.fide.com/profile/498777' target='_blank' class='modal-action-btn'>View Official FIDE Record ↗</a>
+                """
             },
             "basketball": {
                 "title": "BASKETBALL ATHLETICS",
@@ -608,20 +650,36 @@
         // Hide Loader once window & PyScript runtime initialize
         window.addEventListener('load', () => {
             const loader = document.getElementById('pyscript-loader');
-            if (loader) {
-                loader.classList.add('loaded');
-            }
+            if (loader) loader.classList.add('loaded');
         });
 
-        // Hardware Accelerated Cursor (Fine pointer only)
+        // Hardware Accelerated Cursor & Ambient Glow
         const cursor = document.getElementById("custom-cursor");
+        const glow = document.getElementById("ambient-glow");
+        
         document.addEventListener("mousemove", (e) => {
             if (cursor) {
                 cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
             }
+            if (glow) {
+                glow.style.transform = `translate(calc(-50% + ${(e.clientX - window.innerWidth/2)*0.05}px), calc(-50% + ${(e.clientY - window.innerHeight/2)*0.05}px))`;
+            }
         });
 
-        // 3. Keyboard Accessibility Support (Enter & Space trigger click on cards)
+        // 3D Tilt Effect on Cards
+        document.querySelectorAll('.pro-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                card.style.transform = `translateY(-6px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.01)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        // Keyboard Accessibility & Shortcuts (Enter/Space opens cards, Escape closes modal)
         document.querySelectorAll('.pro-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -629,6 +687,17 @@
                     card.click();
                 }
             });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const detail = document.getElementById('detail-view');
+                if (detail && detail.classList.contains('modal-open')) {
+                    // Trigger close by querying the close button
+                    const closeBtn = detail.querySelector('.close-btn');
+                    if (closeBtn) closeBtn.click();
+                }
+            }
         });
 
         // Intersection Observer for Scroll Fade-Ins
