@@ -54,7 +54,17 @@
             transition: transform 0.05s ease-out;
         }
 
-        /* 3. UPDATED HERO SECTION (Syne Typography & Full Screen) */
+        /* 3. CARD PRESS ANIMATION */
+        @keyframes pressAnim {
+            0% { transform: scale(1); }
+            40% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        .card-pressed {
+            animation: pressAnim 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* 4. UPDATED HERO SECTION (Syne Typography & Full Screen) */
         .hero-container {
             height: 100vh;
             width: 100%;
@@ -83,7 +93,7 @@
             display: block;
         }
 
-        /* 4. APPLE SPECS STRIP */
+        /* 5. APPLE SPECS STRIP */
         .specs-strip {
             display: flex;
             justify-content: space-around;
@@ -110,7 +120,7 @@
             margin-top: 4px;
         }
 
-        /* 5. MAIN SHOWCASE GRID */
+        /* 6. MAIN SHOWCASE GRID */
         .section-container {
             padding: 100px 5vw;
             max-width: 1400px;
@@ -203,7 +213,7 @@
             color: #ffd700;
         }
 
-        /* 6. CONNECT ROWS */
+        /* 7. CONNECT ROWS */
         .connect-section {
             padding: 80px 2.5vw;
             background: #050505;
@@ -258,7 +268,7 @@
             transform: translateX(4px);
         }
 
-        /* 7. DETAIL SHEET MODAL */
+        /* 8. DETAIL SHEET MODAL */
         #detail-view {
             display: none;
             position: fixed;
@@ -324,7 +334,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* 8. SCROLL FADE-IN EFFECT */
+        /* 9. SCROLL FADE-IN EFFECT */
         .fade-in {
             opacity: 0;
             transform: translateY(40px);
@@ -356,7 +366,7 @@
                 <div class="spec-label">FIDE Rating</div>
             </div>
             <div class="spec-item">
-                <div class="spec-value">6'0"</div>
+                <div class="spec-value">182 centimeters</div>
                 <div class="spec-label">Basketball Center</div>
             </div>
             <div class="spec-item">
@@ -491,23 +501,29 @@
 
         categories = {
             "chess": {
-                "title": "CHESS & STRATEGY",
-                "badge": "1545 OFFICIAL FIDE RATING",
-                "content": "<p>Competitive strategy maintained by <span class='kabir-cursive'>Kabir</span> with an official <strong>1545 FIDE rating</strong>. Focused on tactical openings, deep positional sacrifices, and endgame precision under high-pressure time controls.</p><div class='detail-spec-box'><strong>FIDE Player ID:</strong> 498777</div>"
+                "title": "CHESS",
+                "badge": "STRATEGY",
+                "content": """<p>1. Opening Repertoire: Aggressive and Direct<br>
+With the White Pieces: I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.<br><br>
+With the Black Pieces: I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).<br><br>
+2. Tactical & Dynamic Temperament<br>
+My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.<br><br>
+3. Fast-Paced & Time-Pressure Resilience<br>
+A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p><div class='detail-spec-box'><strong>FIDE Player ID:</strong> 498777</div>"""
             },
             "basketball": {
-                "title": "BASKETBALL ATHLETICS",
-                "badge": "6'0\" CENTER POSITION",
-                "content": "<p>Athletic performance led by <span class='kabir-cursive'>Kabir</span>. Playing Center with a focus on interior paint defense, explosive rebounding, team communication, and aggressive post play.</p><div class='detail-spec-box'><strong>Focus:</strong> Paint Defense & Board Rebounding</div>"
+                "title": "BASKETBALL",
+                "badge": "ATHLETICS",
+                "content": "<p>Athletic performance led by <span class='kabir-cursive'>Kabir</span>. Playing Center with a focus on interior paint defense, explosive rebounding, team communication, and aggressive post play.</p><div class='detail-spec-box'><strong>Measurements:</strong> 182 cm, Positive wingspan</div>"
             },
             "coding": {
-                "title": "PYTHON & SOFTWARE",
-                "badge": "ENGINEERING ARCHITECTURE",
+                "title": "CODING",
+                "badge": "ENGINEERING",
                 "content": "<p>Software systems built by <span class='kabir-cursive'>Kabir</span>. Developing automated Python backend scripts, single-page web applications, and deploying static builds to GitHub Pages.</p><div class='detail-spec-box'><strong>Tech Stack:</strong> Python 3.12, PyScript, HTML5/CSS3</div>"
             },
             "music": {
-                "title": "VIOLIN & MUSIC",
-                "badge": "SUZUKI REPERTOIRE",
+                "title": "MUSIC",
+                "badge": "PERFORMANCE",
                 "content": "<p>Musical discipline mastered by <span class='kabir-cursive'>Kabir</span>. Currently performing Suzuki Book 3 classical pieces, focusing on tone quality, bowing technique, and rhythm.</p><div class='detail-spec-box'><strong>Level:</strong> Suzuki Book 3</div>"
             },
             "presentations": {
@@ -523,7 +539,13 @@
         }
 
         def open_category(event):
-            cat_id = event.currentTarget.id
+            card = event.currentTarget
+            cat_id = card.id
+            
+            # Trigger card press animation
+            card.classList.add("card-pressed")
+            js.setTimeout(js.eval("function(c){ c.classList.remove('card-pressed'); }"), 300, card)
+
             if cat_id in categories:
                 item = categories[cat_id]
                 document.querySelector("#detail-title").innerHTML = item["title"]
