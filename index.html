@@ -26,7 +26,7 @@
         /* Touch Device & Cursor Handling */
         @media (pointer: fine) {
             body, html { cursor: none; }
-            a, button, .pro-card, .connect-row { cursor: none !important; }
+            a, button, .pro-card, .connect-card { cursor: none !important; }
             #custom-cursor { display: block; }
         }
         @media (pointer: coarse) {
@@ -95,32 +95,32 @@
             padding: 0 2px;
         }
 
+        /* Enhanced Card Press Animation */
         @keyframes pressAnim {
             0% { transform: scale(1); }
-            40% { transform: scale(0.95); }
+            30% { transform: scale(0.92); filter: brightness(1.2); }
             100% { transform: scale(1); }
         }
-        .card-pressed { animation: pressAnim 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* Fixed Hero Container & Padding to prevent cut-off */
+        /* Fixed Hero Container & Padding to protect the 'r' in Bhuchar */
         .hero-container {
             height: 100vh;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 7vw;
+            padding: 0 8vw;
             background-color: transparent;
             position: relative;
             z-index: 1;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             box-sizing: border-box;
-            overflow: visible;
         }
 
         .hero-title {
             font-family: 'Syne', sans-serif;
-            font-size: clamp(3rem, 10vw, 12rem);
+            font-size: clamp(3rem, 9.5vw, 11rem);
             font-weight: 800;
             line-height: 0.9;
             text-transform: uppercase;
@@ -129,7 +129,8 @@
             background: linear-gradient(180deg, #ffffff 0%, #86868b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            word-break: break-word;
+            word-break: normal;
+            overflow-wrap: normal;
         }
         .hero-title span { display: block; }
 
@@ -163,7 +164,7 @@
 
         .section-container {
             padding: 90px 5vw;
-            max-width: 1400px;
+            max-width: 1300px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
@@ -184,31 +185,42 @@
             margin-bottom: 45px;
         }
 
-        .tiles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
+        /* 2x2 Domain Grid with In-Place Hover Expansion */
+        .domain-grid-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 620px;
         }
 
-        /* Card Expansion on Hover & 3D Tilt */
+        .domain-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 290px);
+            gap: 24px;
+            width: 100%;
+        }
+
         .pro-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 28px;
             padding: 36px 28px;
-            min-height: 280px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             outline: none;
             transform-style: preserve-3d;
             perspective: 1000px;
+            /* Smooth transition for in-place expansion without reflowing other cards */
+            transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
         }
+
         .pro-card:focus-visible {
             border-color: #ffd700;
             box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
@@ -234,7 +246,7 @@
             color: #ffffff;
         }
 
-        /* Hover expandable content description */
+        /* Hidden by default, appears ONLY on hover */
         .card-preview {
             max-height: 0;
             opacity: 0;
@@ -242,17 +254,12 @@
             transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin-top 0.3s ease;
             margin-top: 0;
         }
-        .pro-card:hover .card-preview, .pro-card:focus-within .card-preview {
-            max-height: 140px;
-            opacity: 1;
-            margin-top: 12px;
-        }
 
         .card-preview p {
             color: #a1a1a6;
             font-size: 0.95rem;
             line-height: 1.5;
-            margin: 0 0 12px 0;
+            margin: 0 0 14px 0;
         }
 
         .card-action-btn {
@@ -263,13 +270,13 @@
             font-weight: 600;
             color: #000000;
             background: #ffd700;
-            padding: 8px 16px;
+            padding: 9px 18px;
             border-radius: 980px;
             transition: transform 0.2s, background 0.2s;
         }
         .card-action-btn:hover {
             background: #ffffff;
-            transform: scale(1.05);
+            transform: scale(1.04);
         }
 
         .card-action-default {
@@ -281,13 +288,78 @@
             color: #2997ff;
             transition: opacity 0.2s;
         }
-        .pro-card:hover .card-action-default { opacity: 0; }
 
+        /* Hover Expansion: Takes up 2x2 container space in place while others form L-shape underneath */
         .pro-card:hover, .pro-card:focus {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
+            background: rgba(18, 18, 20, 0.95);
+            transform: scale(1.01);
+        }
+
+        .pro-card:hover .card-preview, .pro-card:focus-within .card-preview {
+            max-height: 160px;
+            opacity: 1;
+            margin-top: 14px;
+        }
+
+        .pro-card:hover .card-action-default {
+            opacity: 0;
+        }
+
+        /* Standard 3-column or responsive grid for other sections */
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .standard-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 36px 28px;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+        }
+        .standard-card:hover {
             border-color: rgba(255, 215, 0, 0.4);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 215, 0, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
             background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-8px) scale(1.02);
+            transform: translateY(-6px);
+        }
+
+        /* Placeholder image / media container */
+        .media-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 16px 0;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .standard-card:hover .media-placeholder {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.02);
+            color: #ffd700;
         }
 
         /* Connect Grid Layout */
@@ -303,7 +375,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 16px;
-            max-width: 1400px;
+            max-width: 1300px;
             margin: 0 auto;
         }
 
@@ -341,7 +413,7 @@
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
 
-        /* Enhanced Prominent Modal Animation */
+        /* Enhanced Prominent Modal View */
         #detail-view {
             display: none;
             position: fixed;
@@ -367,7 +439,7 @@
             padding: 50px;
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 215, 0, 0.1);
             position: relative;
-            transform: scale(0.92) translateY(30px);
+            transform: scale(0.9) translateY(30px);
             opacity: 0;
             transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
@@ -480,96 +552,104 @@
 
         <section class="section-container fade-in">
             <h2 class="section-header-title">The Domain of <span class="kabir-cursive">Kabir</span></h2>
-            <p class="section-subtitle">Hover over any capability card to inspect quick specs or click to dive deeper.</p>
+            <p class="section-subtitle">Hover over any card to expand quick specs or click to inspect full details.</p>
 
-            <div class="tiles-grid">
-                
-                <div class="pro-card" id="chess" tabindex="0" role="button" aria-label="Inspect Chess Profile" py-click="open_category">
-                    <span class="card-pill">Strategy</span>
-                    <div>
-                        <h3>Chess</h3>
-                        <div class="card-preview">
-                            <p>1545 FIDE tournament rating specializing in sharp tactical combat, aggressive 1.e4 openings, and rapid time scrambles.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
+            <div class="domain-grid-wrapper">
+                <div class="domain-grid">
+                    
+                    <div class="pro-card" id="chess" tabindex="0" role="button" aria-label="Inspect Chess Profile" py-click="open_category">
+                        <span class="card-pill">Strategy</span>
+                        <div>
+                            <h3>Chess</h3>
+                            <div class="card-preview">
+                                <p>1545 FIDE tournament rating specializing in sharp tactical combat, aggressive 1.e4 openings, and rapid time scrambles.</p>
+                                <span class="card-action-btn">Click to view more info →</span>
+                            </div>
                         </div>
+                        <div class="card-action-default">Inspect Profile <span>→</span></div>
                     </div>
-                    <div class="card-action-default">Inspect Profile <span>→</span></div>
-                </div>
 
-                <div class="pro-card" id="basketball" tabindex="0" role="button" aria-label="Inspect Basketball Profile" py-click="open_category">
-                    <span class="card-pill">Athletics</span>
-                    <div>
-                        <h3>Basketball</h3>
-                        <div class="card-preview">
-                            <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding under pressure.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
+                    <div class="pro-card" id="basketball" tabindex="0" role="button" aria-label="Inspect Basketball Profile" py-click="open_category">
+                        <span class="card-pill">Athletics</span>
+                        <div>
+                            <h3>Basketball</h3>
+                            <div class="card-preview">
+                                <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding under pressure.</p>
+                                <span class="card-action-btn">Click to view more info →</span>
+                            </div>
                         </div>
+                        <div class="card-action-default">Inspect Profile <span>→</span></div>
                     </div>
-                    <div class="card-action-default">Inspect Profile <span>→</span></div>
-                </div>
 
-                <div class="pro-card" id="coding" tabindex="0" role="button" aria-label="Inspect Coding Profile" py-click="open_category">
-                    <span class="card-pill">Engineering</span>
-                    <div>
-                        <h3>Coding</h3>
-                        <div class="card-preview">
-                            <p>Building automated Python backends, web micro-apps, and deploying dynamic interfaces straight to GitHub Pages.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
+                    <div class="pro-card" id="coding" tabindex="0" role="button" aria-label="Inspect Coding Profile" py-click="open_category">
+                        <span class="card-pill">Engineering</span>
+                        <div>
+                            <h3>Coding</h3>
+                            <div class="card-preview">
+                                <p>Building automated Python backends, web micro-apps, and deploying dynamic interfaces straight to GitHub Pages.</p>
+                                <span class="card-action-btn">Click to view more info →</span>
+                            </div>
                         </div>
+                        <div class="card-action-default">Inspect Profile <span>→</span></div>
                     </div>
-                    <div class="card-action-default">Inspect Profile <span>→</span></div>
-                </div>
 
-                <div class="pro-card" id="music" tabindex="0" role="button" aria-label="Inspect Music Profile" py-click="open_category">
-                    <span class="card-pill">Performance</span>
-                    <div>
-                        <h3>Music</h3>
-                        <div class="card-preview">
-                            <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire with clean tone articulation.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
+                    <div class="pro-card" id="music" tabindex="0" role="button" aria-label="Inspect Music Profile" py-click="open_category">
+                        <span class="card-pill">Performance</span>
+                        <div>
+                            <h3>Music</h3>
+                            <div class="card-preview">
+                                <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire with clean tone articulation.</p>
+                                <span class="card-action-btn">Click to view more info →</span>
+                            </div>
                         </div>
+                        <div class="card-action-default">Inspect Profile <span>→</span></div>
                     </div>
-                    <div class="card-action-default">Inspect Profile <span>→</span></div>
-                </div>
 
+                </div>
             </div>
         </section>
 
         <section class="section-container fade-in" style="padding-top: 0;">
-            <h2 class="section-header-title">Academics & Keynotes</h2>
-            <p class="section-subtitle">Schoolwork decks and creative portfolios engineered by <span class="kabir-cursive">Kabir</span>.</p>
+            <h2 class="section-header-title">Projects & Creative Archive</h2>
+            <p class="section-subtitle">Active development scripts, presentation slide decks, and design portfolios.</p>
 
             <div class="tiles-grid">
                 
-                <div class="pro-card" id="presentations" tabindex="0" role="button" aria-label="View Presentations" py-click="open_category">
+                <div class="standard-card" id="presentations" tabindex="0" role="button" aria-label="View Presentations" py-click="open_category">
                     <span class="card-pill" style="color:#34c759;">Keynote Decks</span>
                     <div>
                         <h3>PowerPoint Presentations</h3>
-                        <div class="card-preview">
-                            <p>Dynamic visual slide decks engineered with minimalist layouts, custom animations, and clean storytelling.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
-                        </div>
+                        <div class="media-placeholder">[ Presentation Slide Deck Preview ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Dynamic visual slide decks engineered with minimalist layouts.</p>
                     </div>
-                    <div class="card-action-default">View Presentations <span>→</span></div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Presentations <span>→</span></div>
                 </div>
 
-                <div class="pro-card" id="portfolios" tabindex="0" role="button" aria-label="View Design Work" py-click="open_category">
+                <div class="standard-card" id="portfolios" tabindex="0" role="button" aria-label="View Design Work" py-click="open_category">
                     <span class="card-pill" style="color:#5e5ce6;">Creative Showcase</span>
                     <div>
                         <h3>Design Portfolios</h3>
-                        <div class="card-preview">
-                            <p>Curated archive of 9+ comprehensive design project portfolios featuring Apple-inspired aesthetics.</p>
-                            <span class="card-action-btn">Click to view more info →</span>
-                        </div>
+                        <div class="media-placeholder">[ Design Project Gallery Placeholder ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Curated archive of 9+ comprehensive design project portfolios.</p>
                     </div>
-                    <div class="card-action-default">View Design Work <span>→</span></div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Design Work <span>→</span></div>
+                </div>
+
+                <div class="standard-card" id="projects" tabindex="0" role="button" aria-label="View Projects" py-click="open_category">
+                    <span class="card-pill" style="color:#ff9f0a;">Python Workflows</span>
+                    <div>
+                        <h3>Custom Code Repos</h3>
+                        <div class="media-placeholder">[ Python Script Architecture View ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Automated scripts, data pipelines, and browser app micro-services.</p>
+                    </div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Code Repos <span>→</span></div>
                 </div>
 
             </div>
         </section>
 
         <section class="connect-section fade-in">
-            <div style="max-width: 1400px; margin: 0 auto 30px auto; padding: 0 10px;">
+            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
                 <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contact gateways.</p>
             </div>
@@ -733,6 +813,11 @@
                 "title": "DESIGN PORTFOLIOS",
                 "badge": "CREATIVE SHOWCASE",
                 "content": "<p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids, striking typography contrast, and polished Apple-inspired interface aesthetics.</p>"
+            },
+            "projects": {
+                "title": "PYTHON CODE REPOS",
+                "badge": "AUTOMATION & MICRO-APPS",
+                "content": "<p>Showcases custom Python scripts, automated scripts, and interactive browser apps built for performance and streamlined user experiences.</p><a href='https://github.com/Aajukubaaa' target='_blank' class='modal-action-btn'>Explore Code Repos ↗</a>"
             }
         }
 
@@ -744,7 +829,7 @@
             cat_id = card.id
 
             card.classList.add("card-pressed")
-            js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 300, card)
+            js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 350, card)
 
             if cat_id in categories:
                 item = categories[cat_id]
@@ -770,7 +855,7 @@
                 card_el = document.getElementById(last_opened_card_id)
                 if card_el:
                     card_el.classList.add('card-pressed')
-                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 300, card_el)
+                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 350, card_el)
                 last_opened_card_id = None
 
             js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 400, detail)
@@ -796,21 +881,8 @@
             }
         });
 
-        // 3D Tilt Effect on Cards
-        document.querySelectorAll('.pro-card').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                card.style.transform = `translateY(-8px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.02)`;
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
-            });
-        });
-
         // Keyboard Accessibility & Shortcuts (Enter/Space opens cards, Escape closes modal)
-        document.querySelectorAll('.pro-card').forEach(card => {
+        document.querySelectorAll('.pro-card, .standard-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
