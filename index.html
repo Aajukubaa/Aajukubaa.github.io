@@ -2,281 +2,407 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kabir | Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabir Bhuchar | Portfolio</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@800;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        /* 1. BASE SETUP & HARDWARE ACCELERATED CURSOR */
+        /* 1. BASE SYSTEM & TYPOGRAPHY */
+        * { box-sizing: border-box; }
         body, html {
-            margin: 0; padding: 0;
-            background-color: #000;
-            color: #fff;
-            font-family: 'Outfit', sans-serif; /* The new Product Sans */
+            margin: 0; 
+            padding: 0;
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
-            cursor: none;
             scroll-behavior: smooth;
         }
 
-        #custom-cursor {
-            position: fixed;
-            top: 0; left: 0;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background-color: #fff;
-            mix-blend-mode: difference;
-            pointer-events: none;
-            z-index: 9999;
-            /* We removed transition on width/height to stop the lag */
-            will-change: transform; /* Tells the GPU to handle this */
-        }
-
-        .cursive-name {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.5em;
-            color: #FFD700; /* Gold */
-            padding: 0 5px;
-        }
-
-        /* 2. NIKE-STYLE HERO SECTION */
+        /* 2. HERO SECTION (Cursive "Kabir" + Left-Aligned "BHUCHAR") */
         .hero {
-            height: 100vh;
+            min-height: 85vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            background: #000;
+            padding: 0 5vw;
+            background: linear-gradient(180deg, #000000 0%, #080808 100%);
+            border-bottom: 1px solid #1f1f1f;
         }
-        .hero h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 24vw;
+        .hero-title-wrapper {
+            display: inline-block;
+            max-width: fit-content;
+        }
+        .hero-cursive {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(4rem, 14vw, 12rem);
+            color: #FFD700; /* Signature Gold */
             margin: 0;
-            line-height: 0.8;
-            letter-spacing: -0.05em;
+            line-height: 1.1;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+        .hero-surname {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 8vw, 7rem);
+            font-weight: 900;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #ffffff;
+            margin: -0.2em 0 0 0;
+            line-height: 0.9;
+            text-align: left; /* Strict left alignment to the parent wrapper */
+        }
+        .hero-tagline {
+            margin-top: 25px;
+            font-size: 1.1rem;
+            color: #888;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
-        /* 3. VIBRANT COLUMNS (No expanding, just Gold hover) */
-        .columns-container {
-            height: 80vh;
-            display: flex;
-            width: 100%;
+        /* 3. LANDO NORRIS-STYLE SPORTS GRID (6 CARDS) */
+        .grid-section {
+            padding: 60px 5vw;
+            background: #050505;
         }
-        .column {
-            flex: 1; 
+        .section-header {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #000;
-            position: relative;
-            transition: background-color 0.2s; /* Snappy color change */
+            gap: 15px;
         }
-        .column h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 4vw;
-            text-transform: uppercase;
-            transform: rotate(-90deg);
-            white-space: nowrap;
+        .section-header::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 35px;
+            background-color: #FFD700;
         }
         
-        /* Base Colors */
-        #chess { background-color: #FF3366; } 
-        #basketball { background-color: #FF9933; } 
-        #coding { background-color: #33CCFF; } 
-        #music { background-color: #CC33FF; } 
-
-        /* The Gold Hover Effect */
-        .column:hover { background-color: #FFD700 !important; color: #000 !important; }
-
-        /* 4. SCHOOL WORK SECTION */
-        .schoolwork-container {
-            display: flex;
-            height: 40vh;
+        .tiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
             width: 100%;
-            border-top: 5px solid #000;
         }
-        .school-block {
-            flex: 1;
+
+        .tile-card {
+            background: #0d0d0d;
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 40px 30px;
+            min-height: 220px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #111;
-            border-right: 5px solid #000;
-            transition: background-color 0.2s;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden;
         }
-        .school-block h2 {
+        .tile-card h3 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 3vw;
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tile-category-tag {
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            color: #888;
+            font-weight: 600;
         }
-        .school-block:hover { background-color: #FFD700 !important; color: #000 !important; }
 
-        /* 5. WIDE LINK CARDS SECTION */
-        .socials {
-            padding: 80px 20px;
+        /* Signature Accent Border Line */
+        .tile-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: #222;
+            transition: background 0.2s;
+        }
+        #chess::after { background: #FF3366; }
+        #basketball::after { background: #FF9933; }
+        #coding::after { background: #33CCFF; }
+        #music::after { background: #CC33FF; }
+        #presentations::after { background: #FFD700; }
+        #portfolios::after { background: #00FFcc; }
+
+        /* Crisp Gold Hover State */
+        .tile-card:hover {
+            background-color: #FFD700 !important;
+            color: #000000 !important;
+            transform: translateY(-4px);
+            border-color: #FFD700;
+        }
+        .tile-card:hover .tile-category-tag {
+            color: #222;
+        }
+
+        /* 4. FULL-WIDTH LINK ROWS (95% Screen Width) */
+        .socials-section {
+            padding: 60px 2.5vw;
             background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 3rem;
-            margin-bottom: 40px;
+        .social-cards-wrapper {
+            width: 95vw; /* Wide edge-to-edge layout */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .link-card {
+        .link-row {
             display: flex;
             align-items: center;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px; /* Rounded edges */
-            padding: 20px;
+            background: #111111;
+            border: 1px solid #222222;
+            border-radius: 16px;
+            padding: 20px 30px;
             width: 100%;
-            max-width: 600px;
-            margin: 10px 0;
             text-decoration: none;
-            color: #fff;
-            transition: transform 0.3s, background 0.3s;
+            color: #ffffff;
+            transition: all 0.2s ease-in-out;
         }
-        .link-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.08);
+        .link-row:hover {
+            background: #181818;
             border-color: #FFD700;
+            transform: translateX(6px);
         }
-        .profile-pic {
-            width: 65px;
-            height: 65px;
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background-color: #333; /* Default gray circle */
+            background-color: #222;
+            border: 2px solid #FFD700;
             background-size: cover;
             background-position: center;
             margin-right: 25px;
             flex-shrink: 0;
         }
-        .link-info h3 { margin: 0 0 5px 0; font-family: 'Montserrat', sans-serif; }
-        .link-info p { margin: 0; color: #aaa; font-size: 0.9rem; }
+        .link-details {
+            flex-grow: 1;
+        }
+        .link-details h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            margin: 0 0 4px 0;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .link-details p {
+            margin: 0;
+            color: #999999;
+            font-size: 0.95rem;
+        }
+        .link-arrow {
+            font-size: 1.5rem;
+            color: #FFD700;
+            font-weight: bold;
+        }
 
-        /* 6. DYNAMIC DETAIL PAGE (Controlled by Python) */
+        /* 5. DYNAMIC DETAIL VIEW (Python Controlled) */
         #detail-view {
-            display: none; 
+            display: none;
             min-height: 100vh;
-            width: 100%;
-            padding: 80px 10vw;
+            width: 100vw;
+            padding: 80px 8vw;
             box-sizing: border-box;
-            color: #000;
+            background-color: #0d0d0d;
+            color: #ffffff;
         }
         .back-btn {
             background: transparent;
-            border: 3px solid #000;
-            color: #000;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: none; /* Keep custom cursor on button */
-            margin-bottom: 50px;
-            font-family: 'Outfit', sans-serif;
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            padding: 14px 35px;
+            font-size: 1rem;
+            font-weight: 800;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-bottom: 40px;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
         }
-        .back-btn:hover { background: #000; color: #fff; }
-        #detail-title { font-family: 'Montserrat', sans-serif; font-size: 6rem; margin: 0 0 20px 0; text-transform: uppercase;}
-        #detail-content { font-size: 1.5rem; line-height: 1.6; max-width: 800px; }
+        .back-btn:hover {
+            background: #FFD700;
+            color: #000000;
+        }
+        #detail-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 900;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        #detail-content {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            color: #cccccc;
+            max-width: 900px;
+        }
+        .cursive-inline {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: #FFD700;
+        }
     </style>
 </head>
 <body>
 
-    <div id="custom-cursor"></div>
-
     <div id="main-view">
         
         <section class="hero">
-            <h1>KABIR</h1>
+            <div class="hero-title-wrapper">
+                <h1 class="hero-cursive">Kabir</h1>
+                <h2 class="hero-surname">Bhuchar</h2>
+            </div>
+            <div class="hero-tagline">Student &nbsp;|&nbsp; Athlete &nbsp;|&nbsp; 1545 FIDE Chess &nbsp;|&nbsp; Developer</div>
         </section>
 
-        <section class="columns-container">
-            <div class="column" id="chess" py-click="open_category"><h2>Chess</h2></div>
-            <div class="column" id="basketball" py-click="open_category"><h2>Basketball</h2></div>
-            <div class="column" id="coding" py-click="open_category"><h2>Coding</h2></div>
-            <div class="column" id="music" py-click="open_category"><h2>Music</h2></div>
-        </section>
-
-        <section class="schoolwork-container">
-            <div class="school-block" id="presentations" py-click="open_category"><h2>Presentations</h2></div>
-            <div class="school-block" id="portfolios" py-click="open_category"><h2>Portfolios</h2></div>
-        </section>
-
-        <section class="socials">
-            <h2 class="section-title">CONNECT</h2>
+        <section class="grid-section">
+            <div class="section-header">EXPLORE PORTFOLIO</div>
             
-            <a href="http://ratings.fide.com/profile/498777" target="_blank" class="link-card">
-                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
-                <div class="link-info">
-                    <h3>FIDE Chess Profile</h3>
-                    <p>Official tournament ratings and match history.</p>
+            <div class="tiles-grid">
+                <div class="tile-card" id="chess" py-click="open_category">
+                    <span class="tile-category-tag">Strategy</span>
+                    <h3>Chess</h3>
                 </div>
-            </a>
+                
+                <div class="tile-card" id="basketball" py-click="open_category">
+                    <span class="tile-category-tag">Athletics</span>
+                    <h3>Basketball</h3>
+                </div>
+                
+                <div class="tile-card" id="coding" py-click="open_category">
+                    <span class="tile-category-tag">Development</span>
+                    <h3>Coding</h3>
+                </div>
+                
+                <div class="tile-card" id="music" py-click="open_category">
+                    <span class="tile-category-tag">Performance</span>
+                    <h3>Music</h3>
+                </div>
+                
+                <div class="tile-card" id="presentations" py-click="open_category">
+                    <span class="tile-category-tag">Academics</span>
+                    <h3>Presentations</h3>
+                </div>
+                
+                <div class="tile-card" id="portfolios" py-click="open_category">
+                    <span class="tile-category-tag">Design Work</span>
+                    <h3>Portfolios</h3>
+                </div>
+            </div>
+        </section>
 
-            <a href="https://github.com/Aajukubaaa" target="_blank" class="link-card">
-                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
-                <div class="link-info">
-                    <h3>GitHub Repository</h3>
-                    <p>Where I build and deploy all my Python projects.</p>
-                </div>
-            </a>
+        <section class="socials-section">
+            <div class="section-header" style="width: 95vw;">CONNECT & PROFILES</div>
+            
+            <div class="social-cards-wrapper">
+                
+                <a href="http://ratings.fide.com/profile/498777" target="_blank" class="link-row">
+                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=150');"></div>
+                    <div class="link-details">
+                        <h4>FIDE Chess Profile</h4>
+                        <p>1545 Rating • Official tournament match records and player stats.</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
 
-            <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="link-card">
-                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
-                <div class="link-info">
-                    <h3>YouTube Channel</h3>
-                    <p>Video content, edits, and general uploads.</p>
-                </div>
-            </a>
+                <a href="https://github.com/Aajukubaaa" target="_blank" class="link-row">
+                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=150');"></div>
+                    <div class="link-details">
+                        <h4>GitHub Repository</h4>
+                        <p>Open-source repositories, Python web apps, and site code.</p>
+                    </div>
+                </a>
+
+                <a href="http://chess.com/member/aajukubaa" target="_blank" class="link-row">
+                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=150');"></div>
+                    <div class="link-details">
+                        <h4>Chess.com Profile</h4>
+                        <p>Online games, rapid rating, tactics puzzles, and club matches.</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+
+                <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="link-row">
+                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=150');"></div>
+                    <div class="link-details">
+                        <h4>YouTube Channel</h4>
+                        <p>Videos, project highlights, and creative edits.</p>
+                    </div>
+                    <div class="link-arrow">→</div>
+                </a>
+
+            </div>
         </section>
 
     </div>
 
     <div id="detail-view">
-        <button class="back-btn" py-click="close_category">← GO BACK</button>
+        <button class="back-btn" py-click="close_category">← Return to Overview</button>
         <h1 id="detail-title">TITLE</h1>
-        <div id="detail-content">Content goes here...</div>
+        <div id="detail-content">Loading content...</div>
     </div>
 
     <script type="py">
         from pyscript import document
         import js
 
-        # Your Database updated with Cursive tags and Schoolwork!
+        # Centralized Python dictionary for all portfolio categories
         categories = {
             "chess": {
-                "title": "CHESS", 
-                "color": "#FF3366", 
-                "content": "<p>1545 FIDE Rating. Analyzing complex openings and playing strategic tournament games as <span class='cursive-name'>Kabir</span>.</p>"
+                "title": "Chess Career", 
+                "color": "#FF3366",
+                "content": "<p>Competitive player holding a <strong>1545 FIDE rating</strong>. Focused on analyzing classic opening theory, tactical mid-game combinations, and endgame strategy in official tournaments representing <span class='cursive-inline'>Kabir</span>.</p>"
             },
             "basketball": {
-                "title": "BASKETBALL", 
-                "color": "#FF9933", 
-                "content": "<p>6'0\" Center. Focusing on team coordination, defense, and high-pressure performance.</p>"
+                "title": "Basketball", 
+                "color": "#FF9933",
+                "content": "<p>Playing as a <strong>6'0\" Center</strong>. Focusing on paint defense, rebounding, high-pressure team communication, and tournament play execution.</p>"
             },
             "coding": {
-                "title": "CODING", 
-                "color": "#33CCFF", 
-                "content": "<p>Building automated Python scripts and stunning frontend designs directly on GitHub Pages.</p>"
+                "title": "Python & Web Coding", 
+                "color": "#33CCFF",
+                "content": "<p>Building automated Python backend scripts, web applications, dynamic single-page architectures, and hosting projects live on GitHub Pages.</p>"
             },
             "music": {
-                "title": "MUSIC", 
-                "color": "#CC33FF", 
-                "content": "<p>Violin - Suzuki Book 3. Finding rhythm and discipline outside of academics.</p>"
+                "title": "Violin & Music", 
+                "color": "#CC33FF",
+                "content": "<p>Playing Violin following the <strong>Suzuki Book 3</strong> repertoire. Developing rhythmic precision and musical discipline.</p>"
             },
             "presentations": {
-                "title": "POWERPOINTS", 
-                "color": "#111111", # Dark grey so the white text pops 
-                "content": "<p style='color: white;'>This is where we will embed your 9+ Google Slides and PowerPoint animations crafted by <span class='cursive-name'>Kabir</span>.</p>"
+                "title": "PowerPoint Presentations", 
+                "color": "#FFD700",
+                "content": "<p>Featured presentations from school projects with key animations. We can embed published Google Slides directly into this window.</p>"
             },
             "portfolios": {
-                "title": "DESIGN PORTFOLIOS", 
-                "color": "#111111", 
-                "content": "<p style='color: white;'>A showcase of school design projects, layouts, and creative concepts.</p>"
+                "title": "Design Portfolios", 
+                "color": "#00FFcc",
+                "content": "<p>Collection of 9 design project slide decks and creative visual portfolios created by <span class='cursive-inline'>Kabir</span>.</p>"
             }
         }
 
@@ -284,35 +410,25 @@
             clicked_id = event.currentTarget.id
             data = categories[clicked_id]
             
+            # Hide Main View & Display Detail View
             document.querySelector("#main-view").style.display = "none"
             detail_view = document.querySelector("#detail-view")
             detail_view.style.display = "block"
             
-            detail_view.style.backgroundColor = data["color"]
-            
-            # If the background is dark (like schoolwork), make the title white
+            # Update Content
             title_el = document.querySelector("#detail-title")
             title_el.innerHTML = data["title"]
-            if data["color"] == "#111111":
-                title_el.style.color = "#ffffff"
-            else:
-                title_el.style.color = "#000000"
-
+            title_el.style.color = data["color"]
+            
             document.querySelector("#detail-content").innerHTML = data["content"]
+            
+            # Scroll window to top smoothly
             js.window.scrollTo(0, 0)
 
         def close_category(event):
             document.querySelector("#detail-view").style.display = "none"
             document.querySelector("#main-view").style.display = "block"
-    </script>
-
-    <script>
-        const cursor = document.getElementById("custom-cursor");
-        
-        // Using translate3d forces the GPU to render the movement, removing all lag.
-        document.addEventListener("mousemove", (e) => {
-            cursor.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
-        });
+            js.window.scrollTo(0, 0)
     </script>
 </body>
 </html>
