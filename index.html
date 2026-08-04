@@ -4,34 +4,41 @@
     <meta charset="UTF-8">
     <title>Kabir | Portfolio</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        /* 1. BASE SETUP & CUSTOM CURSOR */
+        /* 1. BASE SETUP & HARDWARE ACCELERATED CURSOR */
         body, html {
             margin: 0; padding: 0;
             background-color: #000;
             color: #fff;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Outfit', sans-serif; /* The new Product Sans */
             overflow-x: hidden;
-            cursor: none; /* Hides the default mouse */
+            cursor: none;
+            scroll-behavior: smooth;
         }
 
-        /* The Inverted Color Cursor Magic */
         #custom-cursor {
             position: fixed;
             top: 0; left: 0;
             width: 40px; height: 40px;
             border-radius: 50%;
             background-color: #fff;
-            mix-blend-mode: difference; /* This automatically inverts colors! */
-            pointer-events: none; /* Lets you click through it */
+            mix-blend-mode: difference;
+            pointer-events: none;
             z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s;
+            /* We removed transition on width/height to stop the lag */
+            will-change: transform; /* Tells the GPU to handle this */
+        }
+
+        .cursive-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5em;
+            color: #FFD700; /* Gold */
+            padding: 0 5px;
         }
 
         /* 2. NIKE-STYLE HERO SECTION */
@@ -44,77 +51,116 @@
         }
         .hero h1 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 24vw; /* Scales to fill the screen perfectly */
+            font-size: 24vw;
             margin: 0;
             line-height: 0.8;
             letter-spacing: -0.05em;
         }
 
-        /* 3. APPLE-STYLE VIBRANT COLUMNS */
+        /* 3. VIBRANT COLUMNS (No expanding, just Gold hover) */
         .columns-container {
-            height: 100vh;
+            height: 80vh;
             display: flex;
             width: 100%;
         }
         .column {
-            flex: 1; /* Makes them equal width */
+            flex: 1; 
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth expansion */
             color: #000;
             position: relative;
-        }
-        /* The Apple Expansion Effect */
-        .column:hover {
-            flex: 1.5; 
+            transition: background-color 0.2s; /* Snappy color change */
         }
         .column h2 {
             font-family: 'Montserrat', sans-serif;
             font-size: 4vw;
             text-transform: uppercase;
             transform: rotate(-90deg);
-            transition: transform 0.4s;
             white-space: nowrap;
         }
-        .column:hover h2 {
-            transform: rotate(0deg) scale(1.2);
-        }
+        
+        /* Base Colors */
+        #chess { background-color: #FF3366; } 
+        #basketball { background-color: #FF9933; } 
+        #coding { background-color: #33CCFF; } 
+        #music { background-color: #CC33FF; } 
 
-        /* Vibrant Solid Colors */
-        #chess { background-color: #FF3366; } /* Vibrant Pink/Red */
-        #basketball { background-color: #FF9933; } /* Vibrant Orange */
-        #coding { background-color: #33CCFF; } /* Vibrant Blue */
-        #music { background-color: #CC33FF; } /* Vibrant Purple */
+        /* The Gold Hover Effect */
+        .column:hover { background-color: #FFD700 !important; color: #000 !important; }
 
-        /* 4. SOCIAL LINKS SECTION */
-        .socials {
-            padding: 100px 20px;
-            background: #000;
-            text-align: center;
+        /* 4. SCHOOL WORK SECTION */
+        .schoolwork-container {
             display: flex;
+            height: 40vh;
+            width: 100%;
+            border-top: 5px solid #000;
+        }
+        .school-block {
+            flex: 1;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
+            background-color: #111;
+            border-right: 5px solid #000;
+            transition: background-color 0.2s;
         }
-        .socials a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 600;
-            border: 2px solid #fff;
-            padding: 15px 40px;
-            border-radius: 50px;
-            transition: all 0.3s;
+        .school-block h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3vw;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        .socials a:hover {
-            background: #fff;
-            color: #000;
-        }
+        .school-block:hover { background-color: #FFD700 !important; color: #000 !important; }
 
-        /* 5. DYNAMIC DETAIL PAGE (Controlled by Python) */
+        /* 5. WIDE LINK CARDS SECTION */
+        .socials {
+            padding: 80px 20px;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 40px;
+        }
+        .link-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; /* Rounded edges */
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 10px 0;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.08);
+            border-color: #FFD700;
+        }
+        .profile-pic {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background-color: #333; /* Default gray circle */
+            background-size: cover;
+            background-position: center;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+        .link-info h3 { margin: 0 0 5px 0; font-family: 'Montserrat', sans-serif; }
+        .link-info p { margin: 0; color: #aaa; font-size: 0.9rem; }
+
+        /* 6. DYNAMIC DETAIL PAGE (Controlled by Python) */
         #detail-view {
-            display: none; /* Hidden by default */
+            display: none; 
             min-height: 100vh;
             width: 100%;
             padding: 80px 10vw;
@@ -129,9 +175,9 @@
             font-size: 1.2rem;
             font-weight: bold;
             border-radius: 50px;
-            cursor: pointer;
+            cursor: none; /* Keep custom cursor on button */
             margin-bottom: 50px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
         .back-btn:hover { background: #000; color: #fff; }
         #detail-title { font-family: 'Montserrat', sans-serif; font-size: 6rem; margin: 0 0 20px 0; text-transform: uppercase;}
@@ -149,24 +195,43 @@
         </section>
 
         <section class="columns-container">
-            <div class="column" id="chess" py-click="open_category">
-                <h2>Chess</h2>
-            </div>
-            <div class="column" id="basketball" py-click="open_category">
-                <h2>Basketball</h2>
-            </div>
-            <div class="column" id="coding" py-click="open_category">
-                <h2>Coding</h2>
-            </div>
-            <div class="column" id="music" py-click="open_category">
-                <h2>Music</h2>
-            </div>
+            <div class="column" id="chess" py-click="open_category"><h2>Chess</h2></div>
+            <div class="column" id="basketball" py-click="open_category"><h2>Basketball</h2></div>
+            <div class="column" id="coding" py-click="open_category"><h2>Coding</h2></div>
+            <div class="column" id="music" py-click="open_category"><h2>Music</h2></div>
+        </section>
+
+        <section class="schoolwork-container">
+            <div class="school-block" id="presentations" py-click="open_category"><h2>Presentations</h2></div>
+            <div class="school-block" id="portfolios" py-click="open_category"><h2>Portfolios</h2></div>
         </section>
 
         <section class="socials">
-            <a href="http://ratings.fide.com/profile/498777" target="_blank">FIDE</a>
-            <a href="https://github.com/Aajukubaaa" target="_blank">GitHub</a>
-            <a href="https://www.youtube.com/@Aajukubaa" target="_blank">YouTube</a>
+            <h2 class="section-title">CONNECT</h2>
+            
+            <a href="http://ratings.fide.com/profile/498777" target="_blank" class="link-card">
+                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
+                <div class="link-info">
+                    <h3>FIDE Chess Profile</h3>
+                    <p>Official tournament ratings and match history.</p>
+                </div>
+            </a>
+
+            <a href="https://github.com/Aajukubaaa" target="_blank" class="link-card">
+                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
+                <div class="link-info">
+                    <h3>GitHub Repository</h3>
+                    <p>Where I build and deploy all my Python projects.</p>
+                </div>
+            </a>
+
+            <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="link-card">
+                <div class="profile-pic" style="background-image: url('https://via.placeholder.com/65');"></div>
+                <div class="link-info">
+                    <h3>YouTube Channel</h3>
+                    <p>Video content, edits, and general uploads.</p>
+                </div>
+            </a>
         </section>
 
     </div>
@@ -181,12 +246,12 @@
         from pyscript import document
         import js
 
-        # 1. Your Database: All your content lives here in Python
+        # Your Database updated with Cursive tags and Schoolwork!
         categories = {
             "chess": {
                 "title": "CHESS", 
                 "color": "#FF3366", 
-                "content": "<p>1545 FIDE Rating. Analyzing complex openings and playing strategic tournament games.</p>"
+                "content": "<p>1545 FIDE Rating. Analyzing complex openings and playing strategic tournament games as <span class='cursive-name'>Kabir</span>.</p>"
             },
             "basketball": {
                 "title": "BASKETBALL", 
@@ -202,31 +267,40 @@
                 "title": "MUSIC", 
                 "color": "#CC33FF", 
                 "content": "<p>Violin - Suzuki Book 3. Finding rhythm and discipline outside of academics.</p>"
+            },
+            "presentations": {
+                "title": "POWERPOINTS", 
+                "color": "#111111", # Dark grey so the white text pops 
+                "content": "<p style='color: white;'>This is where we will embed your 9+ Google Slides and PowerPoint animations crafted by <span class='cursive-name'>Kabir</span>.</p>"
+            },
+            "portfolios": {
+                "title": "DESIGN PORTFOLIOS", 
+                "color": "#111111", 
+                "content": "<p style='color: white;'>A showcase of school design projects, layouts, and creative concepts.</p>"
             }
         }
 
-        # 2. Logic: What happens when you click a column
         def open_category(event):
-            # Find out which column was clicked by grabbing its ID
             clicked_id = event.currentTarget.id
             data = categories[clicked_id]
             
-            # Hide the main screen and show the detail screen
             document.querySelector("#main-view").style.display = "none"
             detail_view = document.querySelector("#detail-view")
             detail_view.style.display = "block"
             
-            # Dynamically change the background color to match the column
             detail_view.style.backgroundColor = data["color"]
             
-            # Inject your Python data into the HTML
-            document.querySelector("#detail-title").innerHTML = data["title"]
+            # If the background is dark (like schoolwork), make the title white
+            title_el = document.querySelector("#detail-title")
+            title_el.innerHTML = data["title"]
+            if data["color"] == "#111111":
+                title_el.style.color = "#ffffff"
+            else:
+                title_el.style.color = "#000000"
+
             document.querySelector("#detail-content").innerHTML = data["content"]
-            
-            # Instantly scroll the browser back to the top of the page
             js.window.scrollTo(0, 0)
 
-        # 3. Logic: What happens when you click 'Go Back'
         def close_category(event):
             document.querySelector("#detail-view").style.display = "none"
             document.querySelector("#main-view").style.display = "block"
@@ -234,21 +308,10 @@
 
     <script>
         const cursor = document.getElementById("custom-cursor");
-        document.addEventListener("mousemove", (e) => {
-            cursor.style.left = e.clientX + "px";
-            cursor.style.top = e.clientY + "px";
-        });
         
-        // Makes the cursor slightly bigger when you hover over clickable things
-        document.querySelectorAll("a, .column, .back-btn").forEach(el => {
-            el.addEventListener("mouseenter", () => {
-                cursor.style.width = "60px";
-                cursor.style.height = "60px";
-            });
-            el.addEventListener("mouseleave", () => {
-                cursor.style.width = "40px";
-                cursor.style.height = "40px";
-            });
+        // Using translate3d forces the GPU to render the movement, removing all lag.
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.transform = `translate3d(${e.clientX - 20}px, ${e.clientY - 20}px, 0)`;
         });
     </script>
 </body>
