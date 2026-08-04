@@ -538,13 +538,13 @@ A huge part of my playstyle is shaped by fast time controls—predominantly 60+1
             }
         }
 
-        def open_category(event):
+def open_category(event):
             card = event.currentTarget
             cat_id = card.id
             
             # Trigger card press animation
             card.classList.add("card-pressed")
-            js.setTimeout(js.eval("function(c){ c.classList.remove('card-pressed'); }"), 300, card)
+            js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 300, card)
 
             if cat_id in categories:
                 item = categories[cat_id]
