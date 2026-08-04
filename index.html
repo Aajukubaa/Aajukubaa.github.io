@@ -5,365 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kabir Bhuchar | Portfolio</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@800;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        /* 1. BASE SYSTEM & TYPOGRAPHY */
+        /* 1. BASE SYSTEM (Apple-style minimalism + Lando Dark Mode) */
         * { box-sizing: border-box; }
         body, html {
-            margin: 0; 
-            padding: 0;
-            background-color: #050505;
+            margin: 0; padding: 0;
+            background-color: #000000;
             color: #ffffff;
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
+            cursor: none; /* Hides default mouse */
         }
 
-        /* 2. HERO SECTION (Cursive "Kabir" + Left-Aligned "BHUCHAR") */
+        /* 2. SUPER SIMPLE INVERTED CURSOR */
+        #custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 30px; height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            mix-blend-mode: difference; /* This creates the color inversion */
+            pointer-events: none; /* Allows clicking through it */
+            z-index: 9999;
+            will-change: transform;
+        }
+
+        /* 3. HERO SECTION (Fills entire screen) */
         .hero {
-            min-height: 85vh;
+            height: 100vh; /* 100% Viewport Height pushes everything else down */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 5vw;
-            background: linear-gradient(180deg, #000000 0%, #080808 100%);
-            border-bottom: 1px solid #1f1f1f;
+            align-items: center;
+            text-align: center;
         }
-        .hero-title-wrapper {
-            display: inline-block;
-            max-width: fit-content;
-        }
-        .hero-cursive {
-            font-family: 'Great Vibes', cursive;
-            font-size: clamp(4rem, 14vw, 12rem);
-            color: #FFD700; /* Signature Gold */
-            margin: 0;
-            line-height: 1.1;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-        }
-        .hero-surname {
+        .hero-first {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(2rem, 8vw, 7rem);
+            font-size: 22vw; /* Massive screen-filling text */
             font-weight: 900;
-            letter-spacing: 0.15em;
+            line-height: 0.75;
+            margin: 0;
             text-transform: uppercase;
-            color: #ffffff;
-            margin: -0.2em 0 0 0;
-            line-height: 0.9;
-            text-align: left; /* Strict left alignment to the parent wrapper */
         }
-        .hero-tagline {
-            margin-top: 25px;
-            font-size: 1.1rem;
-            color: #888;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+        .hero-last {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3vw; /* Much smaller */
             font-weight: 600;
+            letter-spacing: 1.5vw; /* Widely spaced out */
+            color: #888888;
+            margin-top: 20px;
+            text-transform: uppercase;
         }
 
-        /* 3. LANDO NORRIS-STYLE SPORTS GRID (6 CARDS) */
+        /* 4. APPLE-STYLE INTRO BANNER */
+        .intro-banner {
+            padding: 80px 5vw;
+            text-align: center;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-family: 'Montserrat', sans-serif;
+            color: #cccccc;
+            border-top: 1px solid #111;
+        }
+        .intro-banner span { color: #FFD700; font-weight: bold; }
+
+        /* 5. PORTFOLIO GRID */
         .grid-section {
-            padding: 60px 5vw;
-            background: #050505;
+            padding: 20px 5vw 80px 5vw;
         }
         .section-header {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-size: 2.5rem;
             font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
         }
-        .section-header::before {
-            content: '';
-            display: inline-block;
-            width: 8px;
-            height: 35px;
-            background-color: #FFD700;
-        }
-        
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            width: 100%;
+            gap: 25px;
         }
-
         .tile-card {
-            background: #0d0d0d;
+            background: #0a0a0a;
             border: 1px solid #222;
-            border-radius: 14px;
+            border-radius: 20px; /* Apple-style rounded corners */
             padding: 40px 30px;
-            min-height: 220px;
+            min-height: 250px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
         }
         .tile-card h3 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 2.2rem;
-            font-weight: 900;
+            font-size: 2.5rem;
             margin: 0;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        .tile-category-tag {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #888;
-            font-weight: 600;
-        }
-
-        /* Signature Accent Border Line */
-        .tile-card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: #222;
-            transition: background 0.2s;
-        }
-        #chess::after { background: #FF3366; }
-        #basketball::after { background: #FF9933; }
-        #coding::after { background: #33CCFF; }
-        #music::after { background: #CC33FF; }
-        #presentations::after { background: #FFD700; }
-        #portfolios::after { background: #00FFcc; }
-
-        /* Crisp Gold Hover State */
         .tile-card:hover {
-            background-color: #FFD700 !important;
+            background-color: #ffffff !important;
             color: #000000 !important;
-            transform: translateY(-4px);
-            border-color: #FFD700;
-        }
-        .tile-card:hover .tile-category-tag {
-            color: #222;
+            transform: scale(1.02);
+            border-color: #ffffff;
         }
 
-        /* 4. FULL-WIDTH LINK ROWS (95% Screen Width) */
+        /* Grid Base Colors */
+        #chess { border-bottom: 4px solid #FF3366; }
+        #basketball { border-bottom: 4px solid #FF9933; }
+        #coding { border-bottom: 4px solid #33CCFF; }
+        #music { border-bottom: 4px solid #CC33FF; }
+        #presentations { border-bottom: 4px solid #FFD700; }
+        #portfolios { border-bottom: 4px solid #00FFcc; }
+
+        /* 6. FULL-WIDTH LINKS */
         .socials-section {
-            padding: 60px 2.5vw;
-            background: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .social-cards-wrapper {
-            width: 95vw; /* Wide edge-to-edge layout */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            padding: 80px 2.5vw;
+            background: #050505;
+            border-top: 1px solid #111;
         }
         .link-row {
             display: flex;
             align-items: center;
-            background: #111111;
-            border: 1px solid #222222;
+            background: #0d0d0d;
+            border: 1px solid #222;
             border-radius: 16px;
-            padding: 20px 30px;
+            padding: 25px 30px;
             width: 100%;
+            margin-bottom: 15px;
             text-decoration: none;
-            color: #ffffff;
-            transition: all 0.2s ease-in-out;
+            color: #fff;
+            transition: all 0.2s;
         }
         .link-row:hover {
-            background: #181818;
-            border-color: #FFD700;
-            transform: translateX(6px);
+            background: #1a1a1a;
+            border-color: #ffffff;
         }
         .profile-avatar {
-            width: 60px;
-            height: 60px;
+            width: 70px; height: 70px;
             border-radius: 50%;
-            background-color: #222;
-            border: 2px solid #FFD700;
+            background-color: #333;
             background-size: cover;
-            background-position: center;
-            margin-right: 25px;
+            margin-right: 30px;
             flex-shrink: 0;
-        }
-        .link-details {
-            flex-grow: 1;
         }
         .link-details h4 {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.3rem;
-            margin: 0 0 4px 0;
-            font-weight: 800;
+            font-size: 1.5rem;
+            margin: 0 0 5px 0;
             text-transform: uppercase;
         }
-        .link-details p {
-            margin: 0;
-            color: #999999;
-            font-size: 0.95rem;
-        }
-        .link-arrow {
-            font-size: 1.5rem;
-            color: #FFD700;
-            font-weight: bold;
-        }
+        .link-details p { margin: 0; color: #888; }
 
-        /* 5. DYNAMIC DETAIL VIEW (Python Controlled) */
+        /* 7. DYNAMIC DETAIL VIEW (Python Controlled) */
         #detail-view {
             display: none;
             min-height: 100vh;
-            width: 100vw;
             padding: 80px 8vw;
-            box-sizing: border-box;
-            background-color: #0d0d0d;
+            background-color: #050505;
             color: #ffffff;
         }
         .back-btn {
             background: transparent;
-            border: 2px solid #FFD700;
-            color: #FFD700;
-            padding: 14px 35px;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 15px 40px;
+            font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
             font-weight: 800;
-            border-radius: 40px;
-            cursor: pointer;
-            margin-bottom: 40px;
-            font-family: 'Montserrat', sans-serif;
+            border-radius: 50px;
+            cursor: none;
+            margin-bottom: 50px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
         }
-        .back-btn:hover {
-            background: #FFD700;
-            color: #000000;
-        }
+        .back-btn:hover { background: #ffffff; color: #000000; }
         #detail-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: clamp(3rem, 7vw, 5.5rem);
-            font-weight: 900;
+            font-size: clamp(3rem, 8vw, 6rem);
             margin: 0 0 20px 0;
             text-transform: uppercase;
-            line-height: 1;
         }
-        #detail-content {
-            font-size: 1.3rem;
-            line-height: 1.7;
-            color: #cccccc;
-            max-width: 900px;
-        }
-        .cursive-inline {
-            font-family: 'Great Vibes', cursive;
-            font-size: 1.8rem;
-            color: #FFD700;
-        }
+        #detail-content { font-size: 1.5rem; color: #cccccc; max-width: 900px; line-height: 1.6; }
     </style>
 </head>
 <body>
 
+    <div id="custom-cursor"></div>
+
     <div id="main-view">
         
         <section class="hero">
-            <div class="hero-title-wrapper">
-                <h1 class="hero-cursive">Kabir</h1>
-                <h2 class="hero-surname">Bhuchar</h2>
-            </div>
-            <div class="hero-tagline">Student &nbsp;|&nbsp; Athlete &nbsp;|&nbsp; 1545 FIDE Chess &nbsp;|&nbsp; Developer</div>
+            <h1 class="hero-first">KABIR</h1>
+            <h2 class="hero-last">BHUCHAR</h2>
+        </section>
+
+        <section class="intro-banner">
+            Student / Athlete / <span>1545 FIDE Chess</span> / Developer
         </section>
 
         <section class="grid-section">
             <div class="section-header">EXPLORE PORTFOLIO</div>
-            
             <div class="tiles-grid">
-                <div class="tile-card" id="chess" py-click="open_category">
-                    <span class="tile-category-tag">Strategy</span>
-                    <h3>Chess</h3>
-                </div>
-                
-                <div class="tile-card" id="basketball" py-click="open_category">
-                    <span class="tile-category-tag">Athletics</span>
-                    <h3>Basketball</h3>
-                </div>
-                
-                <div class="tile-card" id="coding" py-click="open_category">
-                    <span class="tile-category-tag">Development</span>
-                    <h3>Coding</h3>
-                </div>
-                
-                <div class="tile-card" id="music" py-click="open_category">
-                    <span class="tile-category-tag">Performance</span>
-                    <h3>Music</h3>
-                </div>
-                
-                <div class="tile-card" id="presentations" py-click="open_category">
-                    <span class="tile-category-tag">Academics</span>
-                    <h3>Presentations</h3>
-                </div>
-                
-                <div class="tile-card" id="portfolios" py-click="open_category">
-                    <span class="tile-category-tag">Design Work</span>
-                    <h3>Portfolios</h3>
-                </div>
+                <div class="tile-card" id="chess" py-click="open_category"><h3>Chess</h3></div>
+                <div class="tile-card" id="basketball" py-click="open_category"><h3>Basketball</h3></div>
+                <div class="tile-card" id="coding" py-click="open_category"><h3>Coding</h3></div>
+                <div class="tile-card" id="music" py-click="open_category"><h3>Music</h3></div>
+                <div class="tile-card" id="presentations" py-click="open_category"><h3>Presentations</h3></div>
+                <div class="tile-card" id="portfolios" py-click="open_category"><h3>Portfolios</h3></div>
             </div>
         </section>
 
         <section class="socials-section">
-            <div class="section-header" style="width: 95vw;">CONNECT & PROFILES</div>
-            
-            <div class="social-cards-wrapper">
-                
-                <a href="http://ratings.fide.com/profile/498777" target="_blank" class="link-row">
-                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=150');"></div>
-                    <div class="link-details">
-                        <h4>FIDE Chess Profile</h4>
-                        <p>1545 Rating • Official tournament match records and player stats.</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-
-                <a href="https://github.com/Aajukubaaa" target="_blank" class="link-row">
-                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=150');"></div>
-                    <div class="link-details">
-                        <h4>GitHub Repository</h4>
-                        <p>Open-source repositories, Python web apps, and site code.</p>
-                    </div>
-                </a>
-
-                <a href="http://chess.com/member/aajukubaa" target="_blank" class="link-row">
-                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=150');"></div>
-                    <div class="link-details">
-                        <h4>Chess.com Profile</h4>
-                        <p>Online games, rapid rating, tactics puzzles, and club matches.</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-
-                <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="link-row">
-                    <div class="profile-avatar" style="background-image: url('https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=150');"></div>
-                    <div class="link-details">
-                        <h4>YouTube Channel</h4>
-                        <p>Videos, project highlights, and creative edits.</p>
-                    </div>
-                    <div class="link-arrow">→</div>
-                </a>
-
-            </div>
+            <div class="section-header">CONNECT</div>
+            <a href="http://ratings.fide.com/profile/498777" target="_blank" class="link-row">
+                <div class="profile-avatar" style="background-image: url('https://via.placeholder.com/150');"></div>
+                <div class="link-details">
+                    <h4>FIDE Chess Profile</h4>
+                    <p>1545 Rating • Official tournament match records.</p>
+                </div>
+            </a>
+            <a href="https://github.com/Aajukubaaa" target="_blank" class="link-row">
+                <div class="profile-avatar" style="background-image: url('https://via.placeholder.com/150');"></div>
+                <div class="link-details">
+                    <h4>GitHub Repository</h4>
+                    <p>Open-source repositories and Python web apps.</p>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="link-row">
+                <div class="profile-avatar" style="background-image: url('https://via.placeholder.com/150');"></div>
+                <div class="link-details">
+                    <h4>YouTube Channel</h4>
+                    <p>Videos, project highlights, and creative edits.</p>
+                </div>
+            </a>
         </section>
 
     </div>
 
     <div id="detail-view">
-        <button class="back-btn" py-click="close_category">← Return to Overview</button>
+        <button class="back-btn" py-click="close_category">← GO BACK</button>
         <h1 id="detail-title">TITLE</h1>
         <div id="detail-content">Loading content...</div>
     </div>
@@ -372,63 +256,38 @@
         from pyscript import document
         import js
 
-        # Centralized Python dictionary for all portfolio categories
         categories = {
-            "chess": {
-                "title": "Chess Career", 
-                "color": "#FF3366",
-                "content": "<p>Competitive player holding a <strong>1545 FIDE rating</strong>. Focused on analyzing classic opening theory, tactical mid-game combinations, and endgame strategy in official tournaments representing <span class='cursive-inline'>Kabir</span>.</p>"
-            },
-            "basketball": {
-                "title": "Basketball", 
-                "color": "#FF9933",
-                "content": "<p>Playing as a <strong>6'0\" Center</strong>. Focusing on paint defense, rebounding, high-pressure team communication, and tournament play execution.</p>"
-            },
-            "coding": {
-                "title": "Python & Web Coding", 
-                "color": "#33CCFF",
-                "content": "<p>Building automated Python backend scripts, web applications, dynamic single-page architectures, and hosting projects live on GitHub Pages.</p>"
-            },
-            "music": {
-                "title": "Violin & Music", 
-                "color": "#CC33FF",
-                "content": "<p>Playing Violin following the <strong>Suzuki Book 3</strong> repertoire. Developing rhythmic precision and musical discipline.</p>"
-            },
-            "presentations": {
-                "title": "PowerPoint Presentations", 
-                "color": "#FFD700",
-                "content": "<p>Featured presentations from school projects with key animations. We can embed published Google Slides directly into this window.</p>"
-            },
-            "portfolios": {
-                "title": "Design Portfolios", 
-                "color": "#00FFcc",
-                "content": "<p>Collection of 9 design project slide decks and creative visual portfolios created by <span class='cursive-inline'>Kabir</span>.</p>"
-            }
+            "chess": {"title": "CHESS", "color": "#FF3366", "content": "<p>1545 FIDE rating. Analyzing classic opening theory and endgame strategy.</p>"},
+            "basketball": {"title": "BASKETBALL", "color": "#FF9933", "content": "<p>6'0\" Center. Focusing on paint defense and rebounding.</p>"},
+            "coding": {"title": "CODING", "color": "#33CCFF", "content": "<p>Building automated Python scripts and web applications.</p>"},
+            "music": {"title": "MUSIC", "color": "#CC33FF", "content": "<p>Violin - Suzuki Book 3. Developing rhythmic precision.</p>"},
+            "presentations": {"title": "PRESENTATIONS", "color": "#FFD700", "content": "<p>Featured presentations from school projects.</p>"},
+            "portfolios": {"title": "PORTFOLIOS", "color": "#00FFcc", "content": "<p>Collection of design project slide decks.</p>"}
         }
 
         def open_category(event):
-            clicked_id = event.currentTarget.id
-            data = categories[clicked_id]
-            
-            # Hide Main View & Display Detail View
+            data = categories[event.currentTarget.id]
             document.querySelector("#main-view").style.display = "none"
             detail_view = document.querySelector("#detail-view")
             detail_view.style.display = "block"
             
-            # Update Content
-            title_el = document.querySelector("#detail-title")
-            title_el.innerHTML = data["title"]
-            title_el.style.color = data["color"]
-            
+            document.querySelector("#detail-title").innerHTML = data["title"]
+            document.querySelector("#detail-title").style.color = data["color"]
             document.querySelector("#detail-content").innerHTML = data["content"]
-            
-            # Scroll window to top smoothly
             js.window.scrollTo(0, 0)
 
         def close_category(event):
             document.querySelector("#detail-view").style.display = "none"
             document.querySelector("#main-view").style.display = "block"
             js.window.scrollTo(0, 0)
+    </script>
+
+    <script>
+        const cursor = document.getElementById("custom-cursor");
+        document.addEventListener("mousemove", e => {
+            // Centers the circle directly under your mouse point effortlessly
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+        });
     </script>
 </body>
 </html>
