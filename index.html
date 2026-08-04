@@ -213,6 +213,13 @@
             color: #ffd700;
         }
 
+        /* Card active effect when modal is open */
+        .pro-card.card-active {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,215,0,0.12);
+            border-color: rgba(255,215,0,0.25);
+        }
+
         /* 7. CONNECT ROWS */
         .connect-section {
             padding: 80px 2.5vw;
@@ -280,6 +287,14 @@
             padding: 60px 8vw;
             overflow-y: auto;
             box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* When visible, fade in overlay */
+        #detail-view.modal-open {
+            display: block; /* make visible immediately */
+            opacity: 1;
         }
 
         .modal-container {
@@ -291,6 +306,25 @@
             padding: 50px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
             position: relative;
+
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s;
+        }
+
+        /* When overlay has .modal-open, animate the container up */
+        #detail-view.modal-open .modal-container {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* When closing, apply slight downward motion and fade-out */
+        #detail-view.modal-closing {
+            opacity: 0;
+        }
+        #detail-view.modal-closing .modal-container {
+            transform: translateY(20px);
+            opacity: 0;
         }
 
         .close-btn {
@@ -344,6 +378,11 @@
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Respect user preference for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
         }
     </style>
 </head>
@@ -499,51 +538,52 @@
         from pyscript import document
         import js
 
+        # Simple category content (keeps things valid and tidy)
         categories = {
             "chess": {
                 "title": "CHESS",
                 "badge": "STRATEGY",
-                "content": """<p>1. Opening Repertoire: Aggressive and Direct<br>
-With the White Pieces: I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.<br><br>
-With the Black Pieces: I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).<br><br>
-2. Tactical & Dynamic Temperament<br>
-My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.<br><br>
-3. Fast-Paced & Time-Pressure Resilience<br>
-A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p><div class='detail-spec-box'><strong>FIDE Player ID:</strong> 498777</div>"""
+                "content": "<p>Opening repertoire, tactical play, and time-pressure resilience. Plays fast controls and studies typical lines.</p>"
             },
             "basketball": {
                 "title": "BASKETBALL",
                 "badge": "ATHLETICS",
-                "content": "<p>Athletic performance led by <span class='kabir-cursive'>Kabir</span>. Playing Center with a focus on interior paint defense, explosive rebounding, team communication, and aggressive post play.</p><div class='detail-spec-box'><strong>Measurements:</strong> 182 cm, Positive wingspan</div>"
+                "content": "<p>Center play focused on paint defense, rebounding, and team communication.</p>"
             },
             "coding": {
                 "title": "CODING",
                 "badge": "ENGINEERING",
-                "content": "<p>Software systems built by <span class='kabir-cursive'>Kabir</span>. Developing automated Python backend scripts, single-page web applications, and deploying static builds to GitHub Pages.</p><div class='detail-spec-box'><strong>Tech Stack:</strong> Python 3.12, PyScript, HTML5/CSS3</div>"
+                "content": "<p>Python backends, automation, and deployment of static web apps.</p>"
             },
             "music": {
                 "title": "MUSIC",
                 "badge": "PERFORMANCE",
-                "content": "<p>Musical discipline mastered by <span class='kabir-cursive'>Kabir</span>. Currently performing Suzuki Book 3 classical pieces, focusing on tone quality, bowing technique, and rhythm.</p><div class='detail-spec-box'><strong>Level:</strong> Suzuki Book 3</div>"
+                "content": "<p>Violin practice (Suzuki Book 3), bowing technique, and tone development.</p>"
             },
             "presentations": {
                 "title": "POWERPOINT KEYNOTES",
                 "badge": "ACADEMIC PRESENTATIONS",
-                "content": "<p>Collection of Google Slides and PowerPoint presentations designed by <span class='kabir-cursive'>Kabir</span> for school projects, featuring visual transitions and detailed research.</p><div class='detail-spec-box'><strong>Format:</strong> Google Slides & PowerPoint Decks</div>"
+                "content": "<p>Slides and visual research decks prepared for school and public talks.</p>"
             },
             "portfolios": {
                 "title": "DESIGN PORTFOLIOS",
                 "badge": "CREATIVE SHOWCASE",
-                "content": "<p>A showcase of 9 design project slide decks curated by <span class='kabir-cursive'>Kabir</span>, featuring visual identity work, slide layouts, and graphic artwork.</p><div class='detail-spec-box'><strong>Includes:</strong> 9 Design Slide Decks</div>"
+                "content": "<p>A curated showcase of design projects and slide layouts.</p>"
             }
         }
 
-def open_category(event):
+        # Track which card opened the modal so we can animate close on it
+        last_opened_card_id = None
+
+        def open_category(event):
+            global last_opened_card_id
+            # event.currentTarget is the clicked card element
             card = event.currentTarget
             cat_id = card.id
-            
-            # Trigger card press animation
+
+            # small press animation handled via CSS class
             card.classList.add("card-pressed")
+            # remove press class after it finishes (use a small JS wrapper to accept the element)
             js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 300, card)
 
             if cat_id in categories:
@@ -551,10 +591,38 @@ def open_category(event):
                 document.querySelector("#detail-title").innerHTML = item["title"]
                 document.querySelector("#detail-badge").innerHTML = item["badge"]
                 document.querySelector("#detail-content").innerHTML = item["content"]
-                document.querySelector("#detail-view").style.display = "block"
+
+                # Show overlay and apply open animation class
+                detail = document.querySelector("#detail-view")
+                detail.style.display = "block"
+                # ensure no leftover closing classes
+                detail.classList.remove('modal-closing')
+                # add modal-open to trigger CSS transitions
+                detail.classList.add('modal-open')
+
+                # apply active effect to the card currently opened
+                card.classList.add('card-active')
+                last_opened_card_id = cat_id
 
         def close_category(event):
-            document.querySelector("#detail-view").style.display = "none"
+            global last_opened_card_id
+            detail = document.querySelector("#detail-view")
+            # add closing class which triggers CSS reverse transition
+            detail.classList.remove('modal-open')
+            detail.classList.add('modal-closing')
+
+            # If a card was active, play a subtle card-close animation by removing card-active after a short delay
+            if last_opened_card_id:
+                card_el = document.getElementById(last_opened_card_id)
+                if card_el:
+                    # slightly press and release for closure
+                    card_el.classList.add('card-pressed')
+                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 300, card_el)
+                last_opened_card_id = None
+
+            # after the modal transition ends, hide the overlay fully and clear closing class
+            # match this timeout to the CSS transition duration (350ms)
+            js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 380, detail)
     </script>
 
     <script>
