@@ -2,221 +2,254 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kabir Bhuchar | Portfolio</title>
+    <title>Kabir | Portfolio</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        /* 1. Base Setup & Background */
-        body {
-            background-color: #0a0a0a;
-            color: #ffffff;
+        /* 1. BASE SETUP & CUSTOM CURSOR */
+        body, html {
+            margin: 0; padding: 0;
+            background-color: #000;
+            color: #fff;
             font-family: 'Poppins', sans-serif;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             overflow-x: hidden;
+            cursor: none; /* Hides the default mouse */
         }
 
-        /* 2. The Glowing Cursor Blob */
-        #blob {
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
-            height: 400px;
-            aspect-ratio: 1;
+        /* The Inverted Color Cursor Magic */
+        #custom-cursor {
             position: fixed;
-            left: 50%;
-            top: 50%;
-            translate: -50% -50%;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
             border-radius: 50%;
-            animation: spin 10s infinite linear;
-            opacity: 0.6;
-            z-index: -2;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            background-color: #fff;
+            mix-blend-mode: difference; /* This automatically inverts colors! */
+            pointer-events: none; /* Lets you click through it */
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
         }
 
-        /* 3. The Blur Layer (Creates the deep, frosted effect) */
-        #blur-layer {
+        /* 2. NIKE-STYLE HERO SECTION */
+        .hero {
             height: 100vh;
-            width: 100vw;
-            position: fixed;
-            z-index: -1;
-            backdrop-filter: blur(150px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
         }
-
-        /* 4. Main Content Layout */
-        .container {
-            max-width: 800px;
-            width: 90%;
-            margin-top: 50px;
-            z-index: 1;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        h1 {
-            font-size: 3rem;
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24vw; /* Scales to fill the screen perfectly */
             margin: 0;
-            background: linear-gradient(to right, #60a5fa, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
         }
 
-        /* 5. Modern Glass Buttons */
-        .nav-bar {
+        /* 3. APPLE-STYLE VIBRANT COLUMNS */
+        .columns-container {
+            height: 100vh;
+            display: flex;
+            width: 100%;
+        }
+        .column {
+            flex: 1; /* Makes them equal width */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smooth expansion */
+            color: #000;
+            position: relative;
+        }
+        /* The Apple Expansion Effect */
+        .column:hover {
+            flex: 1.5; 
+        }
+        .column h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4vw;
+            text-transform: uppercase;
+            transform: rotate(-90deg);
+            transition: transform 0.4s;
+            white-space: nowrap;
+        }
+        .column:hover h2 {
+            transform: rotate(0deg) scale(1.2);
+        }
+
+        /* Vibrant Solid Colors */
+        #chess { background-color: #FF3366; } /* Vibrant Pink/Red */
+        #basketball { background-color: #FF9933; } /* Vibrant Orange */
+        #coding { background-color: #33CCFF; } /* Vibrant Blue */
+        #music { background-color: #CC33FF; } /* Vibrant Purple */
+
+        /* 4. SOCIAL LINKS SECTION */
+        .socials {
+            padding: 100px 20px;
+            background: #000;
+            text-align: center;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 3rem;
+            gap: 40px;
             flex-wrap: wrap;
         }
-        .nav-btn {
-            background: rgba(255, 255, 255, 0.05);
+        .socials a {
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 24px;
-            border-radius: 30px;
-            cursor: pointer;
+            text-decoration: none;
+            font-size: 1.5rem;
             font-weight: 600;
+            border: 2px solid #fff;
+            padding: 15px 40px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        .socials a:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* 5. DYNAMIC DETAIL PAGE (Controlled by Python) */
+        #detail-view {
+            display: none; /* Hidden by default */
+            min-height: 100vh;
+            width: 100%;
+            padding: 80px 10vw;
+            box-sizing: border-box;
+            color: #000;
+        }
+        .back-btn {
+            background: transparent;
+            border: 3px solid #000;
+            color: #000;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-bottom: 50px;
             font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
         }
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: #8b5cf6;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.2);
-        }
-
-        /* 6. The Glassmorphism Content Card */
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(16px);
-            min-height: 300px;
-        }
-
-        /* Styling for the Python-generated content */
-        .activity-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            border-left: 4px solid #8b5cf6;
-            transition: transform 0.2s;
-        }
-        .activity-item:hover {
-            transform: translateX(10px);
-            background: rgba(255, 255, 255, 0.06);
-        }
-        a { color: #8b5cf6; text-decoration: none; font-weight: 600; }
-        a:hover { color: #a78bfa; text-decoration: underline; }
+        .back-btn:hover { background: #000; color: #fff; }
+        #detail-title { font-family: 'Montserrat', sans-serif; font-size: 6rem; margin: 0 0 20px 0; text-transform: uppercase;}
+        #detail-content { font-size: 1.5rem; line-height: 1.6; max-width: 800px; }
     </style>
 </head>
 <body>
 
-    <div id="blob"></div>
-    <div id="blur-layer"></div>
+    <div id="custom-cursor"></div>
 
-    <div class="container">
-        <header>
-            <h1>Kabir Bhuchar</h1>
-            <p style="color: #94a3b8; letter-spacing: 2px;">STUDENT | ATHLETE | DEVELOPER</p>
-        </header>
+    <div id="main-view">
+        
+        <section class="hero">
+            <h1>KABIR</h1>
+        </section>
 
-        <div class="nav-bar">
-            <button class="nav-btn" py-click="show_home">Home</button>
-            <button class="nav-btn" py-click="show_links">My Links</button>
-            <button class="nav-btn" py-click="show_activities">Activities</button>
-        </div>
-
-        <div class="card" id="content-area">
-            <div style="text-align: center; color: #94a3b8;">
-                <p>Initializing Python Engine...</p>
+        <section class="columns-container">
+            <div class="column" id="chess" py-click="open_category">
+                <h2>Chess</h2>
             </div>
-        </div>
+            <div class="column" id="basketball" py-click="open_category">
+                <h2>Basketball</h2>
+            </div>
+            <div class="column" id="coding" py-click="open_category">
+                <h2>Coding</h2>
+            </div>
+            <div class="column" id="music" py-click="open_category">
+                <h2>Music</h2>
+            </div>
+        </section>
+
+        <section class="socials">
+            <a href="http://ratings.fide.com/profile/498777" target="_blank">FIDE</a>
+            <a href="https://github.com/Aajukubaaa" target="_blank">GitHub</a>
+            <a href="https://www.youtube.com/@Aajukubaa" target="_blank">YouTube</a>
+        </section>
+
+    </div>
+
+    <div id="detail-view">
+        <button class="back-btn" py-click="close_category">← GO BACK</button>
+        <h1 id="detail-title">TITLE</h1>
+        <div id="detail-content">Content goes here...</div>
     </div>
 
     <script type="py">
         from pyscript import document
+        import js
 
-        # Notice how I added CSS classes to your HTML inside the Python dictionary 
-        # to make it match the new premium theme!
-        pages = {
-            "home": """
-                <h2 style="margin-top: 0;">Welcome to My World</h2>
-                <p style="color: #cbd5e1; line-height: 1.6;">I am a student from India, currently living in London. I balance my time between competitive sports, strategic board games, and writing code.</p>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 30px;">
-                    <div class="activity-item" style="border-left-color: #3b82f6;">
-                        <h3 style="margin: 0 0 10px 0;">♞ Chess</h3>
-                        <p style="margin: 0; color: #94a3b8;">1545 FIDE Rating</p>
-                    </div>
-                    <div class="activity-item" style="border-left-color: #f59e0b;">
-                        <h3 style="margin: 0 0 10px 0;">🏀 Basketball</h3>
-                        <p style="margin: 0; color: #94a3b8;">6'0" Center</p>
-                    </div>
-                    <div class="activity-item" style="border-left-color: #10b981;">
-                        <h3 style="margin: 0 0 10px 0;">🎻 Music</h3>
-                        <p style="margin: 0; color: #94a3b8;">Violin (Suzuki Bk 3)</p>
-                    </div>
-                </div>
-            """,
-            "links": """
-                <h2 style="margin-top: 0;">Connect With Me</h2>
-                <div class="activity-item"><a href="http://ratings.fide.com/profile/498777" target="_blank">♟️ FIDE Profile (1545)</a></div>
-                <div class="activity-item"><a href="http://chess.com/member/aajukubaa" target="_blank">♞ Chess.com Profile</a></div>
-                <div class="activity-item"><a href="https://github.com/Aajukubaaa" target="_blank">💻 GitHub Repository</a></div>
-                <div class="activity-item"><a href="https://www.youtube.com/@Aajukubaa" target="_blank">▶️ YouTube Channel</a></div>
-            """,
-            "activities": """
-                <h2 style="margin-top: 0;">Extracurricular Activities</h2>
-                <p style="color: #cbd5e1;">Highlights of my achievements outside the classroom:</p>
-                <div class="activity-item">
-                    <h3 style="margin-top: 0;">🏀 Basketball Tournaments</h3>
-                    <p style="color: #94a3b8;">Playing competitive matches as a 6'0" Center, focusing on team coordination, defense, and high-pressure tournament performance.</p>
-                </div>
-                <div class="activity-item">
-                    <h3 style="margin-top: 0;">♟️ Chess Competitions</h3>
-                    <p style="color: #94a3b8;">Active competitive player maintaining a 1545 FIDE rating, analyzing complex openings, and playing strategic tournament games.</p>
-                </div>
-                <div class="activity-item">
-                    <h3 style="margin-top: 0;">💻 Coding & Development</h3>
-                    <p style="color: #94a3b8;">Building automated Python scripts, web applications, and deploying custom static pages directly to GitHub Pages.</p>
-                </div>
-            """
+        # 1. Your Database: All your content lives here in Python
+        categories = {
+            "chess": {
+                "title": "CHESS", 
+                "color": "#FF3366", 
+                "content": "<p>1545 FIDE Rating. Analyzing complex openings and playing strategic tournament games.</p>"
+            },
+            "basketball": {
+                "title": "BASKETBALL", 
+                "color": "#FF9933", 
+                "content": "<p>6'0\" Center. Focusing on team coordination, defense, and high-pressure performance.</p>"
+            },
+            "coding": {
+                "title": "CODING", 
+                "color": "#33CCFF", 
+                "content": "<p>Building automated Python scripts and stunning frontend designs directly on GitHub Pages.</p>"
+            },
+            "music": {
+                "title": "MUSIC", 
+                "color": "#CC33FF", 
+                "content": "<p>Violin - Suzuki Book 3. Finding rhythm and discipline outside of academics.</p>"
+            }
         }
 
-        def update_page(content):
-            content_box = document.querySelector("#content-area")
-            content_box.innerHTML = content
+        # 2. Logic: What happens when you click a column
+        def open_category(event):
+            # Find out which column was clicked by grabbing its ID
+            clicked_id = event.currentTarget.id
+            data = categories[clicked_id]
+            
+            # Hide the main screen and show the detail screen
+            document.querySelector("#main-view").style.display = "none"
+            detail_view = document.querySelector("#detail-view")
+            detail_view.style.display = "block"
+            
+            # Dynamically change the background color to match the column
+            detail_view.style.backgroundColor = data["color"]
+            
+            # Inject your Python data into the HTML
+            document.querySelector("#detail-title").innerHTML = data["title"]
+            document.querySelector("#detail-content").innerHTML = data["content"]
+            
+            # Instantly scroll the browser back to the top of the page
+            js.window.scrollTo(0, 0)
 
-        def show_home(event): update_page(pages["home"])
-        def show_links(event): update_page(pages["links"])
-        def show_activities(event): update_page(pages["activities"])
-
-        # Load home page on start
-        update_page(pages["home"])
+        # 3. Logic: What happens when you click 'Go Back'
+        def close_category(event):
+            document.querySelector("#detail-view").style.display = "none"
+            document.querySelector("#main-view").style.display = "block"
     </script>
 
     <script>
-        const blob = document.getElementById("blob");
-        window.onpointermove = event => { 
-            const { clientX, clientY } = event;
-            blob.animate({ left: `${clientX}px`, top: `${clientY}px` }, { duration: 3000, fill: "forwards" });
-        }
+        const cursor = document.getElementById("custom-cursor");
+        document.addEventListener("mousemove", (e) => {
+            cursor.style.left = e.clientX + "px";
+            cursor.style.top = e.clientY + "px";
+        });
+        
+        // Makes the cursor slightly bigger when you hover over clickable things
+        document.querySelectorAll("a, .column, .back-btn").forEach(el => {
+            el.addEventListener("mouseenter", () => {
+                cursor.style.width = "60px";
+                cursor.style.height = "60px";
+            });
+            el.addEventListener("mouseleave", () => {
+                cursor.style.width = "40px";
+                cursor.style.height = "40px";
+            });
+        });
     </script>
 </body>
 </html>
