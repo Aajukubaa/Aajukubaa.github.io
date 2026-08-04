@@ -21,13 +21,17 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
             overflow-x: hidden;
             scroll-behavior: smooth;
-            cursor: none; /* Custom Inverted Cursor */
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Enforce custom cursor on all clickable elements */
-        a, button, .pro-card, .connect-row {
-            cursor: none !important;
+        /* Enable custom cursor only on fine-pointer (desktop) devices */
+        @media (pointer: fine) {
+            body, html { cursor: none; }
+            a, button, .pro-card, .connect-row { cursor: none !important; }
+            #custom-cursor { display: block; }
+        }
+        @media (pointer: coarse) {
+            #custom-cursor { display: none !important; }
         }
 
         /* KABIR CURSIVE ACCENT */
@@ -64,7 +68,7 @@
             animation: pressAnim 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 4. UPDATED HERO SECTION (Syne Typography & Full Screen) */
+        /* 4. UPDATED HERO SECTION */
         .hero-container {
             height: 100vh;
             width: 100%;
@@ -163,6 +167,7 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(20px);
+            outline: none;
         }
 
         .pro-card::before {
@@ -202,18 +207,17 @@
             transition: gap 0.2s;
         }
 
-        .pro-card:hover {
+        .pro-card:hover, .pro-card:focus {
             transform: translateY(-6px) scale(1.01);
             border-color: rgba(255, 215, 0, 0.4);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.15);
             background: rgba(255, 255, 255, 0.06);
         }
-        .pro-card:hover .card-action {
+        .pro-card:hover .card-action, .pro-card:focus .card-action {
             gap: 14px;
             color: #ffd700;
         }
 
-        /* Card active effect when modal is open */
         .pro-card.card-active {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,215,0,0.12);
@@ -291,9 +295,8 @@
             transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* When visible, fade in overlay */
         #detail-view.modal-open {
-            display: block; /* make visible immediately */
+            display: block;
             opacity: 1;
         }
 
@@ -306,19 +309,16 @@
             padding: 50px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
             position: relative;
-
             transform: translateY(20px);
             opacity: 0;
             transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s;
         }
 
-        /* When overlay has .modal-open, animate the container up */
         #detail-view.modal-open .modal-container {
             transform: translateY(0);
             opacity: 1;
         }
 
-        /* When closing, apply slight downward motion and fade-out */
         #detail-view.modal-closing {
             opacity: 0;
         }
@@ -336,7 +336,7 @@
             width: 40px; height: 40px;
             border-radius: 50%;
             font-size: 1.2rem;
-            cursor: none;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -360,14 +360,6 @@
             color: #a1a1a6;
         }
 
-        .detail-spec-box {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
         /* 9. SCROLL FADE-IN EFFECT */
         .fade-in {
             opacity: 0;
@@ -380,7 +372,6 @@
             transform: translateY(0);
         }
 
-        /* Respect user preference for reduced motion */
         @media (prefers-reduced-motion: reduce) {
             * { transition: none !important; animation: none !important; }
         }
@@ -424,7 +415,7 @@
 
             <div class="tiles-grid">
                 
-                <div class="pro-card" id="chess" py-click="open_category">
+                <div class="pro-card" id="chess" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill">Strategy</span>
                     <div>
                         <h3>Chess</h3>
@@ -433,7 +424,7 @@
                     <div class="card-action">Inspect Profile <span>→</span></div>
                 </div>
 
-                <div class="pro-card" id="basketball" py-click="open_category">
+                <div class="pro-card" id="basketball" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill">Athletics</span>
                     <div>
                         <h3>Basketball</h3>
@@ -442,7 +433,7 @@
                     <div class="card-action">Inspect Profile <span>→</span></div>
                 </div>
 
-                <div class="pro-card" id="coding" py-click="open_category">
+                <div class="pro-card" id="coding" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill">Engineering</span>
                     <div>
                         <h3>Coding</h3>
@@ -451,7 +442,7 @@
                     <div class="card-action">Inspect Profile <span>→</span></div>
                 </div>
 
-                <div class="pro-card" id="music" py-click="open_category">
+                <div class="pro-card" id="music" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill">Performance</span>
                     <div>
                         <h3>Music</h3>
@@ -469,7 +460,7 @@
 
             <div class="tiles-grid">
                 
-                <div class="pro-card" id="presentations" py-click="open_category">
+                <div class="pro-card" id="presentations" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill" style="color:#34c759;">Keynote Slide Decks</span>
                     <div>
                         <h3>PowerPoint Presentations</h3>
@@ -478,7 +469,7 @@
                     <div class="card-action">View Presentations <span>→</span></div>
                 </div>
 
-                <div class="pro-card" id="portfolios" py-click="open_category">
+                <div class="pro-card" id="portfolios" tabindex="0" role="button" py-click="open_category">
                     <span class="card-pill" style="color:#5e5ce6;">Creative Showcase</span>
                     <div>
                         <h3>Design Portfolios</h3>
@@ -538,52 +529,47 @@
         from pyscript import document
         import js
 
-        # Simple category content (keeps things valid and tidy)
         categories = {
             "chess": {
                 "title": "CHESS",
                 "badge": "STRATEGY",
-                "content": "<p>Opening repertoire, tactical play, and time-pressure resilience. Plays fast controls and studies typical lines.</p>"
+                "content": "<p>Maintains an official 1545 FIDE tournament rating. Focuses on sharp tactical calculation, positional understanding, and deep opening preparation under tight time controls.</p>"
             },
             "basketball": {
                 "title": "BASKETBALL",
                 "badge": "ATHLETICS",
-                "content": "<p>Center play focused on paint defense, rebounding, and team communication.</p>"
+                "content": "<p>Playing as a 6'0\" (182 cm) Center. Leverages strong vertical presence, rim protection, box-outs, and defensive coordination in the paint.</p>"
             },
             "coding": {
                 "title": "CODING",
                 "badge": "ENGINEERING",
-                "content": "<p>Python backends, automation, and deployment of static web apps.</p>"
+                "content": "<p>Proficient in Python 3.12 backend development, task automation scripts, data handling, and deploying static interactive web applications.</p>"
             },
             "music": {
                 "title": "MUSIC",
                 "badge": "PERFORMANCE",
-                "content": "<p>Violin practice (Suzuki Book 3), bowing technique, and tone development.</p>"
+                "content": "<p>Classical violin mastery currently progressing through Suzuki Book 3. Specializes in tone production, clean intonation, and bowing mechanics.</p>"
             },
             "presentations": {
                 "title": "POWERPOINT KEYNOTES",
                 "badge": "ACADEMIC PRESENTATIONS",
-                "content": "<p>Slides and visual research decks prepared for school and public talks.</p>"
+                "content": "<p>Engineered dynamic visual research decks featuring structured typography, custom animations, and data-driven storytelling.</p>"
             },
             "portfolios": {
                 "title": "DESIGN PORTFOLIOS",
                 "badge": "CREATIVE SHOWCASE",
-                "content": "<p>A curated showcase of design projects and slide layouts.</p>"
+                "content": "<p>A curated collection of 9+ design projects emphasizing minimalist layouts, high-contrast imagery, and smooth Apple-inspired user experiences.</p>"
             }
         }
 
-        # Track which card opened the modal so we can animate close on it
         last_opened_card_id = None
 
         def open_category(event):
             global last_opened_card_id
-            # event.currentTarget is the clicked card element
             card = event.currentTarget
             cat_id = card.id
 
-            # small press animation handled via CSS class
             card.classList.add("card-pressed")
-            # remove press class after it finishes (use a small JS wrapper to accept the element)
             js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 300, card)
 
             if cat_id in categories:
@@ -592,44 +578,37 @@
                 document.querySelector("#detail-badge").innerHTML = item["badge"]
                 document.querySelector("#detail-content").innerHTML = item["content"]
 
-                # Show overlay and apply open animation class
                 detail = document.querySelector("#detail-view")
                 detail.style.display = "block"
-                # ensure no leftover closing classes
                 detail.classList.remove('modal-closing')
-                # add modal-open to trigger CSS transitions
                 detail.classList.add('modal-open')
 
-                # apply active effect to the card currently opened
                 card.classList.add('card-active')
                 last_opened_card_id = cat_id
 
         def close_category(event):
             global last_opened_card_id
             detail = document.querySelector("#detail-view")
-            # add closing class which triggers CSS reverse transition
             detail.classList.remove('modal-open')
             detail.classList.add('modal-closing')
 
-            # If a card was active, play a subtle card-close animation by removing card-active after a short delay
             if last_opened_card_id:
                 card_el = document.getElementById(last_opened_card_id)
                 if card_el:
-                    # slightly press and release for closure
                     card_el.classList.add('card-pressed')
                     js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 300, card_el)
                 last_opened_card_id = None
 
-            # after the modal transition ends, hide the overlay fully and clear closing class
-            # match this timeout to the CSS transition duration (350ms)
             js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 380, detail)
     </script>
 
     <script>
-        // Hardware Accelerated Cursor
+        // Hardware Accelerated Cursor (Runs only on fine-pointer devices due to CSS media query)
         const cursor = document.getElementById("custom-cursor");
         document.addEventListener("mousemove", (e) => {
-            cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
+            if (cursor) {
+                cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
+            }
         });
 
         // Intersection Observer for Scroll Fade-Ins
