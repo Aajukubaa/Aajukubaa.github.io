@@ -103,7 +103,6 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* Fixed Hero Container & Padding to protect the 'r' in Bhuchar */
         .hero-container {
             height: 100vh;
             width: 100%;
@@ -185,7 +184,7 @@
             margin-bottom: 45px;
         }
 
-        /* 2x2 Domain Grid with In-Place Hover Expansion */
+        /* 2x2 Domain Grid with Glitch-Free In-Place Corner Expansion */
         .domain-grid-wrapper {
             position: relative;
             max-width: 1000px;
@@ -216,8 +215,7 @@
             outline: none;
             transform-style: preserve-3d;
             perspective: 1000px;
-            /* Smooth transition for in-place expansion without reflowing other cards */
-            transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 1;
         }
 
@@ -246,7 +244,6 @@
             color: #ffffff;
         }
 
-        /* Hidden by default, appears ONLY on hover */
         .card-preview {
             max-height: 0;
             opacity: 0;
@@ -289,17 +286,45 @@
             transition: opacity 0.2s;
         }
 
-        /* Hover Expansion: Takes up 2x2 container space in place while others form L-shape underneath */
-        .pro-card:hover, .pro-card:focus {
+        /* Glitch-Free Corner-Anchored Expansion Rules */
+        .pro-card:nth-child(1):hover, .pro-card:nth-child(1):focus {
             position: absolute;
             top: 0; left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             z-index: 50;
             border-color: rgba(255, 215, 0, 0.5);
             box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
             background: rgba(18, 18, 20, 0.95);
-            transform: scale(1.01);
+        }
+
+        .pro-card:nth-child(2):hover, .pro-card:nth-child(2):focus {
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 100%;
+            z-index: 50;
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
+            background: rgba(18, 18, 20, 0.95);
+        }
+
+        .pro-card:nth-child(3):hover, .pro-card:nth-child(3):focus {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 50;
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
+            background: rgba(18, 18, 20, 0.95);
+        }
+
+        .pro-card:nth-child(4):hover, .pro-card:nth-child(4):focus {
+            position: absolute;
+            bottom: 0; right: 0;
+            width: 100%; height: 100%;
+            z-index: 50;
+            border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 215, 0, 0.2);
+            background: rgba(18, 18, 20, 0.95);
         }
 
         .pro-card:hover .card-preview, .pro-card:focus-within .card-preview {
@@ -312,7 +337,6 @@
             opacity: 0;
         }
 
-        /* Standard 3-column or responsive grid for other sections */
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -340,7 +364,6 @@
             transform: translateY(-6px);
         }
 
-        /* Placeholder image / media container */
         .media-placeholder {
             width: 100%;
             height: 160px;
@@ -362,7 +385,6 @@
             color: #ffd700;
         }
 
-        /* Connect Grid Layout */
         .connect-section {
             padding: 70px 5vw;
             background: #050505;
@@ -413,7 +435,6 @@
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
 
-        /* Enhanced Prominent Modal View */
         #detail-view {
             display: none;
             position: fixed;
@@ -862,13 +883,11 @@
     </script>
 
     <script>
-        // Hide Loader once window & PyScript runtime initialize
         window.addEventListener('load', () => {
             const loader = document.getElementById('pyscript-loader');
             if (loader) loader.classList.add('loaded');
         });
 
-        // Hardware Accelerated Cursor & Ambient Glow
         const cursor = document.getElementById("custom-cursor");
         const glow = document.getElementById("ambient-glow");
         
@@ -881,7 +900,6 @@
             }
         });
 
-        // Keyboard Accessibility & Shortcuts (Enter/Space opens cards, Escape closes modal)
         document.querySelectorAll('.pro-card, .standard-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -901,7 +919,6 @@
             }
         });
 
-        // Intersection Observer for Scroll Fade-Ins
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
