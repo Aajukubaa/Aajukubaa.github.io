@@ -47,7 +47,6 @@
             transition: transform 0.05s ease-out;
         }
 
-        /* Ambient Background Glow */
         #ambient-glow {
             position: fixed;
             top: 50%; left: 50%;
@@ -103,22 +102,25 @@
         }
         .card-pressed { animation: pressAnim 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
 
+        /* Fixed Hero Container & Padding to prevent cut-off */
         .hero-container {
             height: 100vh;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 0 5vw;
+            padding: 0 7vw;
             background-color: transparent;
             position: relative;
             z-index: 1;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-sizing: border-box;
+            overflow: visible;
         }
 
         .hero-title {
             font-family: 'Syne', sans-serif;
-            font-size: clamp(3.2rem, 11vw, 13rem);
+            font-size: clamp(3rem, 10vw, 12rem);
             font-weight: 800;
             line-height: 0.9;
             text-transform: uppercase;
@@ -127,6 +129,7 @@
             background: linear-gradient(180deg, #ffffff 0%, #86868b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            word-break: break-word;
         }
         .hero-title span { display: block; }
 
@@ -183,21 +186,21 @@
 
         .tiles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
         }
 
-        /* 3D Tilt Cards */
+        /* Card Expansion on Hover & 3D Tilt */
         .pro-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 28px;
             padding: 36px 28px;
-            min-height: 270px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s, background 0.3s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -231,112 +234,146 @@
             color: #ffffff;
         }
 
-        .card-action {
+        /* Hover expandable content description */
+        .card-preview {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+        .pro-card:hover .card-preview, .pro-card:focus-within .card-preview {
+            max-height: 140px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+
+        .card-preview p {
+            color: #a1a1a6;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 12px 0;
+        }
+
+        .card-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #000000;
+            background: #ffd700;
+            padding: 8px 16px;
+            border-radius: 980px;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .card-action-btn:hover {
+            background: #ffffff;
+            transform: scale(1.05);
+        }
+
+        .card-action-default {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 0.95rem;
             font-weight: 600;
             color: #2997ff;
-            transition: gap 0.2s;
+            transition: opacity 0.2s;
         }
+        .pro-card:hover .card-action-default { opacity: 0; }
 
         .pro-card:hover, .pro-card:focus {
             border-color: rgba(255, 215, 0, 0.4);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 215, 0, 0.15);
             background: rgba(255, 255, 255, 0.06);
-        }
-        .pro-card:hover .card-action, .pro-card:focus .card-action {
-            gap: 14px;
-            color: #ffd700;
+            transform: translateY(-8px) scale(1.02);
         }
 
-        .pro-card.card-active {
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,215,0,0.12);
-            border-color: rgba(255,215,0,0.25);
-        }
-
+        /* Connect Grid Layout */
         .connect-section {
-            padding: 70px 2.5vw;
+            padding: 70px 5vw;
             background: #050505;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
             z-index: 1;
         }
 
-        .connect-row {
+        .connect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .connect-card {
             display: flex;
             align-items: center;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 20px;
-            padding: 20px 28px;
-            margin-bottom: 16px;
+            padding: 18px 22px;
             text-decoration: none;
             color: #ffffff;
             transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-            width: 92vw;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
         }
-        .connect-row:hover {
+        .connect-card:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: #ffd700;
-            transform: translateX(6px);
+            transform: translateY(-4px);
         }
 
-        .avatar-circle {
-            width: 56px; height: 56px;
-            border-radius: 50%;
-            background: #1c1c1e;
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            background-size: cover;
-            background-position: center;
-            margin-right: 20px;
+        .connect-icon {
+            font-size: 1.5rem;
+            margin-right: 16px;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
             flex-shrink: 0;
         }
 
-        .connect-info { flex-grow: 1; }
-        .connect-info h4 { font-size: 1.2rem; font-weight: 700; margin: 0 0 4px 0; }
-        .connect-info p { margin: 0; color: #86868b; font-size: 0.9rem; }
+        .connect-details { flex-grow: 1; }
+        .connect-details h4 { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px 0; }
+        .connect-details p { margin: 0; color: #86868b; font-size: 0.8rem; }
         
-        .connect-arrow { font-size: 1.3rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
-        .connect-row:hover .connect-arrow { color: #ffd700; transform: translateX(4px); }
+        .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
+        .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
 
-        /* Enhanced Modal Styles */
+        /* Enhanced Prominent Modal Animation */
         #detail-view {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(30px);
+            backdrop-filter: blur(35px);
             z-index: 9999;
             padding: 50px 6vw;
             overflow-y: auto;
             box-sizing: border-box;
             opacity: 0;
-            transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         #detail-view.modal-open { display: block; opacity: 1; }
 
         .modal-container {
             max-width: 850px;
-            margin: 30px auto;
+            margin: 40px auto;
             background: #111113;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 32px;
-            padding: 45px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 36px;
+            padding: 50px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 215, 0, 0.1);
             position: relative;
-            transform: translateY(20px);
+            transform: scale(0.92) translateY(30px);
             opacity: 0;
-            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
-        #detail-view.modal-open .modal-container { transform: translateY(0); opacity: 1; }
+        #detail-view.modal-open .modal-container { transform: scale(1) translateY(0); opacity: 1; }
         #detail-view.modal-closing { opacity: 0; }
-        #detail-view.modal-closing .modal-container { transform: translateY(20px); opacity: 0; }
+        #detail-view.modal-closing .modal-container { transform: scale(0.95) translateY(20px); opacity: 0; }
 
         .close-btn {
             position: absolute;
@@ -344,16 +381,16 @@
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: #ffffff;
-            width: 38px; height: 38px;
+            width: 40px; height: 40px;
             border-radius: 50%;
             font-size: 1.1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.2s;
         }
-        .close-btn:hover { background: #ffd700; color: #000000; }
+        .close-btn:hover { background: #ffd700; color: #000000; transform: rotate(90deg); }
 
         #detail-badge { display: inline-block; margin-bottom: 12px; }
         #detail-title {
@@ -443,7 +480,7 @@
 
         <section class="section-container fade-in">
             <h2 class="section-header-title">The Domain of <span class="kabir-cursive">Kabir</span></h2>
-            <p class="section-subtitle">Select a capability card below to inspect full specifications.</p>
+            <p class="section-subtitle">Hover over any capability card to inspect quick specs or click to dive deeper.</p>
 
             <div class="tiles-grid">
                 
@@ -451,36 +488,48 @@
                     <span class="card-pill">Strategy</span>
                     <div>
                         <h3>Chess</h3>
-                        <p style="color:#86868b; margin:0;">1545 FIDE tournament ratings & openings analysis.</p>
+                        <div class="card-preview">
+                            <p>1545 FIDE tournament rating specializing in sharp tactical combat, aggressive 1.e4 openings, and rapid time scrambles.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">Inspect Profile <span>→</span></div>
+                    <div class="card-action-default">Inspect Profile <span>→</span></div>
                 </div>
 
                 <div class="pro-card" id="basketball" tabindex="0" role="button" aria-label="Inspect Basketball Profile" py-click="open_category">
                     <span class="card-pill">Athletics</span>
                     <div>
                         <h3>Basketball</h3>
-                        <p style="color:#86868b; margin:0;">6'0" Center dominating paint defense & rebounding.</p>
+                        <div class="card-preview">
+                            <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding under pressure.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">Inspect Profile <span>→</span></div>
+                    <div class="card-action-default">Inspect Profile <span>→</span></div>
                 </div>
 
                 <div class="pro-card" id="coding" tabindex="0" role="button" aria-label="Inspect Coding Profile" py-click="open_category">
                     <span class="card-pill">Engineering</span>
                     <div>
                         <h3>Coding</h3>
-                        <p style="color:#86868b; margin:0;">Automated Python backend & dynamic web architectures.</p>
+                        <div class="card-preview">
+                            <p>Building automated Python backends, web micro-apps, and deploying dynamic interfaces straight to GitHub Pages.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">Inspect Profile <span>→</span></div>
+                    <div class="card-action-default">Inspect Profile <span>→</span></div>
                 </div>
 
                 <div class="pro-card" id="music" tabindex="0" role="button" aria-label="Inspect Music Profile" py-click="open_category">
                     <span class="card-pill">Performance</span>
                     <div>
                         <h3>Music</h3>
-                        <p style="color:#86868b; margin:0;">Violin classical repertoire & rhythmic mastery.</p>
+                        <div class="card-preview">
+                            <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire with clean tone articulation.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">Inspect Profile <span>→</span></div>
+                    <div class="card-action-default">Inspect Profile <span>→</span></div>
                 </div>
 
             </div>
@@ -493,21 +542,27 @@
             <div class="tiles-grid">
                 
                 <div class="pro-card" id="presentations" tabindex="0" role="button" aria-label="View Presentations" py-click="open_category">
-                    <span class="card-pill" style="color:#34c759;">Keynote Slide Decks</span>
+                    <span class="card-pill" style="color:#34c759;">Keynote Decks</span>
                     <div>
                         <h3>PowerPoint Presentations</h3>
-                        <p style="color:#86868b; margin:0;">Animated Google Slides and interactive visual research topics.</p>
+                        <div class="card-preview">
+                            <p>Dynamic visual slide decks engineered with minimalist layouts, custom animations, and clean storytelling.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">View Presentations <span>→</span></div>
+                    <div class="card-action-default">View Presentations <span>→</span></div>
                 </div>
 
                 <div class="pro-card" id="portfolios" tabindex="0" role="button" aria-label="View Design Work" py-click="open_category">
                     <span class="card-pill" style="color:#5e5ce6;">Creative Showcase</span>
                     <div>
                         <h3>Design Portfolios</h3>
-                        <p style="color:#86868b; margin:0;">Full showcase of 9+ design project decks and layout concepts.</p>
+                        <div class="card-preview">
+                            <p>Curated archive of 9+ comprehensive design project portfolios featuring Apple-inspired aesthetics.</p>
+                            <span class="card-action-btn">Click to view more info →</span>
+                        </div>
                     </div>
-                    <div class="card-action">View Design Work <span>→</span></div>
+                    <div class="card-action-default">View Design Work <span>→</span></div>
                 </div>
 
             </div>
@@ -516,34 +571,109 @@
         <section class="connect-section fade-in">
             <div style="max-width: 1400px; margin: 0 auto 30px auto; padding: 0 10px;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
+                <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contact gateways.</p>
             </div>
 
-            <a href="http://ratings.fide.com/profile/498777" target="_blank" class="connect-row">
-                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=150');"></div>
-                <div class="connect-info">
-                    <h4>FIDE Official Rating</h4>
-                    <p>Official 1545 tournament records registered to <span class="kabir-cursive">Kabir</span>.</p>
-                </div>
-                <div class="connect-arrow">↗</div>
-            </a>
+            <div class="connect-grid">
+                <a href="http://ratings.fide.com/profile/498777" target="_blank" class="connect-card">
+                    <div class="connect-icon">♟️</div>
+                    <div class="connect-details">
+                        <h4>FIDE Profile</h4>
+                        <p>Official 1545 tournament records</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
 
-            <a href="https://github.com/Aajukubaaa" target="_blank" class="connect-row">
-                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?w=150');"></div>
-                <div class="connect-info">
-                    <h4>GitHub Repositories</h4>
-                    <p>Python code, web app deployments, and automation scripts.</p>
-                </div>
-                <div class="connect-arrow">↗</div>
-            </a>
+                <a href="https://www.chess.com" target="_blank" class="connect-card">
+                    <div class="connect-icon">♘</div>
+                    <div class="connect-details">
+                        <h4>Chess.com</h4>
+                        <p>Blitz & rapid online matches</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
 
-            <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="connect-row">
-                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=150');"></div>
-                <div class="connect-info">
-                    <h4>YouTube Channel</h4>
-                    <p>Video edits, athletic highlights, and coding demos.</p>
-                </div>
-                <div class="connect-arrow">↗</div>
-            </a>
+                <a href="https://lichess.org" target="_blank" class="connect-card">
+                    <div class="connect-icon">♞</div>
+                    <div class="connect-details">
+                        <h4>Lichess</h4>
+                        <p>Bullet & puzzle training</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://github.com/Aajukubaaa" target="_blank" class="connect-card">
+                    <div class="connect-icon">💻</div>
+                    <div class="connect-details">
+                        <h4>GitHub</h4>
+                        <p>Python repositories & micro-apps</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://replit.com" target="_blank" class="connect-card">
+                    <div class="connect-icon">⚡</div>
+                    <div class="connect-details">
+                        <h4>Replit</h4>
+                        <p>Live Python code execution</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="connect-card">
+                    <div class="connect-icon">▶️</div>
+                    <div class="connect-details">
+                        <h4>YouTube</h4>
+                        <p>Video edits & athletic highlights</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://medium.com" target="_blank" class="connect-card">
+                    <div class="connect-icon">✍️</div>
+                    <div class="connect-details">
+                        <h4>Medium</h4>
+                        <p>Articles and analytical logs</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://www.duolingo.com" target="_blank" class="connect-card">
+                    <div class="connect-icon">🦉</div>
+                    <div class="connect-details">
+                        <h4>Duolingo</h4>
+                        <p>Daily streak & language stats</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://www.vinted.co.uk" target="_blank" class="connect-card">
+                    <div class="connect-icon">🏷️</div>
+                    <div class="connect-details">
+                        <h4>Vinted</h4>
+                        <p>Curated style storefront</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="https://www.etsy.com/uk/shop/PotterybyRG" target="_blank" class="connect-card">
+                    <div class="connect-icon">🏺</div>
+                    <div class="connect-details">
+                        <h4>Pottery by RG</h4>
+                        <p>Handmade ceramic works</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+
+                <a href="mailto:kabirbhuchar@gmail.com" class="connect-card">
+                    <div class="connect-icon">✉️</div>
+                    <div class="connect-details">
+                        <h4>Gmail</h4>
+                        <p>kabirbhuchar@gmail.com</p>
+                    </div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+            </div>
         </section>
 
     </div>
@@ -643,7 +773,7 @@
                     js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 300, card_el)
                 last_opened_card_id = None
 
-            js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 380, detail)
+            js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 400, detail)
     </script>
 
     <script>
@@ -672,7 +802,7 @@
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                card.style.transform = `translateY(-6px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.01)`;
+                card.style.transform = `translateY(-8px) rotateX(${-y / 15}deg) rotateY(${x / 15}deg) scale(1.02)`;
             });
             card.addEventListener('mouseleave', () => {
                 card.style.transform = 'translateY(0) rotateX(0) rotateY(0) scale(1)';
@@ -693,7 +823,6 @@
             if (e.key === 'Escape') {
                 const detail = document.getElementById('detail-view');
                 if (detail && detail.classList.contains('modal-open')) {
-                    // Trigger close by querying the close button
                     const closeBtn = detail.querySelector('.close-btn');
                     if (closeBtn) closeBtn.click();
                 }
