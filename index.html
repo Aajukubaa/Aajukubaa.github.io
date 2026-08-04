@@ -375,6 +375,18 @@
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
+
+        /* 8. APPLE SCROLL FADE-IN EFFECT */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px); /* Starts slightly lower */
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0); /* Glides into place */
+        }
     </style>
 </head>
 <body>
@@ -489,7 +501,7 @@
             </div>
         </section>
 
-        <section class="connect-section">
+<section class="connect-section">
             <div style="max-width: 1400px; margin: 0 auto 30px auto; padding: 0 10px;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
             </div>
@@ -499,6 +511,24 @@
                 <div class="connect-info">
                     <h4>FIDE Official Rating</h4>
                     <p>Official 1545 tournament records registered to <span class="kabir-cursive">Kabir</span>.</p>
+                </div>
+                <div class="connect-arrow">↗</div>
+            </a>
+
+            <a href="http://chess.com/member/aajukubaa" target="_blank" class="connect-row">
+                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=150');"></div>
+                <div class="connect-info">
+                    <h4>Chess.com Profile</h4>
+                    <p>Online games, tactics, and blitz ratings (@aajukubaa).</p>
+                </div>
+                <div class="connect-arrow">↗</div>
+            </a>
+
+            <a href="http://lichess.org/@/onesandzeros" target="_blank" class="connect-row">
+                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?w=150');"></div>
+                <div class="connect-info">
+                    <h4>Lichess Profile</h4>
+                    <p>Open-source arena games (@onesandzeros).</p>
                 </div>
                 <div class="connect-arrow">↗</div>
             </a>
@@ -519,6 +549,24 @@
                     <p>Video edits, athletic highlights, and coding demos.</p>
                 </div>
                 <div class="connect-arrow">↗</div>
+            </a>
+
+            <a href="http://vinted.co.uk/member/284456392" target="_blank" class="connect-row">
+                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=150');"></div>
+                <div class="connect-info">
+                    <h4>Vinted Store</h4>
+                    <p>Apparel and accessories wardrobe items.</p>
+                </div>
+                <div class="connect-arrow">↗</div>
+            </a>
+
+            <a href="mailto:kabirbhuchar@gmail.com" class="connect-row">
+                <div class="avatar-circle" style="background-image: url('https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=150');"></div>
+                <div class="connect-info">
+                    <h4>Direct Contact</h4>
+                    <p>kabirbhuchar@gmail.com</p>
+                </div>
+                <div class="connect-arrow">✉</div>
             </a>
         </section>
 
@@ -590,6 +638,24 @@
         const cursor = document.getElementById("custom-cursor");
         document.addEventListener("mousemove", (e) => {
             cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
+        });
+
+    <script>
+        // This acts as a camera watching your screen
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                // If the element scrolls into view, add the 'visible' class
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stops watching once it appears
+                }
+            });
+        }, { threshold: 0.1 }); // Triggers when 10% of the item is visible
+
+        // Apply the fade-in effect to your major sections
+        document.querySelectorAll('.intro-banner, .section-container, .connect-section').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
         });
     </script>
 </body>
