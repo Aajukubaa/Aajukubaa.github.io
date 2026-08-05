@@ -26,14 +26,10 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Prevent background scroll when modal is open */
         body.modal-active {
             overflow: hidden !important;
         }
 
-        /* * Touch Device & Cursor Handling 
-         * Cursor defaults to normal when modal is open so it is fully visible and usable.
-         */
         @media (pointer: fine) {
             body:not(.modal-active), body:not(.modal-active) html { cursor: none; }
             body:not(.modal-active) a, body:not(.modal-active) button, body:not(.modal-active) .pro-card, body:not(.modal-active) .standard-card, body:not(.modal-active) .highlight-card, body:not(.modal-active) .connect-card, body:not(.modal-active) .nav-tab { cursor: none !important; }
@@ -95,7 +91,6 @@
             padding: 0 2px;
         }
 
-        /* Enhanced Card Press Animation */
         @keyframes pressAnim {
             0% { transform: scale(1); }
             30% { transform: scale(0.92); filter: brightness(1.2); }
@@ -103,7 +98,7 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* Floating Top Nav Bar (Segmented Control / Pill Tabs) */
+        /* Floating Top Nav Bar with Hover Scaling & Click Animation */
         .top-nav-container {
             position: fixed;
             top: 25px;
@@ -119,15 +114,17 @@
             display: flex;
             gap: 6px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            /* Mobile Responsiveness */
             max-width: 95vw;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
         }
-        .top-nav-container::-webkit-scrollbar {
-            display: none;
+        .top-nav-container:hover {
+            transform: translateX(-50%) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
         }
+        .top-nav-container::-webkit-scrollbar { display: none; }
 
         .nav-tab {
             background: transparent;
@@ -145,17 +142,17 @@
 
         .nav-tab:hover {
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.06);
         }
 
         .nav-tab.active {
             background: #ffffff;
             color: #000000;
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
-            transform: scale(1.02);
+            transform: scale(1.04);
         }
 
-        /* Tab Content View Manager */
         .tab-content {
             display: none;
             opacity: 0;
@@ -167,9 +164,8 @@
             opacity: 1;
         }
 
-        /* Hero Container */
         .hero-container {
-            height: calc(100vh - 100px);
+            height: calc(100vh - 140px);
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -207,10 +203,7 @@
             margin: 0;
             font-weight: 400;
         }
-        .intro-banner strong {
-            color: #ffffff;
-            font-weight: 600;
-        }
+        .intro-banner strong { color: #ffffff; font-weight: 600; }
 
         .specs-strip {
             display: flex;
@@ -265,7 +258,6 @@
             margin-bottom: 45px;
         }
 
-        /* 2x2 Domain Grid with Smooth Track Expansion (LARGER CARDS) */
         .domain-grid-wrapper {
             position: relative;
             max-width: 1100px;
@@ -282,24 +274,15 @@
                         grid-template-rows 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Dynamic track expansion on hover keeping all 4 cards visible in an L-shape */
         .domain-grid:has(#chess:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#basketball:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#coding:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 1fr 2.2fr; }
         .domain-grid:has(#music:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 1fr 2.2fr; }
 
         @media (max-width: 800px) {
-            .domain-grid {
-                grid-template-columns: 1fr !important;
-                grid-template-rows: auto !important;
-            }
-            .domain-grid:has(.pro-card:hover) {
-                grid-template-columns: 1fr !important;
-                grid-template-rows: auto !important;
-            }
-            .pro-card {
-                min-height: 300px;
-            }
+            .domain-grid { grid-template-columns: 1fr !important; grid-template-rows: auto !important; }
+            .domain-grid:has(.pro-card:hover) { grid-template-columns: 1fr !important; grid-template-rows: auto !important; }
+            .pro-card { min-height: 300px; }
         }
 
         .pro-card {
@@ -315,11 +298,6 @@
             backdrop-filter: blur(20px);
             outline: none;
             transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .pro-card:focus-visible, .standard-card:focus-visible, .highlight-card:focus-visible {
-            border-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         .card-pill {
@@ -369,10 +347,7 @@
             border-radius: 980px;
             transition: transform 0.2s, background 0.2s;
         }
-        .card-action-btn:hover {
-            background: #e0e0e0;
-            transform: scale(1.04);
-        }
+        .card-action-btn:hover { background: #e0e0e0; transform: scale(1.04); }
 
         .card-action-default {
             display: flex;
@@ -397,7 +372,6 @@
 
         .pro-card:hover .card-action-default { opacity: 0; }
 
-        /* Standard 3-column grid */
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -425,7 +399,6 @@
             transform: translateY(-6px);
         }
 
-        /* Horizontal Feature Cards */
         .highlight-grid {
             display: flex;
             flex-direction: column;
@@ -479,7 +452,6 @@
         }
         .highlight-card .media-placeholder { height: 200px; margin: 0; }
 
-        /* Connect Grid Layout */
         .connect-section {
             padding: 70px 5vw;
             background: transparent;
@@ -530,7 +502,7 @@
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-card:hover .connect-arrow { color: #ffffff; transform: translateX(3px); }
 
-        /* --- NOW & GOALS STYLING --- */
+        /* Goal Progress Bars */
         .goal-bar-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -551,7 +523,6 @@
         .goal-title { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
         .goal-metric { font-size: 0.95rem; color: #86868b; font-weight: 600; }
         
-        /* Horizontal Progress Bar Spanning Screen/Card */
         .progress-track {
             width: 100%;
             height: 10px;
@@ -567,13 +538,13 @@
             transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Micro-Widgets Styling */
+        /* Scattered Widgets */
         .widget-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 24px;
-            margin-top: 15px;
+            margin-top: 25px;
             backdrop-filter: blur(20px);
         }
         .interactive-btn {
@@ -589,44 +560,7 @@
         }
         .interactive-btn:hover { background: #d0d0d0; transform: scale(1.03); }
 
-        /* Keyboard Shortcuts Modal */
-        #shortcuts-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px);
-            z-index: 100000;
-            justify-content: center;
-            align-items: center;
-        }
-        .shortcuts-box {
-            background: #141416;
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
-        }
-        .shortcut-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            font-size: 0.95rem;
-        }
-        .kbd {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: #ffffff;
-        }
-
-        /* --- APPLE BENTO GRID DETAIL MODAL --- */
+        /* Apple Bento Grid Detail Modal */
         #detail-view {
             display: none;
             position: fixed;
@@ -639,8 +573,6 @@
             overflow-y: auto;
             overflow-x: hidden;
             box-sizing: border-box;
-            
-            /* Simple Pop/Scale Opening Animation */
             opacity: 0;
             transform: scale(0.98);
             transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1), transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
@@ -811,6 +743,17 @@
             </div>
         </section>
 
+        <div style="max-width: 900px; margin: 40px auto; padding: 0 5vw;">
+            <div class="widget-box" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                <div>
+                    <span class="card-pill">Quick Telemetry</span>
+                    <h4 style="color:#fff; margin: 8px 0 2px 0; font-size:1.1rem;">System Status Check</h4>
+                    <p style="color:#86868b; font-size:0.85rem; margin:0;">Verify operational status of all active tracks.</p>
+                </div>
+                <button class="interactive-btn" onclick="alert('Status: All systems optimal. Chess, Basketball, Coding & Music modules fully active.')">Run Status Check</button>
+            </div>
+        </div>
+
         <section class="connect-section">
             <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
@@ -929,6 +872,15 @@
                     </div>
                 </div>
             </div>
+
+            <div style="max-width: 1100px; margin: 40px auto 0 auto;">
+                <div class="widget-box">
+                    <span class="card-pill">Domain Micro-Lab</span>
+                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Interactive Tactical Puzzle</h4>
+                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">White to move and checkmate in 2.</p>
+                    <button class="interactive-btn" onclick="alert('Correct! 1. Qh7+ Kxh7 2. Rh3#')">Solve Puzzle</button>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -967,6 +919,13 @@
                     </div>
                     <div class="media-placeholder">[ Match Board / Award Photo Thumbnail ]</div>
                 </div>
+            </div>
+
+            <div class="widget-box" style="margin-bottom: 50px;">
+                <span class="card-pill">Python Sandbox</span>
+                <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Run Telemetry Script</h4>
+                <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Output live Python script parameters for repository builds.</p>
+                <button class="interactive-btn" onclick="alert('Python 3.12 Output: Active Projects Count = 9+, Status = Deployed to GitHub Pages.')">Run script.py</button>
             </div>
 
             <h2 class="section-header-title">Creative Archive</h2>
@@ -1082,16 +1041,14 @@
         </div>
     </div>
 
-    <div id="shortcuts-modal" onclick="toggleShortcuts(false)">
-        <div class="shortcuts-box" onclick="event.stopPropagation()">
+    <div id="shortcuts-modal" onclick="toggleShortcuts(false)" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(20px); z-index:100000; justify-content:center; align-items:center;">
+        <div class="shortcuts-box" onclick="event.stopPropagation()" style="background:#141416; border:1px solid rgba(255,255,255,0.2); border-radius:24px; padding:40px; max-width:500px; width:90%; box-shadow:0 25px 50px rgba(0,0,0,0.9);">
             <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
-            <div class="shortcut-row"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
-            <div class="shortcut-row"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
-            <div class="shortcut-row"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
-            <div class="shortcut-row"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
-            <div class="shortcut-row"><span>Open Selected Card</span><span><kbd class="kbd">Enter</kbd> / <kbd class="kbd">Space</kbd></span></div>
-            <div class="shortcut-row"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
-            <div class="shortcut-row"><span>Toggle Shortcuts Overlay</span><span><kbd class="kbd">?</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.95rem;"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.95rem;"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.08); font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" onclick="toggleShortcuts(false)">Got It</button>
         </div>
     </div>
@@ -1133,7 +1090,6 @@
                         <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory.</p>
                         <p><strong>With the Black Pieces:</strong> I favor fighting counter-attacking systems like the Sicilian Defense (1. e4 c5) or Scandinavian Defense (1. e4 d5).</p>
                     </div>
-                    <div class="content-media-block">[ Interactive Chess Game PGN Viewer Placeholder ]</div>
                 """
             },
             "basketball": {
@@ -1155,7 +1111,6 @@
                         <h4>Paint Dominance</h4>
                         <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and floor communication.</p>
                     </div>
-                    <div class="content-media-block">[ Highlights Video Player Placeholder ]</div>
                 """
             },
             "coding": {
@@ -1185,7 +1140,6 @@
                         <h4>Stack & Workflow</h4>
                         <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps to GitHub Pages.</p>
                     </div>
-                    <div class="content-media-block">[ Code Snippet Viewer Placeholder ]</div>
                 """
             },
             "music": {
@@ -1206,7 +1160,6 @@
                         <h4>Musical Discipline</h4>
                         <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation and pure tone production.</p>
                     </div>
-                    <div class="content-media-block">[ Audio Player Placeholder ]</div>
                 """
             },
             "presentations": {
@@ -1223,7 +1176,6 @@
                         <h4>Slide Deck Design</h4>
                         <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
                     </div>
-                    <div class="content-media-block">[ Presentation PDF Embed Placeholder ]</div>
                 """
             },
             "portfolios": {
@@ -1240,7 +1192,6 @@
                         <h4>Visual Identity</h4>
                         <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids.</p>
                     </div>
-                    <div class="content-media-block">[ Figma / Behance Embed Placeholder ]</div>
                 """
             },
             "projects": {
@@ -1257,7 +1208,6 @@
                         <h4>Open Source</h4>
                         <p>Showcases custom Python scripts and interactive browser apps built for performance.</p>
                     </div>
-                    <div class="content-media-block">[ GitHub Repo Cards Placeholder ]</div>
                 """
             },
             "proj_basketball": {
@@ -1275,7 +1225,6 @@
                         <h4>Leading the Squad</h4>
                         <p>Captained the team through the highly competitive Mediterranean Cup, demanding intense communication and paint leadership.</p>
                     </div>
-                    <div class="content-media-block">[ Carousel: Team & Action Photos Here ]</div>
                 """
             },
             "proj_website": {
@@ -1296,7 +1245,6 @@
                         <h4>Building the UI/UX</h4>
                         <p>Developed to replicate a high-end Apple presentation utilizing Python directly in the browser via PyScript.</p>
                     </div>
-                    <div class="content-media-block">[ Embedded Code View Placeholder ]</div>
                 """
             },
             "proj_chess": {
@@ -1318,7 +1266,6 @@
                         <h4>Competitive Milestones</h4>
                         <p>Representing the school team on top boards, securing the Best Player award for highest win rate.</p>
                     </div>
-                    <div class="content-media-block"></div>
                 """
             }
         }
@@ -1343,7 +1290,6 @@
                 detail = document.querySelector("#detail-view")
                 detail.style.display = "block"
                 
-                # Small delay to ensure display: block is applied before transitioning opacity/transform
                 js.setTimeout(js.eval("(function(){ document.querySelector('#detail-view').classList.remove('modal-closing'); document.querySelector('#detail-view').classList.add('modal-open'); })"), 10)
                 
                 document.body.classList.add('modal-active')
@@ -1362,7 +1308,7 @@
                 card_el = document.getElementById(last_opened_card_id)
                 if card_el:
                     card_el.classList.add('card-pressed')
-                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); c.classList.remove('card-active'); })"), 350, card_el)
+                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 350, card_el)
                 last_opened_card_id = None
 
             js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 400, detail)
@@ -1374,7 +1320,6 @@
             if (loader) loader.classList.add('loaded');
         });
 
-        // Web Audio API Subtle Sound Effects
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(freq = 500, type = 'sine', duration = 0.03) {
             try {
@@ -1396,7 +1341,6 @@
             playSound(440, 'triangle', 0.4);
         }
 
-        // Tab Switching Logic with Sound & Animation
         const navTabs = document.querySelectorAll('.nav-tab');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1416,7 +1360,6 @@
             });
         });
 
-        // Custom Cursor Tracking
         const cursor = document.getElementById("custom-cursor");
         document.addEventListener("mousemove", (e) => {
             if (cursor && !document.body.classList.contains('modal-active')) {
@@ -1424,13 +1367,11 @@
             }
         });
 
-        // Play subtle sound on all interactive buttons/cards
         document.querySelectorAll('a, button, .pro-card, .standard-card, .highlight-card, .connect-card').forEach(el => {
             el.addEventListener('mouseenter', () => playSound(800, 'sine', 0.01));
             el.addEventListener('click', () => playSound(400, 'sine', 0.04));
         });
 
-        // Keyboard Shortcuts & Navigation Handling
         function toggleShortcuts(show) {
             const modal = document.getElementById('shortcuts-modal');
             if (modal) modal.style.display = show ? 'flex' : 'none';
@@ -1452,20 +1393,10 @@
                 const isOpen = modal.style.display === 'flex';
                 toggleShortcuts(!isOpen);
             }
-            // Quick tab switching via number keys 1-4
             if (['1', '2', '3', '4'].includes(e.key) && document.body.className.indexOf('modal-active') === -1) {
                 const index = parseInt(e.key) - 1;
                 if (navTabs[index]) navTabs[index].click();
             }
-        });
-
-        document.querySelectorAll('.pro-card, .standard-card, .highlight-card').forEach(card => {
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    card.click();
-                }
-            });
         });
     </script>
     
