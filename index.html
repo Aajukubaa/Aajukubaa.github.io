@@ -7,6 +7,8 @@
 
     <meta name="description" content="Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist." />
     
+    <link rel="icon" type="image/png" href="K.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
@@ -179,7 +181,7 @@
             margin-bottom: 45px;
         }
 
-        /* 2x2 Domain Grid with Smooth CSS Grid Track Expansion (Inverted L-Shape retention) */
+        /* 2x2 Domain Grid with Smooth CSS Grid Track Expansion */
         .domain-grid-wrapper {
             position: relative;
             max-width: 1000px;
@@ -196,7 +198,6 @@
                         grid-template-rows 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Dynamic track expansion on hover keeping all 4 cards visible in an L-shape */
         .domain-grid:has(#chess:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#basketball:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#coding:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 1fr 2.2fr; }
@@ -243,7 +244,6 @@
             color: #ffffff;
         }
 
-        /* Hidden by default, appears ONLY on hover */
         .card-preview {
             max-height: 0;
             opacity: 0;
@@ -448,8 +448,8 @@
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.7); /* Slightly darker */
-            backdrop-filter: blur(25px); /* Less blur so background is visible */
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             z-index: 9999;
             overflow-y: auto;
@@ -461,7 +461,6 @@
         #detail-view.modal-open { display: block; opacity: 1; }
         #detail-view.modal-closing { opacity: 0; }
 
-        /* Close Button Animation Updated */
         .close-btn {
             position: fixed;
             top: 30px; right: 40px;
@@ -476,7 +475,6 @@
             transition: background 0.2s, color 0.2s;
             z-index: 10000;
         }
-        /* Color change only, NO rotation */
         .close-btn:hover { background: rgba(255, 255, 255, 0.2); color: #ffd700; }
 
         .bento-hero {
@@ -569,7 +567,6 @@
             letter-spacing: 2px;
         }
 
-        /* Deep Content Styling with Built-in Image/Interactive Placeholders */
         .bento-deep-content {
             max-width: 900px;
             margin: 0 auto;
@@ -590,7 +587,6 @@
             margin-bottom: 15px;
             font-weight: 700;
         }
-        /* Reusable media placeholder class inside detail view */
         .content-media-block {
             width: 100%;
             height: 350px;
@@ -646,6 +642,13 @@
 
     <div id="main-view">
         
+        <div style="position: fixed; top: 30px; left: 8vw; z-index: 999;">
+            <a href="#" style="text-decoration: none; display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 980px; backdrop-filter: blur(20px);">
+                <span style="width: 8px; height: 8px; background-color: #ffd700; border-radius: 50%; box-shadow: 0 0 10px #ffd700;"></span>
+                <span style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: #ffffff; letter-spacing: -0.01em;">KB.</span>
+            </a>
+        </div>
+
         <main class="hero-container">
             <h1 class="hero-title">
                 <span>Kabir</span>
@@ -728,15 +731,51 @@
         </section>
 
         <section class="section-container fade-in" style="padding-top: 0;">
+            <div style="max-width: 1000px; margin: 0 auto 40px auto;">
+                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Live System</span>
+                <h2 class="section-header-title">Current Focus & Stack</h2>
+                <p class="section-subtitle" style="margin-bottom: 0;">A real-time snapshot of tools, music repertoire, and competitive routines.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto;">
+                
+                <div class="pro-card" style="min-height: 220px; cursor: default;">
+                    <span class="card-pill">Development</span>
+                    <div>
+                        <h3 style="font-size: 1.5rem;">Tech Arsenal</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Python 3.12, JavaScript DOM, HTML5/CSS3, PyScript, & Git workflows.</p>
+                    </div>
+                </div>
+
+                <div class="pro-card" style="min-height: 220px; cursor: default;">
+                    <span class="card-pill">Performance</span>
+                    <div>
+                        <h3 style="font-size: 1.5rem;">Repertoire</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Advancing through Suzuki Book 3 classical violin concertos & tone refinement.</p>
+                    </div>
+                </div>
+
+                <div class="pro-card" style="min-height: 220px; cursor: default;">
+                    <span class="card-pill">Discipline</span>
+                    <div>
+                        <h3 style="font-size: 1.5rem;">Active Edge</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Balancing rapid tactical chess calculations with high-intensity court drills.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section-container fade-in" style="padding-top: 0;">
             <h2 class="section-header-title">Highlight Projects</h2>
             <p class="section-subtitle">A deep dive into recent tournaments, leadership roles, and technical builds.</p>
 
             <div class="highlight-grid">
                 
-                <div class="highlight-card" id="proj_basketball" tabindex="0" role="button" aria-label="View Meditation Cup Details" py-click="open_category">
+                <div class="highlight-card" id="proj_basketball" tabindex="0" role="button" aria-label="View Mediterranean Cup Details" py-click="open_category">
                     <div>
                         <span class="card-pill" style="color:#ff9f0a;">Leadership & Athletics</span>
-                        <h3>The Meditation Cup</h3>
+                        <h3>The Mediterranean Cup</h3>
                         <p>Captaining the team through a high-stakes basketball tournament. Required on-court leadership, strategic play-calling, and paint dominance.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Tournament Details <span>→</span></div>
                     </div>
@@ -1115,7 +1154,7 @@
                 """
             },
             "proj_basketball": {
-                "title": "MEDITATION CUP",
+                "title": "MEDITERRANEAN CUP",
                 "badge": "TOURNAMENT CAPTAIN",
                 "bento": """
                     <div class="bento-tile span-4">
@@ -1127,9 +1166,9 @@
                 "content": """
                     <div class="content-block">
                         <h4>Leading the Squad</h4>
-                        <p>Captained the team through the highly competitive Meditation Cup. This required intense communication, setting up defensive plays in the paint, and ensuring the team remained composed under pressure.</p>
+                        <p>Captained the team through the highly competitive Mediterranean Cup. This required intense communication, setting up defensive plays in the paint, and ensuring the team remained composed under pressure.</p>
                     </div>
-                    <div class="content-media-block">[ Carousel: Countless Team & Action Photos Here ]</div>
+                    <div class="content-media-block">[ Carousel: Team & Action Photos Here ]</div>
                 """
             },
             "proj_website": {
@@ -1172,8 +1211,8 @@
                         <h4>Competitive Milestones</h4>
                         <p>Competed rigorously both inside and outside of school tournaments. Representing the school team on the top boards, I played against intense opposition and secured the Best Player award for maintaining the highest win rate in the squad.</p>
                     </div>
-                    <div class="content-media-block">[ Image of Award / Trophy Placeholder ]</div>
-                    <div class="content-media-block">[ Image of Matchplay / Board View Placeholder ]</div>
+                    <div class="content-media-block"></div>
+                    <div class="content-media-block"></div>
                 """
             }
         }
@@ -1200,7 +1239,6 @@
                 detail.classList.remove('modal-closing')
                 detail.classList.add('modal-open')
                 
-                # Lock background scroll
                 document.body.classList.add('modal-active')
                 detail.scrollTop = 0
 
@@ -1213,7 +1251,6 @@
             detail.classList.remove('modal-open')
             detail.classList.add('modal-closing')
             
-            # Unlock background scroll immediately
             document.body.classList.remove('modal-active')
 
             if last_opened_card_id:
