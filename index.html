@@ -23,10 +23,15 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Prevent background scroll when modal is open */
+        body.modal-active {
+            overflow: hidden !important;
+        }
+
         /* Touch Device & Cursor Handling */
         @media (pointer: fine) {
             body, html { cursor: none; }
-            a, button, .pro-card, .connect-card { cursor: none !important; }
+            a, button, .pro-card, .standard-card, .highlight-card, .connect-card { cursor: none !important; }
             #custom-cursor { display: block; }
         }
         @media (pointer: coarse) {
@@ -172,7 +177,7 @@
             margin-bottom: 45px;
         }
 
-        /* 2x2 Domain Grid with Smooth CSS Grid Track Expansion */
+        /* 2x2 Domain Grid with Smooth CSS Grid Track Expansion (Inverted L-Shape retention) */
         .domain-grid-wrapper {
             position: relative;
             max-width: 1000px;
@@ -189,22 +194,11 @@
                         grid-template-rows 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .domain-grid:has(#chess:hover) {
-            grid-template-columns: 2.2fr 1fr;
-            grid-template-rows: 2.2fr 1fr;
-        }
-        .domain-grid:has(#basketball:hover) {
-            grid-template-columns: 1fr 2.2fr;
-            grid-template-rows: 2.2fr 1fr;
-        }
-        .domain-grid:has(#coding:hover) {
-            grid-template-columns: 2.2fr 1fr;
-            grid-template-rows: 1fr 2.2fr;
-        }
-        .domain-grid:has(#music:hover) {
-            grid-template-columns: 1fr 2.2fr;
-            grid-template-rows: 1fr 2.2fr;
-        }
+        /* Dynamic track expansion on hover keeping all 4 cards visible in an L-shape */
+        .domain-grid:has(#chess:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 2.2fr 1fr; }
+        .domain-grid:has(#basketball:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 2.2fr 1fr; }
+        .domain-grid:has(#coding:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 1fr 2.2fr; }
+        .domain-grid:has(#music:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 1fr 2.2fr; }
 
         .pro-card {
             background: rgba(255, 255, 255, 0.03);
@@ -222,7 +216,7 @@
             transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .pro-card:focus-visible {
+        .pro-card:focus-visible, .standard-card:focus-visible, .highlight-card:focus-visible {
             border-color: #ffd700;
             box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
         }
@@ -239,7 +233,7 @@
             color: #ffd700;
         }
 
-        .pro-card h3 {
+        .pro-card h3, .standard-card h3, .highlight-card h3 {
             font-size: 2rem;
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -247,6 +241,7 @@
             color: #ffffff;
         }
 
+        /* Hidden by default, appears ONLY on hover */
         .card-preview {
             max-height: 0;
             opacity: 0;
@@ -273,7 +268,6 @@
             padding: 9px 18px;
             border-radius: 980px;
             transition: transform 0.2s, background 0.2s;
-            text-decoration: none;
         }
         .card-action-btn:hover {
             background: #ffffff;
@@ -302,10 +296,9 @@
             margin-top: 14px;
         }
 
-        .pro-card:hover .card-action-default {
-            opacity: 0;
-        }
+        .pro-card:hover .card-action-default { opacity: 0; }
 
+        /* Standard 3-column grid for archives */
         .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -325,6 +318,7 @@
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(20px);
+            outline: none;
         }
         .standard-card:hover {
             border-color: rgba(255, 215, 0, 0.4);
@@ -333,6 +327,43 @@
             transform: translateY(-6px);
         }
 
+        /* Horizontal Feature Cards for Highlights Section */
+        .highlight-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 36px 40px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            outline: none;
+        }
+        @media (max-width: 800px) {
+            .highlight-card {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+        .highlight-card:hover {
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+        }
+        .highlight-card h3 { margin: 10px 0 15px 0; }
+        .highlight-card p { color: #86868b; line-height: 1.6; margin: 0; }
+
+        /* Media placeholders */
         .media-placeholder {
             width: 100%;
             height: 160px;
@@ -348,12 +379,17 @@
             margin: 16px 0;
             transition: border-color 0.2s, background 0.2s;
         }
-        .standard-card:hover .media-placeholder {
+        .standard-card:hover .media-placeholder, .highlight-card:hover .media-placeholder {
             border-color: rgba(255, 215, 0, 0.3);
             background: rgba(255, 215, 0, 0.02);
             color: #ffd700;
         }
+        .highlight-card .media-placeholder {
+            height: 200px;
+            margin: 0;
+        }
 
+        /* Connect Grid Layout */
         .connect-section {
             padding: 70px 5vw;
             background: #050505;
@@ -410,9 +446,9 @@
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(45px);
-            -webkit-backdrop-filter: blur(45px);
+            background: rgba(0, 0, 0, 0.7); /* Slightly darker */
+            backdrop-filter: blur(25px); /* Less blur so background is visible */
+            -webkit-backdrop-filter: blur(25px);
             z-index: 9999;
             overflow-y: auto;
             overflow-x: hidden;
@@ -423,6 +459,7 @@
         #detail-view.modal-open { display: block; opacity: 1; }
         #detail-view.modal-closing { opacity: 0; }
 
+        /* Close Button Animation Updated */
         .close-btn {
             position: fixed;
             top: 30px; right: 40px;
@@ -434,10 +471,11 @@
             font-size: 1.2rem;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s, transform 0.3s;
+            transition: background 0.2s, color 0.2s;
             z-index: 10000;
         }
-        .close-btn:hover { background: #ffd700; color: #000000; transform: rotate(90deg); }
+        /* Color change only, NO rotation */
+        .close-btn:hover { background: rgba(255, 255, 255, 0.2); color: #ffd700; }
 
         .bento-hero {
             min-height: 100vh;
@@ -529,10 +567,14 @@
             letter-spacing: 2px;
         }
 
+        /* Deep Content Styling with Built-in Image/Interactive Placeholders */
         .bento-deep-content {
             max-width: 900px;
             margin: 0 auto;
             padding: 60px 5vw 120px 5vw;
+        }
+        .content-block {
+            margin-bottom: 50px;
         }
         #detail-content {
             font-size: 1.15rem;
@@ -540,11 +582,26 @@
             color: #a1a1a6;
         }
         #detail-content h4 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #ffffff;
             margin-top: 40px;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             font-weight: 700;
+        }
+        /* Reusable media placeholder class inside detail view */
+        .content-media-block {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(135deg, #1c1c1e 0%, #111113 100%);
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-weight: 600;
+            margin: 25px 0;
+            letter-spacing: 1px;
         }
 
         .site-footer {
@@ -555,13 +612,24 @@
             position: relative;
             z-index: 1;
         }
-
         .site-footer p {
             margin: 0;
             font-size: 0.75rem;
             color: #86868b;
             letter-spacing: 0.5px;
             font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
         }
     </style>
 </head>
@@ -658,7 +726,46 @@
         </section>
 
         <section class="section-container fade-in" style="padding-top: 0;">
-            <h2 class="section-header-title">Projects Archive</h2>
+            <h2 class="section-header-title">Highlight Projects</h2>
+            <p class="section-subtitle">A deep dive into recent tournaments, leadership roles, and technical builds.</p>
+
+            <div class="highlight-grid">
+                
+                <div class="highlight-card" id="proj_basketball" tabindex="0" role="button" aria-label="View Meditation Cup Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill" style="color:#ff9f0a;">Leadership & Athletics</span>
+                        <h3>The Meditation Cup</h3>
+                        <p>Captaining the team through a high-stakes basketball tournament. Required on-court leadership, strategic play-calling, and paint dominance.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Tournament Details <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Tournament Photo Gallery Thumbnail ]</div>
+                </div>
+
+                <div class="highlight-card" id="proj_website" tabindex="0" role="button" aria-label="View Website Design Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill" style="color:#2997ff;">Full-Stack Development</span>
+                        <h3>Engineering This Showcase</h3>
+                        <p>The technical breakdown of building this Apple-inspired portfolio. Utilized Python backend architecture (PyScript), pure CSS glassmorphism, and responsive grid systems.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Architecture <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Code Architecture / Repo Snapshot ]</div>
+                </div>
+
+                <div class="highlight-card" id="proj_chess" tabindex="0" role="button" aria-label="View Chess Tournament Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill" style="color:#34c759;">Competitive Strategy</span>
+                        <h3>Chess: School & Circuit</h3>
+                        <p>Representing the school team with top-board performance, securing the Best Player award, and competing in rigorous external circuits.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Match Analysis <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Match Board / Award Photo Thumbnail ]</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section-container fade-in" style="padding-top: 0;">
+            <h2 class="section-header-title">Creative Archive</h2>
             <p class="section-subtitle">Development scripts, presentation slide decks, and design portfolios.</p>
 
             <div class="tiles-grid">
@@ -860,16 +967,25 @@
                     </div>
                 """,
                 "content": """
-                    <h4>1. Opening Repertoire: Aggressive and Direct</h4>
-                    <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.</p>
-                    <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
+                    <div class="content-block">
+                        <h4>1. Opening Repertoire: Aggressive and Direct</h4>
+                        <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.</p>
+                        <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
+                    </div>
                     
-                    <h4>2. Tactical & Dynamic Temperament</h4>
-                    <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
+                    <div class="content-media-block">[ Interactive Chess Game PGN Viewer Placeholder ]</div>
+
+                    <div class="content-block">
+                        <h4>2. Tactical & Dynamic Temperament</h4>
+                        <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
+                    </div>
                     
-                    <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
-                    <p>A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p>
-                    <a href='http://ratings.fide.com/profile/498777' target='_blank' class='card-action-btn' style='display:inline-block; margin-top:20px;'>View Official FIDE Record ↗</a>
+                    <div class="content-media-block">[ Tactics / Best Moves Image Gallery Placeholder ]</div>
+
+                    <div class="content-block">
+                        <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
+                        <p>A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p>
+                    </div>
                 """
             },
             "basketball": {
@@ -886,10 +1002,16 @@
                         <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Rim Protection & Box-outs</p>
                     </div>
                 """,
-                "content": "<p>Operating as a 6'0\" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and floor communication to anchor team defense in high-stakes play.</p>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Paint Dominance</h4>
+                        <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and floor communication to anchor team defense in high-stakes play.</p>
+                    </div>
+                    <div class="content-media-block">[ Highlights Video Player Placeholder ]</div>
+                """
             },
             "coding": {
-                "title": "CODING & ENGINEERING",
+                "title": "CODING",
                 "badge": "ENGINEERING",
                 "bento": """
                     <div class="bento-tile row-2 span-2">
@@ -910,7 +1032,13 @@
                         <p style="color:#fff; font-weight:600;">Apple-inspired Glassmorphism & Micro-interactions</p>
                     </div>
                 """,
-                "content": "<p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive static micro-applications straight to GitHub Pages.</p><a href='https://github.com/Aajukubaaa' target='_blank' class='card-action-btn' style='display:inline-block; margin-top:20px;'>View GitHub Repositories ↗</a>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Stack & Workflow</h4>
+                        <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive static micro-applications straight to GitHub Pages.</p>
+                    </div>
+                    <div class="content-media-block">[ Code Snippet Viewer Placeholder ]</div>
+                """
             },
             "music": {
                 "title": "VIOLIN",
@@ -925,10 +1053,16 @@
                         <p style="color:#fff; font-weight:600;">Clean intonation & controlled bowing articulation</p>
                     </div>
                 """,
-                "content": "<p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, controlled bowing articulation, and pure tone production.</p>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Musical Discipline</h4>
+                        <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, controlled bowing articulation, and pure tone production.</p>
+                    </div>
+                    <div class="content-media-block">[ Audio Player Placeholder ]</div>
+                """
             },
             "presentations": {
-                "title": "POWERPOINT KEYNOTES",
+                "title": "POWERPOINT",
                 "badge": "ACADEMIC DECK ARCHITECTURE",
                 "bento": """
                     <div class="bento-tile span-4">
@@ -936,10 +1070,16 @@
                         <p style="color:#fff; font-weight:600; font-size:1.2rem;">Minimalist typography & synchronized visual storytelling</p>
                     </div>
                 """,
-                "content": "<p>Engineered dynamic visual presentations featuring clean hierarchical typography, synchronized animations, and concise visual storytelling for complex research.</p>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Slide Deck Design</h4>
+                        <p>Engineered dynamic visual presentations featuring clean hierarchical typography, synchronized animations, and concise visual storytelling for complex research.</p>
+                    </div>
+                    <div class="content-media-block">[ Presentation PDF Embed Placeholder ]</div>
+                """
             },
             "portfolios": {
-                "title": "DESIGN PORTFOLIOS",
+                "title": "PORTFOLIOS",
                 "badge": "CREATIVE SHOWCASE",
                 "bento": """
                     <div class="bento-tile span-4">
@@ -947,10 +1087,16 @@
                         <h2>9+ Portfolios</h2>
                     </div>
                 """,
-                "content": "<p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids, striking typography contrast, and polished Apple-inspired interface aesthetics.</p>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Visual Identity</h4>
+                        <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids, striking typography contrast, and polished Apple-inspired interface aesthetics.</p>
+                    </div>
+                    <div class="content-media-block">[ Figma / Behance Embed Placeholder ]</div>
+                """
             },
             "projects": {
-                "title": "PYTHON CODE REPOS",
+                "title": "REPOSITORIES",
                 "badge": "AUTOMATION & MICRO-APPS",
                 "bento": """
                     <div class="bento-tile span-4">
@@ -958,7 +1104,75 @@
                         <p style="color:#fff; font-weight:600;">Automated scripts & dynamic browser utilities</p>
                     </div>
                 """,
-                "content": "<p>Showcases custom Python scripts, automated scripts, and interactive browser apps built for performance and streamlined user experiences.</p><a href='https://github.com/Aajukubaaa' target='_blank' class='card-action-btn' style='display:inline-block; margin-top:20px;'>Explore Code Repos ↗</a>"
+                "content": """
+                    <div class="content-block">
+                        <h4>Open Source</h4>
+                        <p>Showcases custom Python scripts, automated scripts, and interactive browser apps built for performance and streamlined user experiences.</p>
+                    </div>
+                    <div class="content-media-block">[ GitHub Repo Cards Placeholder ]</div>
+                """
+            },
+            "proj_basketball": {
+                "title": "MEDITATION CUP",
+                "badge": "TOURNAMENT CAPTAIN",
+                "bento": """
+                    <div class="bento-tile span-4">
+                        <h4>Role</h4>
+                        <h2>Team Captain</h2>
+                        <p style="margin-top:auto;">Lead team strategy and on-court execution.</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Leading the Squad</h4>
+                        <p>Captained the team through the highly competitive Meditation Cup. This required intense communication, setting up defensive plays in the paint, and ensuring the team remained composed under pressure.</p>
+                    </div>
+                    <div class="content-media-block">[ Carousel: Countless Team & Action Photos Here ]</div>
+                """
+            },
+            "proj_website": {
+                "title": "THIS SHOWCASE",
+                "badge": "ARCHITECTURE",
+                "bento": """
+                    <div class="bento-tile span-2">
+                        <h4>Engine</h4>
+                        <h2>PyScript</h2>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Style</h4>
+                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">Glassmorphism & Bento Grids</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Building the UI/UX</h4>
+                        <p>This entire portfolio was developed to replicate a high-end, premium Apple presentation. It utilizes Python directly in the browser via PyScript, eliminating the need for complex JavaScript state management, while purely relying on advanced CSS grid layouts and backdrop filters for visuals.</p>
+                    </div>
+                    <div class="content-media-block">[ Embedded Code View Placeholder ]</div>
+                """
+            },
+            "proj_chess": {
+                "title": "CHESS CIRCUIT",
+                "badge": "SCHOOL REPRESENTATIVE",
+                "bento": """
+                    <div class="bento-tile span-2">
+                        <h4>Accolade</h4>
+                        <h2>Best Player</h2>
+                        <p style="margin-top:auto;">Top board performance.</p>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Format</h4>
+                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">In-School & External Circuits</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Competitive Milestones</h4>
+                        <p>Competed rigorously both inside and outside of school tournaments. Representing the school team on the top boards, I played against intense opposition and secured the Best Player award for maintaining the highest win rate in the squad.</p>
+                    </div>
+                    <div class="content-media-block">[ Image of Award / Trophy Placeholder ]</div>
+                    <div class="content-media-block">[ Image of Matchplay / Board View Placeholder ]</div>
+                """
             }
         }
 
@@ -977,16 +1191,15 @@
                 document.querySelector("#detail-title").innerHTML = item["title"]
                 document.querySelector("#detail-badge").innerHTML = item["badge"]
                 document.querySelector("#detail-content").innerHTML = item.get("content", "")
-                
-                # Render the Bento Grid!
-                document.querySelector("#detail-bento-grid").innerHTML = item.get("bento", "<div class='bento-tile span-4'><h4>Data Unavailable</h4></div>")
+                document.querySelector("#detail-bento-grid").innerHTML = item.get("bento", "")
 
                 detail = document.querySelector("#detail-view")
                 detail.style.display = "block"
                 detail.classList.remove('modal-closing')
                 detail.classList.add('modal-open')
                 
-                # Reset scroll position to top
+                # Lock background scroll
+                document.body.classList.add('modal-active')
                 detail.scrollTop = 0
 
                 card.classList.add('card-active')
@@ -997,6 +1210,9 @@
             detail = document.querySelector("#detail-view")
             detail.classList.remove('modal-open')
             detail.classList.add('modal-closing')
+            
+            # Unlock background scroll immediately
+            document.body.classList.remove('modal-active')
 
             if last_opened_card_id:
                 card_el = document.getElementById(last_opened_card_id)
@@ -1009,23 +1225,19 @@
     </script>
 
     <script>
-        // Hide Loader once window & PyScript runtime initialize
         window.addEventListener('load', () => {
             const loader = document.getElementById('pyscript-loader');
             if (loader) loader.classList.add('loaded');
         });
 
-        // Hardware Accelerated Cursor
         const cursor = document.getElementById("custom-cursor");
-        
         document.addEventListener("mousemove", (e) => {
             if (cursor) {
                 cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
             }
         });
 
-        // Keyboard Accessibility & Shortcuts (Enter/Space opens cards, Escape closes modal)
-        document.querySelectorAll('.pro-card, .standard-card').forEach(card => {
+        document.querySelectorAll('.pro-card, .standard-card, .highlight-card').forEach(card => {
             card.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
@@ -1044,7 +1256,6 @@
             }
         });
 
-        // Intersection Observer for Scroll Fade-Ins
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
