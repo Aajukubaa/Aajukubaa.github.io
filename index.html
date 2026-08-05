@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabir Bhuchar — Dashboard Showcase</title>
+    <title>Kabir Bhuchar</title>
 
-    <meta name="description" content="Kabir Bhuchar's interactive portfolio and digital dashboard." />
+    <meta name="description" content="Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist." />
     
     <link rel="icon" type="image/png" href="K.png">
     
@@ -22,9 +22,7 @@
             background-color: #000000;
             color: #f5f5f7;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
-            overflow: hidden; /* App-like viewport container */
-            height: 100vh;
-            width: 100vw;
+            overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -32,6 +30,7 @@
             overflow: hidden !important;
         }
 
+        /* Touch Device & Cursor Handling */
         @media (pointer: fine) {
             body, html { cursor: none; }
             a, button, .pro-card, .standard-card, .highlight-card, .connect-card, .nav-tab { cursor: none !important; }
@@ -39,7 +38,6 @@
         }
         @media (pointer: coarse) {
             #custom-cursor { display: none !important; }
-            body, html { overflow-y: auto; }
         }
 
         #custom-cursor {
@@ -75,7 +73,7 @@
         .spinner {
             width: 40px; height: 40px;
             border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #ffd700;
+            border-top-color: #ffffff;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             margin-bottom: 15px;
@@ -85,12 +83,13 @@
         .kabir-cursive {
             font-family: 'Dancing Script', cursive;
             font-weight: 700;
-            color: #ffd700;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.35);
             display: inline-block;
             padding: 0 2px;
         }
 
+        /* Enhanced Card Press Animation */
         @keyframes pressAnim {
             0% { transform: scale(1); }
             30% { transform: scale(0.92); filter: brightness(1.2); }
@@ -98,118 +97,81 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* App Shell Navigation & Header */
-        .app-header {
+        /* Floating Top Nav Bar (Segmented Control / Pill Tabs) */
+        .top-nav-container {
             position: fixed;
-            top: 0; left: 0; width: 100%;
-            height: 75px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 5vw;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 1000;
-        }
-
-        .logo-badge {
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 16px;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            background: rgba(20, 20, 22, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 6px;
             border-radius: 980px;
-            transition: border-color 0.2s;
-        }
-        .logo-badge:hover { border-color: #ffd700; }
-
-        .nav-tabs {
             display: flex;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 4px;
-            border-radius: 980px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 6px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
         .nav-tab {
             background: transparent;
             border: none;
             color: #86868b;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
             font-weight: 600;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 980px;
-            transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .nav-tab:hover { color: #ffffff; background: rgba(255, 255, 255, 0.05); }
-        .nav-tab.active { color: #000000; background: #ffd700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-
-        .shortcut-hint {
-            font-size: 0.75rem;
-            color: #86868b;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 6px 12px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .shortcut-hint kbd {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: inherit;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            outline: none;
         }
 
-        @media (max-width: 900px) {
-            .nav-tabs { display: none; }
+        .nav-tab:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* App View Panels Container */
-        .app-viewport {
-            position: absolute;
-            top: 75px; left: 0; right: 0; bottom: 0;
-            overflow-y: auto;
-            padding: 40px 5vw;
-            box-sizing: border-box;
+        .nav-tab.active {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
+            transform: scale(1.02);
         }
 
-        .view-panel {
+        /* Tab Content View Manager */
+        .tab-content {
             display: none;
-            max-width: 1300px;
-            margin: 0 auto;
             opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease;
+            padding-top: 100px;
         }
-        .view-panel.active-view {
+        .tab-content.active-view {
             display: block;
             opacity: 1;
-            transform: translateY(0);
         }
 
-        /* Hero Overview View */
+        /* Hero Container */
         .hero-container {
-            min-height: calc(100vh - 200px);
+            height: calc(100vh - 100px);
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
+            padding: 0 8vw;
+            background-color: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-title {
             font-family: 'Syne', sans-serif;
-            font-size: clamp(3.5rem, 9.5vw, 11rem);
+            font-size: clamp(3rem, 9.5vw, 11rem);
             font-weight: 800;
             line-height: 0.9;
             text-transform: uppercase;
-            margin: 0 0 30px 0;
+            margin: 0;
             letter-spacing: -0.03em;
             background: linear-gradient(180deg, #ffffff 0%, #86868b 100%);
             -webkit-background-clip: text;
@@ -217,23 +179,42 @@
         }
         .hero-title span { display: block; }
 
+        .intro-banner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 5vw;
+            text-align: center;
+        }
+        .intro-banner p {
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            color: #a1a1a6;
+            line-height: 1.5;
+            margin: 0;
+            font-weight: 400;
+        }
+        .intro-banner strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
         .specs-strip {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 20px;
-            width: 100%;
+            padding: 35px 5vw;
+            background: rgba(15, 15, 15, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 1;
             margin-top: 40px;
         }
-        .spec-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            backdrop-filter: blur(20px);
-        }
+        .spec-item { text-align: center; flex: 1; min-width: 130px; }
         .spec-value {
-            font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
             font-weight: 800;
             color: #ffffff;
             letter-spacing: -0.02em;
@@ -243,11 +224,19 @@
             color: #86868b;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 6px;
+            margin-top: 4px;
+        }
+
+        .section-container {
+            padding: 60px 5vw 90px 5vw;
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
         .section-header-title {
-            font-size: clamp(2rem, 4.5vw, 3.5rem);
+            font-size: clamp(2rem, 4.5vw, 3.8rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             margin: 0 0 12px 0;
@@ -258,11 +247,16 @@
         .section-subtitle {
             font-size: 1.1rem;
             color: #86868b;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
         }
 
-        /* Domain Grid */
-        .domain-grid-wrapper { position: relative; max-width: 1100px; margin: 0 auto; }
+        /* 2x2 Domain Grid with Smooth Track Expansion */
+        .domain-grid-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
         .domain-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -272,6 +266,7 @@
             transition: grid-template-columns 0.45s cubic-bezier(0.25, 1, 0.5, 1),
                         grid-template-rows 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
+
         .domain-grid:has(#chess:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#basketball:hover) { grid-template-columns: 1fr 2.2fr; grid-template-rows: 2.2fr 1fr; }
         .domain-grid:has(#coding:hover) { grid-template-columns: 2.2fr 1fr; grid-template-rows: 1fr 2.2fr; }
@@ -292,9 +287,10 @@
             outline: none;
             transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
+
         .pro-card:focus-visible, .standard-card:focus-visible, .highlight-card:focus-visible {
-            border-color: #ffd700;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
+            border-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
         }
 
         .card-pill {
@@ -306,7 +302,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: #ffd700;
+            color: #ffffff;
         }
 
         .pro-card h3, .standard-card h3, .highlight-card h3 {
@@ -324,7 +320,13 @@
             transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin-top 0.3s ease;
             margin-top: 0;
         }
-        .card-preview p { color: #a1a1a6; font-size: 0.95rem; line-height: 1.5; margin: 0 0 14px 0; }
+
+        .card-preview p {
+            color: #a1a1a6;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 14px 0;
+        }
 
         .card-action-btn {
             display: inline-flex;
@@ -333,201 +335,133 @@
             font-size: 0.85rem;
             font-weight: 600;
             color: #000000;
-            background: #ffd700;
+            background: #ffffff;
             padding: 9px 18px;
             border-radius: 980px;
             transition: transform 0.2s, background 0.2s;
         }
-        .card-action-btn:hover { background: #ffffff; transform: scale(1.04); }
+        .card-action-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.04);
+        }
+
         .card-action-default {
             display: flex;
             align-items: center;
             gap: 8px;
             font-size: 0.95rem;
             font-weight: 600;
-            color: #2997ff;
+            color: #ffffff;
             transition: opacity 0.2s;
         }
 
         .pro-card:hover, .pro-card:focus {
-            border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.15);
-            background: rgba(18, 18, 20, 0.95);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 255, 255, 0.1);
+            background: rgba(20, 20, 22, 0.95);
         }
+
         .pro-card:hover .card-preview, .pro-card:focus-within .card-preview {
             max-height: 160px;
             opacity: 1;
             margin-top: 14px;
         }
+
         .pro-card:hover .card-action-default { opacity: 0; }
 
-        /* Point 2: What I'm Doing Now & Point 3: Goals with Progress Bars */
-        .now-goals-grid {
+        /* Standard 3-column grid */
+        .tiles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
-            margin-bottom: 50px;
         }
 
-        .dashboard-tile {
+        .standard-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 28px;
-            padding: 32px;
-            backdrop-filter: blur(20px);
+            padding: 36px 28px;
+            min-height: 280px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-        }
-        .dashboard-tile h3 { font-size: 1.5rem; color: #fff; margin: 15px 0 10px 0; }
-        .dashboard-tile p { color: #a1a1a6; font-size: 0.95rem; line-height: 1.6; margin: 0 0 20px 0; }
-
-        .progress-container {
-            margin-top: 15px;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .progress-bar-bg {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 980px;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
             overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700, #ff9f0a);
-            border-radius: 980px;
-            transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        /* Point 1: Interactive Micro-Widgets Lab */
-        .widgets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 24px;
-        }
-
-        .widget-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            padding: 32px;
             backdrop-filter: blur(20px);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .widget-card h3 { font-size: 1.5rem; color: #fff; margin: 12px 0 8px 0; }
-        .widget-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 15px;
-            text-align: center;
-        }
-
-        /* Mini Chess Puzzle Widget */
-        .chess-mini-board {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
-            max-width: 200px;
-            margin: 0 auto 15px auto;
-        }
-        .chess-sq {
-            aspect-ratio: 1;
-            background: rgba(255,255,255,0.06);
-            border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .chess-sq:hover { background: rgba(255,215,0,0.2); }
-        .chess-sq.highlight { background: rgba(52,199,89,0.3); border: 1px solid #34c759; }
-
-        /* Audio Snippet Player for Violin */
-        .audio-player-pill {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 20px;
-            border-radius: 980px;
-        }
-        .play-btn-circle {
-            width: 44px; height: 44px;
-            background: #ffd700;
-            border: none;
-            border-radius: 50%;
-            color: #000;
-            font-size: 1.1rem;
-            display: flex; align-items: center; justify-content: center;
-            transition: transform 0.2s, background 0.2s;
-        }
-        .play-btn-circle:hover { transform: scale(1.08); background: #fff; }
-        .audio-waveform {
-            flex-grow: 1;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-        .wave-bar {
-            flex: 1;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            height: 30%;
-            transition: height 0.3s;
-        }
-        .audio-player-pill.playing .wave-bar {
-            animation: pulseWave 0.8s ease-in-out infinite alternate;
-        }
-        @keyframes pulseWave {
-            0% { height: 20%; background: #ffd700; }
-            100% { height: 95%; background: #34c759; }
-        }
-
-        /* Live Python Terminal Runner */
-        .terminal-input-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-        }
-        .terminal-input {
-            flex-grow: 1;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 10px 14px;
-            border-radius: 8px;
-            color: #fff;
-            font-family: monospace;
-            font-size: 0.9rem;
             outline: none;
         }
-        .terminal-input:focus { border-color: #ffd700; }
-        .terminal-output {
-            margin-top: 10px;
-            background: rgba(0,0,0,0.8);
-            border-radius: 8px;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            color: #34c759;
-            text-align: left;
-            min-height: 35px;
+        .standard-card:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-6px);
         }
 
-        /* Connect Grid */
+        /* Horizontal Feature Cards */
+        .highlight-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 36px 40px;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            outline: none;
+        }
+        @media (max-width: 800px) {
+            .highlight-card { grid-template-columns: 1fr; gap: 20px; }
+        }
+        .highlight-card:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-4px);
+        }
+        .highlight-card h3 { margin: 10px 0 15px 0; }
+        .highlight-card p { color: #86868b; line-height: 1.6; margin: 0; }
+
+        .media-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 16px 0;
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+        }
+        .standard-card:hover .media-placeholder, .highlight-card:hover .media-placeholder {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.03);
+            color: #ffffff;
+        }
+        .highlight-card .media-placeholder { height: 200px; margin: 0; }
+
+        /* Connect Grid Layout */
+        .connect-section {
+            padding: 70px 5vw;
+            background: #050505;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 1;
+        }
+
         .connect-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -535,6 +469,7 @@
             max-width: 1300px;
             margin: 0 auto;
         }
+
         .connect-card {
             display: flex;
             align-items: center;
@@ -548,9 +483,10 @@
         }
         .connect-card:hover {
             background: rgba(255, 255, 255, 0.06);
-            border-color: #ffd700;
+            border-color: #ffffff;
             transform: translateY(-4px);
         }
+
         .connect-icon {
             font-size: 1.5rem;
             margin-right: 16px;
@@ -560,13 +496,77 @@
             border-radius: 12px;
             flex-shrink: 0;
         }
+
         .connect-details { flex-grow: 1; }
         .connect-details h4 { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px 0; }
         .connect-details p { margin: 0; color: #86868b; font-size: 0.8rem; }
+        
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
-        .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
+        .connect-card:hover .connect-arrow { color: #ffffff; transform: translateX(3px); }
 
-        /* Keyboard Shortcuts Modal Overlay (Point 5) */
+        /* --- NOW & GOALS STYLING (Points 1, 2, 3) --- */
+        .now-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .goal-bar-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(20px);
+        }
+        .goal-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .goal-title { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
+        .goal-metric { font-size: 0.95rem; color: #86868b; font-weight: 600; }
+        
+        /* Horizontal Progress Bar Spanning Screen/Card */
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 980px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #86868b 0%, #ffffff 100%);
+            border-radius: 980px;
+            transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Micro-Widgets Styling (Point 1) */
+        .widget-box {
+            background: rgba(20, 20, 22, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 15px;
+        }
+        .interactive-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 8px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 980px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .interactive-btn:hover { background: #d0d0d0; transform: scale(1.03); }
+
+        /* Keyboard Shortcuts Modal (Point 5) */
         #shortcuts-modal {
             display: none;
             position: fixed;
@@ -574,34 +574,33 @@
             background: rgba(0,0,0,0.8);
             backdrop-filter: blur(20px);
             z-index: 100000;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
         .shortcuts-box {
-            background: rgba(20,20,22,0.95);
-            border: 1px solid rgba(255,215,0,0.3);
-            border-radius: 28px;
+            background: #141416;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 24px;
             padding: 40px;
             max-width: 500px;
             width: 90%;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
         }
         .shortcut-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             font-size: 0.95rem;
-            color: #a1a1a6;
         }
-        .shortcut-row kbd {
+        .kbd {
             background: rgba(255,255,255,0.1);
-            color: #fff;
-            padding: 4px 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 2px 8px;
             border-radius: 6px;
             font-family: monospace;
-            font-weight: 700;
+            font-size: 0.85rem;
+            color: #ffffff;
         }
 
         /* --- APPLE BENTO GRID DETAIL MODAL --- */
@@ -613,7 +612,7 @@
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            z-index: 9999;
+            z-index: 99999;
             overflow-y: auto;
             overflow-x: hidden;
             box-sizing: border-box;
@@ -635,9 +634,9 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: background 0.2s, color 0.2s;
-            z-index: 10000;
+            z-index: 100000;
         }
-        .close-btn:hover { background: rgba(255, 255, 255, 0.2); color: #ffd700; }
+        .close-btn:hover { background: rgba(255, 255, 255, 0.2); color: #ffffff; }
 
         .bento-hero {
             min-height: 100vh;
@@ -649,7 +648,16 @@
             padding: 80px 5vw;
             position: relative;
         }
-        .bento-header-wrapper { text-align: center; margin-bottom: 40px; }
+
+        .bento-header-wrapper {
+            text-align: center;
+            margin-bottom: 40px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.5s ease 0.1s, opacity 0.5s ease 0.1s;
+        }
+        #detail-view.modal-open .bento-header-wrapper { transform: translateY(0); opacity: 1; }
+        
         #detail-title {
             font-size: clamp(3rem, 7vw, 5.5rem);
             font-weight: 800;
@@ -659,6 +667,7 @@
             text-transform: uppercase;
             font-family: 'Syne', sans-serif;
         }
+
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -666,7 +675,12 @@
             gap: 20px;
             width: 100%;
             max-width: 1200px;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, opacity 0.6s ease 0.2s;
         }
+        #detail-view.modal-open .bento-grid { transform: translateY(0); opacity: 1; }
+
         @media (max-width: 900px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .bento-grid { grid-template-columns: 1fr; } }
 
@@ -678,35 +692,66 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.02), 0 15px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+        .bento-tile:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
         .bento-tile.span-2 { grid-column: span 2; }
+        .bento-tile.span-3 { grid-column: span 3; }
         .bento-tile.span-4 { grid-column: span 4; }
         .bento-tile.row-2 { grid-row: span 2; }
+        
         .bento-tile h4 { font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0 0 10px 0; }
-        .bento-tile h2 { font-size: 3rem; font-weight: 800; color: #ffd700; margin: 0; line-height: 1; font-family: 'Syne', sans-serif;}
+        .bento-tile h2 { font-size: 3rem; font-weight: 800; color: #ffffff; margin: 0; line-height: 1; font-family: 'Syne', sans-serif;}
         .bento-tile p { color: #86868b; margin: 0; font-size: 0.95rem; }
 
-        .bento-deep-content { max-width: 900px; margin: 0 auto; padding: 60px 5vw 120px 5vw; color: #a1a1a6; font-size: 1.15rem; line-height: 1.7; }
-        .bento-deep-content h4 { font-size: 1.5rem; color: #ffffff; margin-top: 40px; margin-bottom: 15px; font-weight: 700; }
+        .bento-deep-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 5vw 120px 5vw;
+        }
+        .content-block { margin-bottom: 50px; }
+        #detail-content { font-size: 1.15rem; line-height: 1.7; color: #a1a1a6; }
+        #detail-content h4 { font-size: 1.5rem; color: #ffffff; margin-top: 40px; margin-bottom: 15px; font-weight: 700; }
+        
         .content-media-block {
-            width: 100%; height: 350px;
+            width: 100%;
+            height: 350px;
             background: linear-gradient(135deg, #1c1c1e 0%, #111113 100%);
             border: 1px dashed rgba(255,255,255,0.2);
             border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            color: #86868b; font-weight: 600; margin: 25px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-weight: 600;
+            margin: 25px 0;
+            letter-spacing: 1px;
         }
 
         .site-footer {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
             text-align: center;
-            padding: 12px;
-            background-color: rgba(0,0,0,0.9);
+            padding: 30px 20px;
+            background-color: #000000;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 999;
+            position: relative;
+            z-index: 1;
+        }
+        .site-footer p {
+            margin: 0;
             font-size: 0.75rem;
             color: #86868b;
+            letter-spacing: 0.5px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { transition: none !important; animation: none !important; }
         }
     </style>
 </head>
@@ -719,72 +764,57 @@
         <div style="font-weight: 600; letter-spacing: 1px; color: #86868b; font-size: 0.9rem;">INITIALIZING PYTHON ENGINE...</div>
     </div>
 
-    <header class="app-header">
-        <a href="#" class="logo-badge" onclick="switchView('overview'); return false;">
-            <span style="width: 8px; height: 8px; background-color: #ffd700; border-radius: 50%; box-shadow: 0 0 10px #ffd700;"></span>
-            <span style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: #ffffff;">KB.</span>
-        </a>
+    <nav class="top-nav-container">
+        <button class="nav-tab active" data-target="tab-overview">Overview</button>
+        <button class="nav-tab" data-target="tab-domains">Domains</button>
+        <button class="nav-tab" data-target="tab-archive">Projects & Archive</button>
+        <button class="nav-tab" data-target="tab-now-goals">Now & Goals</button>
+    </nav>
 
-        <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="switchView('overview')">Overview</button>
-            <button class="nav-tab" onclick="switchView('domains')">Domains</button>
-            <button class="nav-tab" onclick="switchView('now')">Now & Goals</button>
-            <button class="nav-tab" onclick="switchView('widgets')">Interactive Lab</button>
-            <button class="nav-tab" onclick="switchView('connect')">Connect</button>
-        </nav>
+    <div id="tab-overview" class="tab-content active-view">
+        <main class="hero-container">
+            <h1 class="hero-title">
+                <span>Kabir</span>
+                <span>Bhuchar</span>
+            </h1>
+        </main>
 
-        <div class="shortcut-hint" onclick="toggleShortcutsModal()" style="cursor: pointer;">
-            Press <kbd>?</kbd> for shortcuts
-        </div>
-    </header>
+        <section class="intro-banner">
+            <p>Competitive chess strategist, basketball center, Python architect, and classical violinist. Welcome to my digital control center.</p>
+        </section>
 
-    <main class="app-viewport">
-        
-        <section id="view-overview" class="view-panel active-view">
-            <div class="hero-container">
-                <h1 class="hero-title">
-                    <span>Kabir</span>
-                    <span>Bhuchar</span>
-                </h1>
-                <p style="font-size: 1.25rem; color: #86868b; max-width: 600px; margin: 0 0 40px 0; line-height: 1.6;">
-                    Competitive chess strategist, basketball center, Python architect, and classical violinist. Welcome to my digital control center.
-                </p>
-
-                <div class="specs-strip">
-                    <div class="spec-item">
-                        <div class="spec-value">1545</div>
-                        <div class="spec-label">FIDE Rating</div>
-                    </div>
-                    <div class="spec-item">
-                        <div class="spec-value">182 cm</div>
-                        <div class="spec-label">Basketball Center</div>
-                    </div>
-                    <div class="spec-item">
-                        <div class="spec-value">Book 3</div>
-                        <div class="spec-label">Suzuki Violin</div>
-                    </div>
-                    <div class="spec-item">
-                        <div class="spec-value">Python 3.12</div>
-                        <div class="spec-label">Engine Architecture</div>
-                    </div>
-                </div>
+        <section class="specs-strip">
+            <div class="spec-item">
+                <div class="spec-value">1545</div>
+                <div class="spec-label">FIDE Rating</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-value">182 cm</div>
+                <div class="spec-label">Basketball Center</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-value">Book 3</div>
+                <div class="spec-label">Suzuki Violin</div>
+            </div>
+            <div class="spec-item">
+                <div class="spec-value">Python 3.12</div>
+                <div class="spec-label">Engine Architecture</div>
             </div>
         </section>
 
-        <section id="view-domains" class="view-panel">
+        <section class="section-container">
             <h2 class="section-header-title"><span class="kabir-cursive">Kabir</span>'s Domain</h2>
-            <p class="section-subtitle">Hover over any card to expand quick specs or click to inspect full details.</p>
+            <p class="section-subtitle">Quick overview of key pillars. Click 'Domains' in the top nav for deep dives.</p>
 
             <div class="domain-grid-wrapper">
                 <div class="domain-grid">
-                    
                     <div class="pro-card" id="chess" tabindex="0" role="button" aria-label="Inspect Chess Profile" py-click="open_category">
                         <span class="card-pill">Strategy</span>
                         <div>
                             <h3>Chess</h3>
                             <div class="card-preview">
-                                <p>1545 FIDE tournament rating specializing in sharp tactical combat, aggressive 1.e4 openings, and rapid time scrambles.</p>
-                                <span class="card-action-btn">Click to view more info →</span>
+                                <p>1545 FIDE tournament rating specializing in sharp tactical combat and aggressive 1.e4 openings.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
                             </div>
                         </div>
                     </div>
@@ -794,8 +824,8 @@
                         <div>
                             <h3>Basketball</h3>
                             <div class="card-preview">
-                                <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding under pressure.</p>
-                                <span class="card-action-btn">Click to view more info →</span>
+                                <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
                             </div>
                         </div>
                     </div>
@@ -805,8 +835,8 @@
                         <div>
                             <h3>Coding</h3>
                             <div class="card-preview">
-                                <p>Building automated Python backends, web micro-apps, and deploying dynamic interfaces straight to GitHub Pages.</p>
-                                <span class="card-action-btn">Click to view more info →</span>
+                                <p>Building automated Python backends, web micro-apps, and deploying to GitHub Pages.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
                             </div>
                         </div>
                     </div>
@@ -816,132 +846,20 @@
                         <div>
                             <h3>Music</h3>
                             <div class="card-preview">
-                                <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire with clean tone articulation.</p>
-                                <span class="card-action-btn">Click to view more info →</span>
+                                <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <section id="view-now" class="view-panel">
-            <h2 class="section-header-title">What I'm Doing Now & Goals</h2>
-            <p class="section-subtitle">Live snapshot of active routines and upcoming performance targets.</p>
-
-            <div class="now-goals-grid">
-                
-                <div class="dashboard-tile">
-                    <div>
-                        <span class="card-pill">Digital Garden</span>
-                        <h3>Currently Active</h3>
-                        <p>Studying sharp tactical Sicilian lines in chess, executing Python 3.12 micro-services, and mastering classical bow articulation for Suzuki Book 3 pieces.</p>
-                    </div>
-                </div>
-
-                <div class="dashboard-tile">
-                    <div>
-                        <span class="card-pill">Milestone Target</span>
-                        <h3>Chess FIDE Rating</h3>
-                        <p>Pushing current 1545 FIDE rating toward the 1800 master benchmark through tournament preparation and endgame study.</p>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-label"><span>Current: 1545</span><span>Target: 1800</span></div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 78%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-tile">
-                    <div>
-                        <span class="card-pill">Musical Milestone</span>
-                        <h3>Suzuki Violin Repertoire</h3>
-                        <p>Advancing through classical violin books with target completion set for Book 5 concertos.</p>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-label"><span>Current: Book 3</span><span>Target: Book 5</span></div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 60%;"></div>
-                        </div>
-                    </div>
-                </div>
-
+        <section class="connect-section">
+            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
+                <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
+                <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
             </div>
-        </section>
-
-        <section id="view-widgets" class="view-panel">
-            <h2 class="section-header-title">Interactive Lab</h2>
-            <p class="section-subtitle">Experience live micro-widgets showcasing chess, violin, and python skills directly.</p>
-
-            <div class="widgets-grid">
-                
-                <div class="widget-card">
-                    <div>
-                        <span class="card-pill">Strategy Widget</span>
-                        <h3>Tactical Puzzle</h3>
-                        <p>Click the winning move on the mini board:</p>
-                    </div>
-                    <div class="widget-box">
-                        <div class="chess-mini-board">
-                            <div class="chess-sq">♟️</div>
-                            <div class="chess-sq">♜</div>
-                            <div class="chess-sq">♚</div>
-                            <div class="chess-sq">♟️</div>
-                            <div class="chess-sq">♞</div>
-                            <div class="chess-sq highlight" onclick="alert('Correct! Sharp tactical calculation.')">♕</div>
-                            <div class="chess-sq">♟️</div>
-                            <div class="chess-sq">♟️</div>
-                        </div>
-                        <span style="font-size: 0.8rem; color: #86868b;">Find the queen strike (Click green square)</span>
-                    </div>
-                </div>
-
-                <div class="widget-card">
-                    <div>
-                        <span class="card-pill">Audio Snippet</span>
-                        <h3>Violin Repertoire</h3>
-                        <p>Listen to a high-fidelity Suzuki Book 3 recording snippet:</p>
-                    </div>
-                    <div class="widget-box" style="padding: 15px;">
-                        <div class="audio-player-pill" id="audio-pill">
-                            <button class="play-btn-circle" onclick="toggleAudioDemo(this)">▶</button>
-                            <div class="audio-waveform">
-                                <div class="wave-bar" style="height: 40%;"></div>
-                                <div class="wave-bar" style="height: 70%;"></div>
-                                <div class="wave-bar" style="height: 30%;"></div>
-                                <div class="wave-bar" style="height: 85%;"></div>
-                                <div class="wave-bar" style="height: 50%;"></div>
-                                <div class="wave-bar" style="height: 90%;"></div>
-                                <div class="wave-bar" style="height: 45%;"></div>
-                            </div>
-                        </div>
-                        <span style="font-size: 0.8rem; color: #86868b; display: block; margin-top: 10px;">Suzuki Book 3 — Gavotte Excerpt</span>
-                    </div>
-                </div>
-
-                <div class="widget-card">
-                    <div>
-                        <span class="card-pill">Python Sandbox</span>
-                        <h3>Micro Script Runner</h3>
-                        <p>Run a python stat snippet in real-time:</p>
-                    </div>
-                    <div class="widget-box">
-                        <div class="terminal-input-group">
-                            <input type="text" class="terminal-input" id="py-input" value="print('Kabir: FIDE 1545')" />
-                            <button class="card-action-btn" onclick="runPythonDemo()">Run</button>
-                        </div>
-                        <div class="terminal-output" id="py-output">&gt;&gt; Output ready...</div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <section id="view-connect" class="view-panel">
-            <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
-            <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
 
             <div class="connect-grid">
                 <a href="http://ratings.fide.com/profile/498777" target="_blank" class="connect-card">
@@ -949,31 +867,51 @@
                     <div class="connect-details"><h4>FIDE Profile</h4><p>Official 1545 tournament records</p></div>
                     <div class="connect-arrow">↗</div>
                 </a>
-
                 <a href="https://www.chess.com/member/aajukubaa" target="_blank" class="connect-card">
                     <div class="connect-icon">♘</div>
                     <div class="connect-details"><h4>Chess.com</h4><p>Blitz & rapid online matches</p></div>
                     <div class="connect-arrow">↗</div>
                 </a>
-
                 <a href="https://lichess.org/@/onesandzeros" target="_blank" class="connect-card">
                     <div class="connect-icon">♞</div>
                     <div class="connect-details"><h4>Lichess</h4><p>Bullet & puzzle training</p></div>
                     <div class="connect-arrow">↗</div>
                 </a>
-
                 <a href="https://github.com/aajukubaa" target="_blank" class="connect-card">
                     <div class="connect-icon">💻</div>
                     <div class="connect-details"><h4>GitHub</h4><p>Python repositories & micro-apps</p></div>
                     <div class="connect-arrow">↗</div>
                 </a>
-
+                <a href="https://replit.com/@Aajukubaa" target="_blank" class="connect-card">
+                    <div class="connect-icon">⚡</div>
+                    <div class="connect-details"><h4>Replit</h4><p>Live Python code execution</p></div>
+                    <div class="connect-arrow">↗</div>
+                </a>
                 <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="connect-card">
                     <div class="connect-icon">▶️</div>
                     <div class="connect-details"><h4>YouTube</h4><p>Video edits & athletic highlights</p></div>
                     <div class="connect-arrow">↗</div>
                 </a>
-
+                <a href="https://aajukubaa.medium.com/" target="_blank" class="connect-card">
+                    <div class="connect-icon">✍️</div>
+                    <div class="connect-details"><h4>Medium</h4><p>Articles and analytical logs</p></div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+                <a href="https://www.duolingo.com/profile/Aajukubaa" target="_blank" class="connect-card">
+                    <div class="connect-icon">🦉</div>
+                    <div class="connect-details"><h4>Duolingo</h4><p>Daily streak & language stats</p></div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+                <a href="https://www.vinted.co.uk/member/284456392" target="_blank" class="connect-card">
+                    <div class="connect-icon">🏷️</div>
+                    <div class="connect-details"><h4>Vinted</h4><p>Curated style storefront</p></div>
+                    <div class="connect-arrow">↗</div>
+                </a>
+                <a href="https://www.etsy.com/uk/shop/PotterybyRG" target="_blank" class="connect-card">
+                    <div class="connect-icon">🏺</div>
+                    <div class="connect-details"><h4>Pottery by RG</h4><p>Handmade ceramic works</p></div>
+                    <div class="connect-arrow">↗</div>
+                </a>
                 <a href="mailto:kabirbhuchar@gmail.com" class="connect-card">
                     <div class="connect-icon">✉️</div>
                     <div class="connect-details"><h4>Gmail</h4><p>kabirbhuchar@gmail.com</p></div>
@@ -981,21 +919,224 @@
                 </a>
             </div>
         </section>
+    </div>
 
-    </main>
+    <div id="tab-domains" class="tab-content">
+        <section class="section-container" style="padding-top: 20px;">
+            <h2 class="section-header-title">Domain Deep Dives</h2>
+            <p class="section-subtitle">Click any card to inspect full bento-grid details.</p>
 
-    <div id="shortcuts-modal" onclick="if(event.target === this) toggleShortcutsModal()">
-        <div class="shortcuts-box">
-            <h3 style="color:#fff; margin-top:0;">Keyboard Shortcuts</h3>
-            <div class="shortcut-row"><span>Overview View</span><kbd>1</kbd></div>
-            <div class="shortcut-row"><span>Domains View</span><kbd>2</kbd></div>
-            <div class="shortcut-row"><span>Now & Goals</span><kbd>3</kbd></div>
-            <div class="shortcut-row"><span>Interactive Lab</span><kbd>4</kbd></div>
-            <div class="shortcut-row"><span>Connect View</span><kbd>5</kbd></div>
-            <div class="shortcut-row"><span>Toggle Shortcuts</span><kbd>?</kbd></div>
-            <div class="shortcut-row"><span>Close Modal</span><kbd>Esc</kbd></div>
-            <button class="card-action-btn" style="width:100%; margin-top:20px; justify-content:center;" onclick="toggleShortcutsModal()">Got It</button>
-        </div>
+            <div class="domain-grid-wrapper">
+                <div class="domain-grid">
+                    <div class="pro-card" id="chess2" tabindex="0" role="button" aria-label="Inspect Chess Profile" py-click="open_category" data-id="chess">
+                        <span class="card-pill">Strategy</span>
+                        <div>
+                            <h3>Chess</h3>
+                            <div class="card-preview">
+                                <p>1545 FIDE tournament rating specializing in sharp tactical combat and aggressive 1.e4 openings.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card" id="basketball2" tabindex="0" role="button" aria-label="Inspect Basketball Profile" py-click="open_category" data-id="basketball">
+                        <span class="card-pill">Athletics</span>
+                        <div>
+                            <h3>Basketball</h3>
+                            <div class="card-preview">
+                                <p>6'0" Center dominating paint defense, rim protection, and high-intensity rebounding.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card" id="coding2" tabindex="0" role="button" aria-label="Inspect Coding Profile" py-click="open_category" data-id="coding">
+                        <span class="card-pill">Engineering</span>
+                        <div>
+                            <h3>Coding</h3>
+                            <div class="card-preview">
+                                <p>Building automated Python backends, web micro-apps, and deploying to GitHub Pages.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pro-card" id="music2" tabindex="0" role="button" aria-label="Inspect Music Profile" py-click="open_category" data-id="music">
+                        <span class="card-pill">Performance</span>
+                        <div>
+                            <h3>Music</h3>
+                            <div class="card-preview">
+                                <p>Advanced classical violin performance executing rigorous Suzuki Book 3 repertoire.</p>
+                                <span class="card-action-btn">Inspect Profile →</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="tab-archive" class="tab-content">
+        <section class="section-container" style="padding-top: 20px;">
+            <h2 class="section-header-title">Highlight Projects</h2>
+            <p class="section-subtitle">A deep dive into recent tournaments, leadership roles, and technical builds.</p>
+
+            <div class="highlight-grid" style="margin-bottom: 70px;">
+                <div class="highlight-card" id="proj_basketball" tabindex="0" role="button" aria-label="View Mediterranean Cup Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill">Leadership & Athletics</span>
+                        <h3>The Mediterranean Cup</h3>
+                        <p>Captaining the team through a high-stakes basketball tournament. Required on-court leadership and paint dominance.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Tournament Details <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Tournament Photo Gallery Thumbnail ]</div>
+                </div>
+
+                <div class="highlight-card" id="proj_website" tabindex="0" role="button" aria-label="View Website Design Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill">Full-Stack Development</span>
+                        <h3>Engineering This Showcase</h3>
+                        <p>The technical breakdown of building this Apple-inspired portfolio utilizing Python backend architecture (PyScript) and pure CSS glassmorphism.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Architecture <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Code Architecture Snapshot ]</div>
+                </div>
+
+                <div class="highlight-card" id="proj_chess" tabindex="0" role="button" aria-label="View Chess Tournament Details" py-click="open_category">
+                    <div>
+                        <span class="card-pill">Competitive Strategy</span>
+                        <h3>Chess: School & Circuit</h3>
+                        <p>Representing the school team with top-board performance, securing the Best Player award, and competing in external circuits.</p>
+                        <div style="margin-top: 20px;" class="card-action-default">View Match Analysis <span>→</span></div>
+                    </div>
+                    <div class="media-placeholder">[ Match Board / Award Photo Thumbnail ]</div>
+                </div>
+            </div>
+
+            <h2 class="section-header-title">Creative Archive</h2>
+            <p class="section-subtitle">Development scripts, presentation slide decks, and design portfolios.</p>
+
+            <div class="tiles-grid">
+                <div class="standard-card" id="presentations" tabindex="0" role="button" aria-label="View Presentations" py-click="open_category">
+                    <span class="card-pill">Keynote Decks</span>
+                    <div>
+                        <h3>PowerPoint Presentations</h3>
+                        <div class="media-placeholder">[ Presentation Slide Deck Preview ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Dynamic visual slide decks engineered with minimalist layouts.</p>
+                    </div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Presentations <span>→</span></div>
+                </div>
+
+                <div class="standard-card" id="portfolios" tabindex="0" role="button" aria-label="View Design Work" py-click="open_category">
+                    <span class="card-pill">Creative Showcase</span>
+                    <div>
+                        <h3>Design Portfolios</h3>
+                        <div class="media-placeholder">[ Design Project Gallery Placeholder ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Curated archive of 9+ comprehensive design project portfolios.</p>
+                    </div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Design Work <span>→</span></div>
+                </div>
+
+                <div class="standard-card" id="projects" tabindex="0" role="button" aria-label="View Projects" py-click="open_category">
+                    <span class="card-pill">Python Workflows</span>
+                    <div>
+                        <h3>Custom Code Repos</h3>
+                        <div class="media-placeholder">[ Python Script Architecture View ]</div>
+                        <p style="color:#86868b; font-size:0.9rem; margin:0;">Automated scripts, data pipelines, and browser app micro-services.</p>
+                    </div>
+                    <div style="margin-top: 15px;" class="card-action-default">View Code Repos <span>→</span></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="tab-now-goals" class="tab-content">
+        <section class="section-container" style="padding-top: 20px;">
+            <div style="max-width: 1000px; margin: 0 auto 40px auto;">
+                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Live Status</span>
+                <h2 class="section-header-title">What I'm Doing Now</h2>
+                <p class="section-subtitle" style="margin-bottom: 0;">An active snapshot of my daily training routines, repertoire study, and coding builds.</p>
+            </div>
+
+            <div class="now-grid" style="max-width: 1000px; margin: 0 auto 60px auto;">
+                <div class="pro-card" style="min-height: 200px; cursor: default;">
+                    <span class="card-pill">Strategy</span>
+                    <div>
+                        <h3 style="font-size: 1.4rem;">Chess Mastery</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Pushing tactical calculation limits & refining 1.e4 opening book depth.</p>
+                    </div>
+                </div>
+                <div class="pro-card" style="min-height: 200px; cursor: default;">
+                    <span class="card-pill">Performance</span>
+                    <div>
+                        <h3 style="font-size: 1.4rem;">Violin Repertoire</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Mastering Suzuki Book 3 technical pieces with precise bowing control.</p>
+                    </div>
+                </div>
+                <div class="pro-card" style="min-height: 200px; cursor: default;">
+                    <span class="card-pill">Engineering</span>
+                    <div>
+                        <h3 style="font-size: 1.4rem;">Python Automation</h3>
+                        <p style="color: #a1a1a6; font-size: 0.9rem; margin-top: 8px;">Developing browser utilities and testing PyScript architecture builds.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto 60px auto;">
+                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Milestone Roadmap</span>
+                <h2 class="section-header-title">Active Goals & Progress</h2>
+                <p class="section-subtitle">Tracking target ratings and musical grade progression across the board.</p>
+
+                <div class="goal-bar-card">
+                    <div class="goal-bar-header">
+                        <span class="goal-title">♟️ FIDE Rating Target: 1800</span>
+                        <span class="goal-metric">Current: 1545 / Target: 1800</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="goal-bar-card">
+                    <div class="goal-bar-header">
+                        <span class="goal-title">🎻 Suzuki Violin Goal: Reach Book 5</span>
+                        <span class="goal-metric">Current: Book 3 / Target: Book 5</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Interactive Lab</span>
+                <h2 class="section-header-title">Skill Micro-Widgets</h2>
+                <p class="section-subtitle">Test out live embedded skill demos right here.</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <div class="widget-box">
+                        <span class="card-pill">Chess Puzzle</span>
+                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Mate in 2 Tactical Test</h4>
+                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">White to move and checkmate.</p>
+                        <button class="interactive-btn" onclick="alert('Correct! 1. Qh7+ Kxh7 2. Rh3#')">Solve Puzzle</button>
+                    </div>
+
+                    <div class="widget-box">
+                        <span class="card-pill">Violin Audio</span>
+                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Suzuki Book 3 Snippet</h4>
+                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Listen to tone articulation sample.</p>
+                        <button class="interactive-btn" onclick="playViolinTone()">Play Audio Note</button>
+                    </div>
+
+                    <div class="widget-box">
+                        <span class="card-pill">Python Sandbox</span>
+                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Run Stats Script</h4>
+                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Output user telemetry script.</p>
+                        <button class="interactive-btn" onclick="alert('Python 3.12 Output: Rating=1545, Status=Active, Domain=Optimal.')">Run script.py</button>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <div id="detail-view">
@@ -1015,89 +1156,19 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <p>This website was made on GitHub Pages with the <strong>help</strong> of artificial intelligence.</p>
-    </footer>
-
-    <script>
-        function switchView(viewName) {
-            document.querySelectorAll('.view-panel').forEach(panel => {
-                panel.classList.remove('active-view');
-            });
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            const targetPanel = document.getElementById('view-' + viewName);
-            if (targetPanel) targetPanel.classList.add('active-view');
-
-            // Match tab buttons
-            const tabs = document.querySelectorAll('.nav-tab');
-            const viewMap = {'overview':0, 'domains':1, 'now':2, 'widgets':3, 'connect':4};
-            if (viewMap[viewName] !== undefined && tabs[viewMap[viewName]]) {
-                tabs[viewMap[viewName]].classList.add('active');
-            }
-        }
-
-        function toggleShortcutsModal() {
-            const modal = document.getElementById('shortcuts-modal');
-            if (modal) {
-                modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-            }
-        }
-
-        function toggleAudioDemo(btn) {
-            const pill = document.getElementById('audio-pill');
-            pill.classList.toggle('playing');
-            if (pill.classList.contains('playing')) {
-                btn.textContent = '⏸';
-            } else {
-                btn.textContent = '▶';
-            }
-        }
-
-        function runPythonDemo() {
-            const inputVal = document.getElementById('py-input').value;
-            const output = document.getElementById('py-output');
-            output.textContent = `>> Executing: ${inputVal}\n>> Success! Status: Active (1545 FIDE)`;
-        }
-
-        // Keyboard navigation bindings (Point 5)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === '1') switchView('overview');
-            if (e.key === '2') switchView('domains');
-            if (e.key === '3') switchView('now');
-            if (e.key === '4') switchView('widgets');
-            if (e.key === '5') switchView('connect');
-            if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-                e.preventDefault();
-                toggleShortcutsModal();
-            }
-            if (e.key === 'Escape') {
-                const modal = document.getElementById('shortcuts-modal');
-                if (modal && modal.style.display === 'flex') {
-                    modal.style.display = 'none';
-                }
-                const detail = document.getElementById('detail-view');
-                if (detail && detail.classList.contains('modal-open')) {
-                    const closeBtn = detail.querySelector('.close-btn');
-                    if (closeBtn) closeBtn.click();
-                }
-            }
-        });
-
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('pyscript-loader');
-            if (loader) loader.classList.add('loaded');
-        });
-
-        const cursor = document.getElementById("custom-cursor");
-        document.addEventListener("mousemove", (e) => {
-            if (cursor) {
-                cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
-            }
-        });
-    </script>
+    <div id="shortcuts-modal" onclick="toggleShortcuts(false)">
+        <div class="shortcuts-box" onclick="event.stopPropagation()">
+            <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
+            <div class="shortcut-row"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
+            <div class="shortcut-row"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
+            <div class="shortcut-row"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
+            <div class="shortcut-row"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
+            <div class="shortcut-row"><span>Open Selected Card</span><span><kbd class="kbd">Enter</kbd> / <kbd class="kbd">Space</kbd></span></div>
+            <div class="shortcut-row"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
+            <div class="shortcut-row"><span>Toggle Shortcuts Overlay</span><span><kbd class="kbd">?</kbd></span></div>
+            <button class="interactive-btn" style="width:100%; margin-top:20px;" onclick="toggleShortcuts(false)">Got It</button>
+        </div>
+    </div>
 
     <script type="py">
         from pyscript import document
@@ -1113,19 +1184,28 @@
                         <h2>1545 FIDE</h2>
                         <p style="margin-top:auto;">Official competitive tournament bracket rating.</p>
                     </div>
-                    <div class="bento-tile row-2" style="background: rgba(255, 215, 0, 0.1); border-color: rgba(255,215,0,0.4);">
-                        <h4 style="color: #ffd700;">Opening Base</h4>
+                    <div class="bento-tile row-2" style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255,255,255,0.4);">
+                        <h4 style="color: #ffffff;">Opening Base</h4>
                         <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>
                     </div>
                     <div class="bento-tile">
                         <h4>Playstyle</h4>
                         <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>
                     </div>
+                    <div class="bento-tile span-2">
+                        <h4>Time Controls</h4>
+                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">60+1 Hyper-Bullet & 3-Min Blitz</p>
+                    </div>
+                    <div class="bento-tile">
+                        <h4>Black Defenses</h4>
+                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>
+                    </div>
                 """,
                 "content": """
                     <div class="content-block">
-                        <h4>Opening Repertoire & Tactical Style</h4>
-                        <p>With White I favor 1.e4 for open tactical games. With Black I deploy the Sicilian or Scandinavian defenses to maintain pressure.</p>
+                        <h4>1. Opening Repertoire: Aggressive and Direct</h4>
+                        <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory.</p>
+                        <p><strong>With the Black Pieces:</strong> I favor fighting counter-attacking systems like the Sicilian Defense (1. e4 c5) or Scandinavian Defense (1. e4 d5).</p>
                     </div>
                     <div class="content-media-block">[ Interactive Chess Game PGN Viewer Placeholder ]</div>
                 """
@@ -1147,8 +1227,9 @@
                 "content": """
                     <div class="content-block">
                         <h4>Paint Dominance</h4>
-                        <p>Operating as a 6'0" Center anchoring defense, high-intensity rebounding, and team leadership.</p>
+                        <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and floor communication.</p>
                     </div>
+                    <div class="content-media-block">[ Highlights Video Player Placeholder ]</div>
                 """
             },
             "coding": {
@@ -1158,7 +1239,7 @@
                     <div class="bento-tile row-2 span-2">
                         <h4>Architecture</h4>
                         <h2>Python 3.12</h2>
-                        <p style="margin-top:auto;">Building automated backend scripts and PyScript integrations.</p>
+                        <p style="margin-top:auto;">Building automated backend scripts, data pipelines, and PyScript integrations.</p>
                     </div>
                     <div class="bento-tile">
                         <h4>Frontend</h4>
@@ -1168,12 +1249,17 @@
                         <h4>Deployment</h4>
                         <p style="color:#fff; font-weight:600;">GitHub Pages</p>
                     </div>
+                    <div class="bento-tile span-2">
+                        <h4>Design Focus</h4>
+                        <p style="color:#fff; font-weight:600;">Apple-inspired Glassmorphism & Micro-interactions</p>
+                    </div>
                 """,
                 "content": """
                     <div class="content-block">
                         <h4>Stack & Workflow</h4>
-                        <p>Specializes in Python 3.12 scripting, automation, and responsive static micro-applications.</p>
+                        <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps to GitHub Pages.</p>
                     </div>
+                    <div class="content-media-block">[ Code Snippet Viewer Placeholder ]</div>
                 """
             },
             "music": {
@@ -1192,8 +1278,121 @@
                 "content": """
                     <div class="content-block">
                         <h4>Musical Discipline</h4>
-                        <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3.</p>
+                        <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation and pure tone production.</p>
                     </div>
+                    <div class="content-media-block">[ Audio Player Placeholder ]</div>
+                """
+            },
+            "presentations": {
+                "title": "POWERPOINT",
+                "badge": "ACADEMIC DECK ARCHITECTURE",
+                "bento": """
+                    <div class="bento-tile span-4">
+                        <h4>Design Standard</h4>
+                        <p style="color:#fff; font-weight:600; font-size:1.2rem;">Minimalist typography & synchronized visual storytelling</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Slide Deck Design</h4>
+                        <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
+                    </div>
+                    <div class="content-media-block">[ Presentation PDF Embed Placeholder ]</div>
+                """
+            },
+            "portfolios": {
+                "title": "PORTFOLIOS",
+                "badge": "CREATIVE SHOWCASE",
+                "bento": """
+                    <div class="bento-tile span-4">
+                        <h4>Archive Volume</h4>
+                        <h2>9+ Portfolios</h2>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Visual Identity</h4>
+                        <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids.</p>
+                    </div>
+                    <div class="content-media-block">[ Figma / Behance Embed Placeholder ]</div>
+                """
+            },
+            "projects": {
+                "title": "REPOSITORIES",
+                "badge": "AUTOMATION & MICRO-APPS",
+                "bento": """
+                    <div class="bento-tile span-4">
+                        <h4>Repositories</h4>
+                        <p style="color:#fff; font-weight:600;">Automated scripts & dynamic browser utilities</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Open Source</h4>
+                        <p>Showcases custom Python scripts and interactive browser apps built for performance.</p>
+                    </div>
+                    <div class="content-media-block">[ GitHub Repo Cards Placeholder ]</div>
+                """
+            },
+            "proj_basketball": {
+                "title": "MEDITERRANEAN CUP",
+                "badge": "TOURNAMENT CAPTAIN",
+                "bento": """
+                    <div class="bento-tile span-4">
+                        <h4>Role</h4>
+                        <h2>Team Captain</h2>
+                        <p style="margin-top:auto;">Lead team strategy and on-court execution.</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Leading the Squad</h4>
+                        <p>Captained the team through the highly competitive Mediterranean Cup, demanding intense communication and paint leadership.</p>
+                    </div>
+                    <div class="content-media-block">[ Carousel: Team & Action Photos Here ]</div>
+                """
+            },
+            "proj_website": {
+                "title": "THIS SHOWCASE",
+                "badge": "ARCHITECTURE",
+                "bento": """
+                    <div class="bento-tile span-2">
+                        <h4>Engine</h4>
+                        <h2>PyScript</h2>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Style</h4>
+                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">Glassmorphism & Bento Grids</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Building the UI/UX</h4>
+                        <p>Developed to replicate a high-end Apple presentation utilizing Python directly in the browser via PyScript.</p>
+                    </div>
+                    <div class="content-media-block">[ Embedded Code View Placeholder ]</div>
+                """
+            },
+            "proj_chess": {
+                "title": "CHESS CIRCUIT",
+                "badge": "SCHOOL REPRESENTATIVE",
+                "bento": """
+                    <div class="bento-tile span-2">
+                        <h4>Accolade</h4>
+                        <h2>Best Player</h2>
+                        <p style="margin-top:auto;">Top board performance.</p>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Format</h4>
+                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">In-School & External Circuits</p>
+                    </div>
+                """,
+                "content": """
+                    <div class="content-block">
+                        <h4>Competitive Milestones</h4>
+                        <p>Representing the school team on top boards, securing the Best Player award for highest win rate.</p>
+                    </div>
+                    <div class="content-media-block"></div>
                 """
             }
         }
@@ -1203,7 +1402,7 @@
         def open_category(event):
             global last_opened_card_id
             card = event.currentTarget
-            cat_id = card.id
+            cat_id = card.getAttribute("data-id") if card.hasAttribute("data-id") else card.id
 
             card.classList.add("card-pressed")
             js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 350, card)
@@ -1229,15 +1428,112 @@
             detail.classList.remove('modal-open')
             detail.classList.add('modal-closing')
             document.body.classList.remove('modal-active')
-
-            if last_opened_card_id:
-                card_el = document.getElementById(last_opened_card_id)
-                if card_el:
-                    card_el.classList.add('card-pressed')
-                    js.setTimeout(js.eval("(function(c){ c.classList.remove('card-pressed'); })"), 350, card_el)
-                last_opened_card_id = None
-
             js.setTimeout(js.eval("(function(el){ el.style.display = 'none'; el.classList.remove('modal-closing'); })"), 400, detail)
     </script>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('pyscript-loader');
+            if (loader) loader.classList.add('loaded');
+        });
+
+        // Web Audio API Subtle Sound Effects
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq = 500, type = 'sine', duration = 0.03) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playViolinTone() {
+            playSound(440, 'triangle', 0.4);
+        }
+
+        // Tab Switching Logic with Sound & Animation
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                playSound(650);
+                navTabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active-view'));
+
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-target');
+                const targetView = document.getElementById(targetId);
+                if (targetView) {
+                    targetView.classList.add('active-view');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Custom Cursor Tracking
+        const cursor = document.getElementById("custom-cursor");
+        document.addEventListener("mousemove", (e) => {
+            if (cursor) {
+                cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
+            }
+        });
+
+        // Play subtle sound on all interactive buttons/cards
+        document.querySelectorAll('a, button, .pro-card, .standard-card, .highlight-card, .connect-card').forEach(el => {
+            el.addEventListener('mouseenter', () => playSound(800, 'sine', 0.01));
+            el.addEventListener('click', () => playSound(400, 'sine', 0.04));
+        });
+
+        // Keyboard Shortcuts & Navigation Handling
+        function toggleShortcuts(show) {
+            const modal = document.getElementById('shortcuts-modal');
+            if (modal) modal.style.display = show ? 'flex' : 'none';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const detail = document.getElementById('detail-view');
+                if (detail && detail.classList.contains('modal-open')) {
+                    const closeBtn = detail.querySelector('.close-btn');
+                    if (closeBtn) closeBtn.click();
+                } else {
+                    toggleShortcuts(false);
+                }
+            }
+            if (e.key === '?') {
+                e.preventDefault();
+                const modal = document.getElementById('shortcuts-modal');
+                const isOpen = modal.style.display === 'flex';
+                toggleShortcuts(!isOpen);
+            }
+            // Quick tab switching via number keys 1-4
+            if (['1', '2', '3', '4'].includes(e.key) && document.body.className.indexOf('modal-active') === -1) {
+                const index = parseInt(e.key) - 1;
+                if (navTabs[index]) navTabs[index].click();
+            }
+        });
+
+        document.querySelectorAll('.pro-card, .standard-card, .highlight-card').forEach(card => {
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+    </script>
+    
+    <footer class="site-footer">
+        <p>This website was made on GitHub Pages with the <strong>help</strong> of artificial intelligence.</p>
+    </footer>
 </body>
 </html>
