@@ -15,7 +15,7 @@
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; box-shadow: none !important; text-shadow: none !important; }
         
         body, html {
             margin: 0; padding: 0;
@@ -24,6 +24,12 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+
+        /* Color Inverting Text Selection */
+        ::selection {
+            background: #ffffff;
+            color: #000000;
         }
 
         body.modal-active {
@@ -42,16 +48,18 @@
         body.modal-active, body.modal-active * { cursor: auto !important; }
         body.modal-active #custom-cursor { display: none !important; }
 
+        /* Color-Inverting Custom Cursor */
         #custom-cursor {
             position: fixed;
             top: 0; left: 0;
-            width: 26px; height: 26px;
+            width: 30px; height: 30px;
             background-color: #ffffff;
             border-radius: 50%;
             pointer-events: none;
             z-index: 99999;
+            mix-blend-mode: difference;
             will-change: transform;
-            transition: transform 0.05s ease-out;
+            transition: transform 0.05s ease-out, width 0.2s, height 0.2s;
         }
 
         /* PyScript Loading Splash Screen */
@@ -96,29 +104,29 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* Floating Top Nav Bar (Solid Matte Style) */
+        /* Much Bigger Floating Top Nav Bar with Large Hover Expansion */
         .top-nav-container {
             position: fixed;
-            top: 25px;
+            top: 30px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;
             background: #141416;
-            border: 1px solid #2e2e33;
-            padding: 6px;
+            border: 2px solid #38383e;
+            padding: 14px 28px;
             border-radius: 980px;
             display: flex;
-            gap: 6px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            gap: 12px;
             max-width: 95vw;
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), padding 0.4s ease, border-color 0.3s ease;
         }
         .top-nav-container:hover {
-            transform: translateX(-50%) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            transform: translateX(-50%) scale(1.18);
+            padding: 20px 40px;
+            border-color: #ffffff;
         }
         .top-nav-container::-webkit-scrollbar { display: none; }
 
@@ -127,9 +135,9 @@
             border: none;
             color: #86868b;
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 10px 20px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 12px 24px;
             border-radius: 980px;
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             outline: none;
@@ -139,21 +147,20 @@
         .nav-tab:hover {
             color: #ffffff;
             background: #222226;
-            transform: scale(1.06);
+            transform: scale(1.08);
         }
 
         .nav-tab.active {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.25);
-            transform: scale(1.04);
+            transform: scale(1.06);
         }
 
         .tab-content {
             display: none;
             opacity: 0;
             transition: opacity 0.4s ease;
-            padding-top: 100px;
+            padding-top: 120px;
         }
         .tab-content.active-view {
             display: block;
@@ -161,7 +168,7 @@
         }
 
         .hero-container {
-            height: calc(100vh - 140px);
+            height: calc(100vh - 160px);
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -207,8 +214,8 @@
             gap: 20px;
             padding: 35px 5vw;
             background: #111113;
-            border-top: 1px solid #222226;
-            border-bottom: 1px solid #222226;
+            border-top: 2px solid #222226;
+            border-bottom: 2px solid #222226;
             position: relative;
             z-index: 1;
             margin-top: 40px;
@@ -278,7 +285,7 @@
 
         .pro-card {
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 28px;
             padding: 40px 30px;
             display: flex;
@@ -370,7 +377,7 @@
 
         .standard-card {
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 28px;
             padding: 36px 28px;
             min-height: 280px;
@@ -395,7 +402,7 @@
         }
         .highlight-card {
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 28px;
             padding: 36px 40px;
             display: grid;
@@ -422,7 +429,7 @@
             width: 100%;
             height: 160px;
             background: #0d0d0f;
-            border: 1px dashed #333338;
+            border: 2px dashed #333338;
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -431,7 +438,13 @@
             font-size: 0.85rem;
             font-weight: 500;
             margin: 16px 0;
+            overflow: hidden;
             transition: border-color 0.2s, background 0.2s, color 0.2s;
+        }
+        .media-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .standard-card:hover .media-placeholder, .highlight-card:hover .media-placeholder {
             border-color: #777780;
@@ -440,10 +453,41 @@
         }
         .highlight-card .media-placeholder { height: 200px; margin: 0; }
 
+        /* Carousel Containers */
+        .carousel-container {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #444 #111;
+            margin: 20px 0;
+        }
+        .carousel-item {
+            min-width: 280px;
+            height: 200px;
+            background: #141418;
+            border: 2px solid #28282e;
+            border-radius: 14px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            overflow: hidden;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .connect-section {
             padding: 70px 5vw;
             background: transparent;
-            border-top: 1px solid #222226;
+            border-top: 2px solid #222226;
             position: relative;
             z-index: 1;
         }
@@ -460,7 +504,7 @@
             display: flex;
             align-items: center;
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 20px;
             padding: 18px 22px;
             text-decoration: none;
@@ -493,7 +537,7 @@
         /* Goal Progress Bars */
         .goal-bar-card {
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 28px;
             padding: 30px;
             margin-bottom: 20px;
@@ -528,7 +572,7 @@
         /* Scattered Widgets */
         .widget-box {
             background: #121215;
-            border: 1px solid #28282d;
+            border: 2px solid #28282d;
             border-radius: 20px;
             padding: 24px;
             margin-top: 25px;
@@ -575,7 +619,7 @@
             position: fixed;
             top: 30px; right: 40px;
             background: #1e1e23;
-            border: 1px solid #38383e;
+            border: 2px solid #38383e;
             color: #ffffff;
             width: 44px; height: 44px;
             border-radius: 50%;
@@ -627,7 +671,7 @@
 
         .bento-tile {
             background: #141418;
-            border: 1px solid #28282e;
+            border: 2px solid #28282e;
             border-radius: 32px;
             padding: 30px;
             display: flex;
@@ -664,7 +708,7 @@
             text-align: center;
             padding: 30px 20px;
             background-color: transparent;
-            border-top: 1px solid #222226;
+            border-top: 2px solid #222226;
             position: relative;
             z-index: 1;
         }
@@ -686,7 +730,7 @@
 
     <div id="pyscript-loader">
         <div class="spinner"></div>
-        <div style="font-weight: 600; letter-spacing: 1px; color: #86868b; font-size: 0.9rem;">INITIALIZING PYTHON ENGINE...</div>
+        <div style="font-weight: 600; letter-spacing: 1px; color: #86868b; font-size: 0.9rem;">INITIALIZING PYTHON ENGINE VIA PYSCRIPT...</div>
     </div>
 
     <nav class="top-nav-container">
@@ -848,15 +892,17 @@
 
             <div style="max-width: 1100px; margin: 40px auto 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
                 <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">Domain Micro-Lab</span>
-                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Interactive Tactical Puzzle</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">White to move and checkmate in 2.</p>
-                    <button class="interactive-btn" onclick="alert('Correct! 1. Qh7+ Kxh7 2. Rh3#')">Solve Puzzle</button>
+                    <span class="card-pill">Interactive Chess Puzzle Widget</span>
+                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Lichess Daily Tactical Puzzle</h4>
+                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Live tactical chess board integrated directly.</p>
+                    <div style="width:100%; height:320px; border-radius:12px; overflow:hidden; background:#000; border:2px solid #28282e;">
+                        <iframe src="https://lichess.org/training/frame?theme=auto&bg=auto" style="width:100%; height:100%; border:none;" allowtransparency="true" frameborder="0"></iframe>
+                    </div>
                 </div>
                 <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">Python Telemetry</span>
+                    <span class="card-pill">Python Telemetry Module</span>
                     <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Run Domain Status Script</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Execute active telemetry diagnostic check.</p>
+                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Execute active telemetry diagnostic check via PyScript.</p>
                     <button class="interactive-btn" onclick="alert('Python Output: All 4 domains operating at peak performance. FIDE 1545, Center 6\'0\", Python 3.12, Violin Book 3.')">Run script.py</button>
                 </div>
             </div>
@@ -876,7 +922,7 @@
                         <p>Captaining the team through a high-stakes basketball tournament. Required on-court leadership and paint dominance.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Tournament Details <span>→</span></div>
                     </div>
-                    <div class="media-placeholder">[ Tournament Photo Gallery Thumbnail ]</div>
+                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Mediterranean Cup Action"></div>
                 </div>
 
                 <div class="highlight-card" id="proj_website" tabindex="0" role="button" aria-label="View Website Design Details" py-click="open_category">
@@ -886,7 +932,7 @@
                         <p>The technical breakdown of building this portfolio utilizing Python backend architecture (PyScript) and CSS.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Architecture <span>→</span></div>
                     </div>
-                    <div class="media-placeholder">[ Code Architecture Snapshot ]</div>
+                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Website Architecture"></div>
                 </div>
 
                 <div class="highlight-card" id="proj_chess" tabindex="0" role="button" aria-label="View Chess Tournament Details" py-click="open_category">
@@ -896,23 +942,52 @@
                         <p>Representing the school team with top-board performance, securing the Best Player award, and competing in external circuits.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Match Analysis <span>→</span></div>
                     </div>
-                    <div class="media-placeholder">[ Match Board / Award Photo Thumbnail ]</div>
+                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Chess Circuit"></div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 50px;">
-                <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">Python Sandbox</span>
-                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Run Telemetry Script</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Output live Python script parameters for repository builds.</p>
-                    <button class="interactive-btn" onclick="alert('Python 3.12 Output: Active Projects Count = 9+, Status = Deployed to GitHub Pages.')">Run script.py</button>
-                </div>
-                <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">Quick Reaction Test</span>
-                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Test Point Guard Reflexes</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Measure response timing in milliseconds.</p>
-                    <button class="interactive-btn" onclick="alert('Reaction Time: 184ms - Optimal athletic grade.')">Test Reflexes</button>
-                </div>
+            <h2 class="section-header-title">Basketball Media & Carousels</h2>
+            <p class="section-subtitle">Extensive gallery featuring attached action shots and additional placeholder slots.</p>
+
+            <div class="carousel-container">
+                <div class="carousel-item"><img src="DSC09519.jpg" alt="Action 1"></div>
+                <div class="carousel-item"><img src="DSC09520.jpg" alt="Action 2"></div>
+                <div class="carousel-item"><img src="DSC09521.jpg" alt="Action 3"></div>
+                <div class="carousel-item"><img src="DSC09540.jpg" alt="Action 4"></div>
+                <div class="carousel-item"><img src="DSC09542.jpg" alt="Action 5"></div>
+                <div class="carousel-item"><img src="DSC09543.jpg" alt="Action 6"></div>
+                <div class="carousel-item"><img src="DSC09545.jpg" alt="Action 7"></div>
+                <div class="carousel-item"><img src="DSC09547.jpg" alt="Action 8"></div>
+                <div class="carousel-item"><img src="DSC09561.jpg" alt="Action 9"></div>
+                <div class="carousel-item">Placeholder Basket 10</div>
+                <div class="carousel-item">Placeholder Basket 11</div>
+                <div class="carousel-item">Placeholder Basket 12</div>
+                <div class="carousel-item">Placeholder Basket 13</div>
+                <div class="carousel-item">Placeholder Basket 14</div>
+                <div class="carousel-item">Placeholder Basket 15</div>
+                <div class="carousel-item">Placeholder Basket 16</div>
+                <div class="carousel-item">Placeholder Basket 17</div>
+                <div class="carousel-item">Placeholder Basket 18</div>
+                <div class="carousel-item">Placeholder Basket 19</div>
+                <div class="carousel-item">Placeholder Basket 20</div>
+                <div class="carousel-item">Placeholder Basket 21</div>
+                <div class="carousel-item">Placeholder Basket 22</div>
+                <div class="carousel-item">Placeholder Basket 23</div>
+                <div class="carousel-item">Placeholder Basket 24</div>
+                <div class="carousel-item">Placeholder Basket 25</div>
+                <div class="carousel-item">Placeholder Basket 26</div>
+                <div class="carousel-item">Placeholder Basket 27</div>
+                <div class="carousel-item">Placeholder Basket 28</div>
+                <div class="carousel-item">Placeholder Basket 29</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 40px 0;">
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09540.jpg" alt="Extra Shot 1"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09542.jpg" alt="Extra Shot 2"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09543.jpg" alt="Extra Shot 3"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09545.jpg" alt="Extra Shot 4"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09547.jpg" alt="Extra Shot 5"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="DSC09561.jpg" alt="Extra Shot 6"></div>
             </div>
 
             <h2 class="section-header-title">Creative Archive</h2>
@@ -954,10 +1029,10 @@
 
     <div id="tab-now-goals" class="tab-content">
         <section class="section-container" style="padding-top: 40px;">
-            <div style="max-width: 1000px; margin: 0 auto 50px auto; background: #121215; border: 1px solid #28282d; border-radius: 28px; padding: 35px;">
+            <div style="max-width: 1000px; margin: 0 auto 50px auto; background: #121215; border: 2px solid #28282d; border-radius: 28px; padding: 35px;">
                 <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Current Status</span>
                 <h2 style="color: #ffffff; font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">What I'm doing now</h2>
-                <p style="color: #86868b; font-size: 1.15rem; margin: 0;">Nothing much right now...</p>
+                <p style="color: #86868b; font-size: 1.15rem; margin: 0;">Making this website...</p>
             </div>
 
             <div style="max-width: 1000px; margin: 0 auto 60px auto;">
@@ -1034,14 +1109,14 @@
         </div>
     </div>
 
-    <div id="shortcuts-modal" onclick="toggleShortcuts(false)" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.85); z-index:100000; justify-content:center; align-items:center;">
-        <div class="shortcuts-box" onclick="event.stopPropagation()" style="background:#141416; border:1px solid #2e2e34; border-radius:24px; padding:40px; max-width:500px; width:90%; box-shadow:0 25px 50px rgba(0,0,0,0.9);">
+    <div id="shortcuts-modal" onclick="toggleShortcuts(false)" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); z-index:100000; justify-content:center; align-items:center;">
+        <div class="shortcuts-box" onclick="event.stopPropagation()" style="background:#141416; border:2px solid #2e2e34; border-radius:24px; padding:40px; max-width:500px; width:90%;">
             <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222226; font-size:0.95rem;"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222226; font-size:0.95rem;"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" onclick="toggleShortcuts(false)">Got It</button>
         </div>
     </div>
@@ -1092,14 +1167,14 @@
                         <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Interactive Chess Game PGN Viewer Placeholder ]</div>
+                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Chess Action 1"></div>
 
                     <div class="content-block">
                         <h4>2. Tactical & Dynamic Temperament</h4>
                         <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Tactics / Best Moves Image Gallery Placeholder ]</div>
+                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Chess Action 2"></div>
 
                     <div class="content-block">
                         <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
@@ -1139,16 +1214,16 @@
                         <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and vocal floor communication to shut down opposing drives.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Basketball Action Carousel Slide 1/4 - Post Play & Drop Step ]</div>
+                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Basketball Post Play"></div>
                     
                     <div class="content-block">
                         <h4>Rebounding & High Post Distribution</h4>
                         <p>Securing defensive and offensive boards in traffic, initiating fast breaks with accurate outlet passes, and setting solid screens in the half-court set.</p>
                     </div>
 
-                    <div class="media-placeholder">[ Basketball Action Carousel Slide 2/4 - Defensive Block & Contest ]</div>
-                    <div class="media-placeholder">[ Basketball Action Carousel Slide 3/4 - Team Huddle & Captain Briefing ]</div>
-                    <div class="media-placeholder">[ Basketball Action Carousel Slide 4/4 - Mediterranean Cup Match Action ]</div>
+                    <div class="media-placeholder"><img src="DSC09540.jpg" alt="Basketball Contest"></div>
+                    <div class="media-placeholder"><img src="DSC09542.jpg" alt="Basketball Huddle"></div>
+                    <div class="media-placeholder"><img src="DSC09543.jpg" alt="Mediterranean Cup Action"></div>
                 """
             },
             "coding": {
@@ -1170,7 +1245,7 @@
                     </div>
                     <div class="bento-tile span-2">
                         <h4>Design Focus</h4>
-                        <p style="color:#fff; font-weight:600;">Minimalist Apple-inspired Interface</p>
+                        <p style="color:#fff; font-weight:600;">Minimalist Solid Matte Interface</p>
                     </div>
                     <div class="bento-tile span-2">
                         <h4>Automation</h4>
@@ -1183,7 +1258,7 @@
                         <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps directly to GitHub Pages.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Python Terminal Telemetry Snapshot ]</div>
+                    <div class="media-placeholder"><img src="DSC09545.jpg" alt="Python Telemetry"></div>
                 """
             },
             "music": {
@@ -1209,7 +1284,7 @@
                         <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, dynamic phrasing, and pure tone production.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Violin Sheet Music & Bowing Technique Placeholder ]</div>
+                    <div class="media-placeholder"><img src="DSC09547.jpg" alt="Violin Performance"></div>
                 """
             },
             "presentations": {
@@ -1235,7 +1310,7 @@
                         <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Presentation Slide Deck Mockup Gallery ]</div>
+                    <div class="media-placeholder"><img src="DSC09561.jpg" alt="Slide Deck Mockup"></div>
                 """
             },
             "portfolios": {
@@ -1310,7 +1385,7 @@
                         <p>Captained the team through the highly competitive Mediterranean Cup, demanding intense communication and paint leadership.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Mediterranean Cup Tournament Trophy & Team Photo ]</div>
+                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Tournament Trophy & Team"></div>
                 """
             },
             "proj_website": {
@@ -1336,7 +1411,7 @@
                         <p>Developed to replicate a high-end presentation utilizing Python directly in the browser via PyScript.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Source Code Diagram & Architecture Tree ]</div>
+                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Source Code Diagram"></div>
                 """
             },
             "proj_chess": {
@@ -1363,7 +1438,7 @@
                         <p>Representing the school team on top boards, securing the Best Player award for highest win rate.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Chess Tournament Board & Award Ceremony Placeholder ]</div>
+                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Chess Tournament Board"></div>
                 """
             }
         }
@@ -1461,7 +1536,7 @@
         const cursor = document.getElementById("custom-cursor");
         document.addEventListener("mousemove", (e) => {
             if (cursor && !document.body.classList.contains('modal-active')) {
-                cursor.style.transform = `translate3d(${e.clientX - 13}px, ${e.clientY - 13}px, 0)`;
+                cursor.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
             }
         });
 
