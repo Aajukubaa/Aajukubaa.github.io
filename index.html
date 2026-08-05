@@ -409,101 +409,153 @@
         .connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
         .connect-card:hover .connect-arrow { color: #ffd700; transform: translateX(3px); }
 
-        /* Enhanced Prominent Modal View */
+/* --- APPLE BENTO GRID OVERLAY --- */
         #detail-view {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100vw; height: 100vh;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(35px);
+            background: rgba(0, 0, 0, 0.65); /* Darker tint */
+            backdrop-filter: blur(45px); /* Heavy blur to see cards behind */
+            -webkit-backdrop-filter: blur(45px);
             z-index: 9999;
-            padding: 50px 6vw;
             overflow-y: auto;
+            overflow-x: hidden;
             box-sizing: border-box;
             opacity: 0;
             transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         #detail-view.modal-open { display: block; opacity: 1; }
-
-        .modal-container {
-            max-width: 850px;
-            margin: 40px auto;
-            background: #111113;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            border-radius: 36px;
-            padding: 50px;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 215, 0, 0.1);
-            position: relative;
-            transform: scale(0.9) translateY(30px);
-            opacity: 0;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-        }
-        #detail-view.modal-open .modal-container { transform: scale(1) translateY(0); opacity: 1; }
         #detail-view.modal-closing { opacity: 0; }
-        #detail-view.modal-closing .modal-container { transform: scale(0.95) translateY(20px); opacity: 0; }
 
+        /* The Close Button stays pinned to the top right */
         .close-btn {
-            position: absolute;
-            top: 25px; right: 25px;
+            position: fixed;
+            top: 30px; right: 40px;
             background: rgba(255, 255, 255, 0.1);
-            border: none;
+            border: 1px solid rgba(255,255,255,0.2);
             color: #ffffff;
-            width: 40px; height: 40px;
+            width: 44px; height: 44px;
             border-radius: 50%;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s, transform 0.3s;
+            z-index: 10000;
+        }
+        .close-btn:hover { background: #ffd700; color: #000000; transform: rotate(90deg); }
+
+        /* First Screen: Bento Grid Hero */
+        .bento-hero {
+            min-height: 100vh;
+            width: 100%;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            transition: background 0.2s, transform 0.2s;
+            align-items: center;
+            padding: 80px 5vw;
+            position: relative;
         }
 
-        #detail-badge { display: inline-block; margin-bottom: 12px; }
+        .bento-header-wrapper {
+            text-align: center;
+            margin-bottom: 40px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: transform 0.5s ease 0.1s, opacity 0.5s ease 0.1s;
+        }
+        #detail-view.modal-open .bento-header-wrapper { transform: translateY(0); opacity: 1; }
+        
         #detail-title {
-            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-size: clamp(3rem, 7vw, 5.5rem);
             font-weight: 800;
             letter-spacing: -0.03em;
-            margin: 0 0 20px 0;
+            margin: 10px 0 0 0;
             color: #ffffff;
+            text-transform: uppercase;
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* The Bento Grid Layout */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(180px, auto);
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s, opacity 0.6s ease 0.2s;
+        }
+        #detail-view.modal-open .bento-grid { transform: translateY(0); opacity: 1; }
+
+        @media (max-width: 900px) { .bento-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .bento-grid { grid-template-columns: 1fr; } }
+
+        /* Individual Bento Tiles */
+        .bento-tile {
+            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.02), 0 15px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .bento-tile:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        /* Bento Tile Utilities */
+        .bento-tile.span-2 { grid-column: span 2; }
+        .bento-tile.span-3 { grid-column: span 3; }
+        .bento-tile.row-2 { grid-row: span 2; }
+        
+        .bento-tile h4 { font-size: 1.5rem; font-weight: 700; color: #fff; margin: 0 0 10px 0; }
+        .bento-tile h2 { font-size: 3rem; font-weight: 800; color: #ffd700; margin: 0; line-height: 1; font-family: 'Syne', sans-serif;}
+        .bento-tile p { color: #86868b; margin: 0; font-size: 0.95rem; }
+
+        /* Bouncing Scroll Arrow */
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        .scroll-arrow {
+            position: absolute;
+            bottom: 40px;
+            animation: floatBounce 2s ease-in-out infinite;
+            opacity: 0.6;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        /* Deep Content Section (Below the fold) */
+        .bento-deep-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 5vw 120px 5vw;
         }
         #detail-content {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             line-height: 1.7;
             color: #a1a1a6;
         }
         #detail-content h4 {
-            font-size: 1.25rem;
+            font-size: 1.4rem;
             color: #ffffff;
-            margin-top: 24px;
-            margin-bottom: 8px;
+            margin-top: 40px;
+            margin-bottom: 12px;
             font-weight: 700;
-        }
-        .modal-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 25px;
-            padding: 12px 24px;
-            background: #2997ff;
-            color: #ffffff;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 980px;
-            transition: background 0.2s, transform 0.2s;
-        }
-        .modal-action-btn:hover { background: #ffd700; color: #000000; transform: scale(1.03); }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-            will-change: opacity, transform;
-        }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; animation: none !important; }
         }
         .site-footer {
     text-align: center;
@@ -561,7 +613,7 @@
         </section>
 
         <section class="section-container fade-in">
-            <h2 class="section-header-title">The Domain of <span class="kabir-cursive">Kabir</span></h2>
+            <h2 class="section-header-title"><span class="kabir-cursive">Kabir</span>'s Domain</h2>
             <p class="section-subtitle">Hover over any card to expand or click to see full details.</p>
 
             <div class="domain-grid-wrapper">
@@ -764,11 +816,24 @@
 
     </div>
 
-    <div id="detail-view">
-        <div class="modal-container">
-            <button class="close-btn" py-click="close_category" aria-label="Close Modal">✕</button>
-            <div id="detail-badge" class="card-pill">PRO DETAIL</div>
-            <h1 id="detail-title">SPECIFICATION</h1>
+<div id="detail-view">
+        <button class="close-btn" py-click="close_category" aria-label="Close Modal">✕</button>
+        
+        <div class="bento-hero">
+            <div class="bento-header-wrapper">
+                <div id="detail-badge" class="card-pill">PRO DETAIL</div>
+                <h1 id="detail-title">TITLE</h1>
+            </div>
+            
+            <div id="detail-bento-grid" class="bento-grid"></div>
+
+            <div class="scroll-arrow">
+                SCROLL TO READ
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-top: 8px;"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+            </div>
+        </div>
+
+        <div class="bento-deep-content">
             <div id="detail-content">Loading content...</div>
         </div>
     </div>
@@ -777,10 +842,37 @@
         from pyscript import document
         import js
 
+<script type="py">
+        from pyscript import document
+        import js
+
         categories = {
             "chess": {
                 "title": "CHESS",
                 "badge": "STRATEGY",
+                "bento": """
+                    <div class="bento-tile span-2">
+                        <h4>Current Rating</h4>
+                        <h2>1545 FIDE</h2>
+                        <p style="margin-top:auto;">Official competitive tournament bracket rating.</p>
+                    </div>
+                    <div class="bento-tile row-2" style="background: rgba(255, 215, 0, 0.1); border-color: rgba(255,215,0,0.4);">
+                        <h4 style="color: #ffd700;">Opening Base</h4>
+                        <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>
+                    </div>
+                    <div class="bento-tile">
+                        <h4>Playstyle</h4>
+                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Time Controls</h4>
+                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">60+1 Hyper-Bullet & 3-Min Blitz</p>
+                    </div>
+                    <div class="bento-tile">
+                        <h4>Black Defenses</h4>
+                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>
+                    </div>
+                """,
                 "content": """
                     <h4>1. Opening Repertoire: Aggressive and Direct</h4>
                     <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.</p>
@@ -791,40 +883,33 @@
                     
                     <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
                     <p>A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p>
-                    
-                    <a href='http://ratings.fide.com/profile/498777' target='_blank' class='modal-action-btn'>View Official FIDE Record ↗</a>
                 """
             },
-            "basketball": {
-                "title": "BASKETBALL",
-                "badge": "ATHLETICS",
-                "content": "<p>Operating as a 6'0\" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and floor communication to anchor team defense in high-stakes play.</p>"
-            },
             "coding": {
-                "title": "CODING & ENGINEERING",
+                "title": "CODING",
                 "badge": "ENGINEERING",
-                "content": "<p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive static micro-applications straight to GitHub Pages.</p><a href='https://github.com/Aajukubaaa' target='_blank' class='modal-action-btn'>View GitHub Repositories ↗</a>"
-            },
-            "music": {
-                "title": "VIOLIN",
-                "badge": "PERFORMANCE",
-                "content": "<p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, controlled bowing articulation, and pure tone production.</p>"
-            },
-            "presentations": {
-                "title": "POWERPOINT KEYNOTES",
-                "badge": "ACADEMIC DECK ARCHITECTURE",
-                "content": "<p>Engineered dynamic visual presentations featuring clean hierarchical typography, synchronized animations, and concise visual storytelling for complex research.</p>"
-            },
-            "portfolios": {
-                "title": "DESIGN PORTFOLIOS",
-                "badge": "CREATIVE SHOWCASE",
-                "content": "<p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids, striking typography contrast, and polished Apple-inspired interface aesthetics.</p>"
-            },
-            "projects": {
-                "title": "PYTHON CODE REPOS",
-                "badge": "AUTOMATION & MICRO-APPS",
-                "content": "<p>Showcases custom Python scripts, automated scripts, and interactive browser apps built for performance and streamlined user experiences.</p><a href='https://github.com/Aajukubaaa' target='_blank' class='modal-action-btn'>Explore Code Repos ↗</a>"
+                "bento": """
+                    <div class="bento-tile row-2 span-2">
+                        <h4>Architecture</h4>
+                        <h2>Python 3.12</h2>
+                        <p style="margin-top:auto;">Building automated backend scripts, data pipelines, and PyScript integrations for seamless browser execution.</p>
+                    </div>
+                    <div class="bento-tile">
+                        <h4>Frontend</h4>
+                        <p style="color:#fff; font-weight:600;">HTML5, CSS3, DOM</p>
+                    </div>
+                    <div class="bento-tile">
+                        <h4>Deployment</h4>
+                        <p style="color:#fff; font-weight:600;">GitHub Pages</p>
+                    </div>
+                    <div class="bento-tile span-2">
+                        <h4>Design Focus</h4>
+                        <p style="color:#fff; font-weight:600;">Apple-inspired Glassmorphism & Micro-interactions</p>
+                    </div>
+                """,
+                "content": "<p>Software systems built by <span class='kabir-cursive'>Kabir</span>. Developing automated Python backend scripts, single-page web applications, and deploying static builds to GitHub Pages.</p>"
             }
+            # Add "bento": """...""" strings to your other dictionary items following this pattern!
         }
 
         last_opened_card_id = None
@@ -841,12 +926,18 @@
                 item = categories[cat_id]
                 document.querySelector("#detail-title").innerHTML = item["title"]
                 document.querySelector("#detail-badge").innerHTML = item["badge"]
-                document.querySelector("#detail-content").innerHTML = item["content"]
+                document.querySelector("#detail-content").innerHTML = item.get("content", "")
+                
+                # Render the Bento Grid!
+                document.querySelector("#detail-bento-grid").innerHTML = item.get("bento", "<div class='bento-tile span-4'><h4>Data Unavailable</h4></div>")
 
                 detail = document.querySelector("#detail-view")
                 detail.style.display = "block"
                 detail.classList.remove('modal-closing')
                 detail.classList.add('modal-open')
+                
+                # Reset scroll position to top
+                detail.scrollTop = 0
 
                 card.classList.add('card-active')
                 last_opened_card_id = cat_id
