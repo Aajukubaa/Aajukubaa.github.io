@@ -7,6 +7,12 @@
 
     <meta name="description" content="Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist." />
     
+    <meta property="og:title" content="Kabir Bhuchar" />
+    <meta property="og:description" content="Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aajukubaa.github.io/" />
+    <meta property="og:image" content="images/DSC09519.JPG" />
+
     <link rel="icon" type="image/png" href="K.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -104,7 +110,7 @@
         }
         .card-pressed { animation: pressAnim 0.35s cubic-bezier(0.25, 1, 0.5, 1); }
 
-        /* Much Bigger Floating Top Nav Bar with Large Hover Expansion */
+        /* Floating Top Nav Bar with Mobile Scroll Snap */
         .top-nav-container {
             position: fixed;
             top: 30px;
@@ -121,11 +127,12 @@
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), padding 0.4s ease, border-color 0.3s ease;
         }
         .top-nav-container:hover {
-            transform: translateX(-50%) scale(1.18);
-            padding: 20px 40px;
+            transform: translateX(-50%) scale(1.08);
+            padding: 18px 36px;
             border-color: #ffffff;
         }
         .top-nav-container::-webkit-scrollbar { display: none; }
@@ -142,6 +149,7 @@
             transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             outline: none;
             flex-shrink: 0;
+            scroll-snap-align: center;
         }
 
         .nav-tab:hover {
@@ -569,7 +577,7 @@
             transition: width 1s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Scattered Widgets */
+        /* Widgets */
         .widget-box {
             background: #121215;
             border: 2px solid #28282d;
@@ -922,7 +930,7 @@
                         <p>Captaining the team through a high-stakes basketball tournament. Required on-court leadership and paint dominance.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Tournament Details <span>→</span></div>
                     </div>
-                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Mediterranean Cup Action"></div>
+                    <div class="media-placeholder"><img src="images/DSC09519.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
                 </div>
 
                 <div class="highlight-card" id="proj_website" tabindex="0" role="button" aria-label="View Website Design Details" py-click="open_category">
@@ -932,7 +940,7 @@
                         <p>The technical breakdown of building this portfolio utilizing Python backend architecture (PyScript) and CSS.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Architecture <span>→</span></div>
                     </div>
-                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Website Architecture"></div>
+                    <div class="media-placeholder"><img src="images/DSC09620.JPG" alt="Website Architecture" loading="lazy"></div>
                 </div>
 
                 <div class="highlight-card" id="proj_chess" tabindex="0" role="button" aria-label="View Chess Tournament Details" py-click="open_category">
@@ -942,52 +950,52 @@
                         <p>Representing the school team with top-board performance, securing the Best Player award, and competing in external circuits.</p>
                         <div style="margin-top: 20px;" class="card-action-default">View Match Analysis <span>→</span></div>
                     </div>
-                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Chess Circuit"></div>
+                    <div class="media-placeholder"><img src="images/DSC09621.JPG" alt="Chess Circuit" loading="lazy"></div>
                 </div>
             </div>
 
             <h2 class="section-header-title">Basketball Media & Carousels</h2>
-            <p class="section-subtitle">Extensive gallery featuring attached action shots and additional placeholder slots.</p>
+            <p class="section-subtitle">Extensive gallery featuring full action shot gallery.</p>
 
             <div class="carousel-container">
-                <div class="carousel-item"><img src="DSC09519.jpg" alt="Action 1"></div>
-                <div class="carousel-item"><img src="DSC09520.jpg" alt="Action 2"></div>
-                <div class="carousel-item"><img src="DSC09521.jpg" alt="Action 3"></div>
-                <div class="carousel-item"><img src="DSC09540.jpg" alt="Action 4"></div>
-                <div class="carousel-item"><img src="DSC09542.jpg" alt="Action 5"></div>
-                <div class="carousel-item"><img src="DSC09543.jpg" alt="Action 6"></div>
-                <div class="carousel-item"><img src="DSC09545.jpg" alt="Action 7"></div>
-                <div class="carousel-item"><img src="DSC09547.jpg" alt="Action 8"></div>
-                <div class="carousel-item"><img src="DSC09561.jpg" alt="Action 9"></div>
-                <div class="carousel-item">Placeholder Basket 10</div>
-                <div class="carousel-item">Placeholder Basket 11</div>
-                <div class="carousel-item">Placeholder Basket 12</div>
-                <div class="carousel-item">Placeholder Basket 13</div>
-                <div class="carousel-item">Placeholder Basket 14</div>
-                <div class="carousel-item">Placeholder Basket 15</div>
-                <div class="carousel-item">Placeholder Basket 16</div>
-                <div class="carousel-item">Placeholder Basket 17</div>
-                <div class="carousel-item">Placeholder Basket 18</div>
-                <div class="carousel-item">Placeholder Basket 19</div>
-                <div class="carousel-item">Placeholder Basket 20</div>
-                <div class="carousel-item">Placeholder Basket 21</div>
-                <div class="carousel-item">Placeholder Basket 22</div>
-                <div class="carousel-item">Placeholder Basket 23</div>
-                <div class="carousel-item">Placeholder Basket 24</div>
-                <div class="carousel-item">Placeholder Basket 25</div>
-                <div class="carousel-item">Placeholder Basket 26</div>
-                <div class="carousel-item">Placeholder Basket 27</div>
-                <div class="carousel-item">Placeholder Basket 28</div>
-                <div class="carousel-item">Placeholder Basket 29</div>
+                <div class="carousel-item"><img src="images/DSC09519.JPG" alt="Action 1" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09620.JPG" alt="Action 2" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09621.JPG" alt="Action 3" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09540.JPG" alt="Action 4" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09642.JPG" alt="Action 5" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09643.JPG" alt="Action 6" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09545.JPG" alt="Action 7" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09547.JPG" alt="Action 8" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09561.JPG" alt="Action 9" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09585.JPG" alt="Action 10" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09586.JPG" alt="Action 11" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09587.JPG" alt="Action 12" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09588.JPG" alt="Action 13" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09589.JPG" alt="Action 14" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09590.JPG" alt="Action 15" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09597.JPG" alt="Action 16" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09603.JPG" alt="Action 17" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09615.JPG" alt="Action 18" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09714.JPG" alt="Action 19" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09715.JPG" alt="Action 20" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09716.JPG" alt="Action 21" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09717.JPG" alt="Action 22" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09729.JPG" alt="Action 23" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09732.JPG" alt="Action 24" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09736.JPG" alt="Action 25" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09737.JPG" alt="Action 26" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09741.JPG" alt="Action 27" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09743.JPG" alt="Action 28" loading="lazy"></div>
+                <div class="carousel-item"><img src="images/DSC09744.JPG" alt="Action 29" loading="lazy"></div>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 40px 0;">
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09540.jpg" alt="Extra Shot 1"></div>
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09542.jpg" alt="Extra Shot 2"></div>
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09543.jpg" alt="Extra Shot 3"></div>
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09545.jpg" alt="Extra Shot 4"></div>
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09547.jpg" alt="Extra Shot 5"></div>
-                <div class="media-placeholder" style="height: 220px;"><img src="DSC09561.jpg" alt="Extra Shot 6"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09540.JPG" alt="Shot 1" loading="lazy"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09642.JPG" alt="Shot 2" loading="lazy"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09643.JPG" alt="Shot 3" loading="lazy"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09545.JPG" alt="Shot 4" loading="lazy"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09547.JPG" alt="Shot 5" loading="lazy"></div>
+                <div class="media-placeholder" style="height: 220px;"><img src="images/DSC09561.JPG" alt="Shot 6" loading="lazy"></div>
             </div>
 
             <h2 class="section-header-title">Creative Archive</h2>
@@ -998,7 +1006,7 @@
                     <span class="card-pill">Keynote Decks</span>
                     <div>
                         <h3>PowerPoint Presentations</h3>
-                        <div class="media-placeholder">[ Presentation Slide Deck Preview ]</div>
+                        <div class="media-placeholder"><img src="images/DSC09585.JPG" alt="Slide Deck Preview" loading="lazy"></div>
                         <p style="color:#86868b; font-size:0.9rem; margin:0;">Dynamic visual slide decks engineered with minimalist layouts.</p>
                     </div>
                     <div style="margin-top: 15px;" class="card-action-default">View Presentations <span>→</span></div>
@@ -1008,7 +1016,7 @@
                     <span class="card-pill">Creative Showcase</span>
                     <div>
                         <h3>Design Portfolios</h3>
-                        <div class="media-placeholder">[ Design Project Gallery Placeholder ]</div>
+                        <div class="media-placeholder"><img src="images/DSC09586.JPG" alt="Design Portfolio" loading="lazy"></div>
                         <p style="color:#86868b; font-size:0.9rem; margin:0;">Curated archive of 9+ comprehensive design project portfolios.</p>
                     </div>
                     <div style="margin-top: 15px;" class="card-action-default">View Design Work <span>→</span></div>
@@ -1018,7 +1026,7 @@
                     <span class="card-pill">Python Workflows</span>
                     <div>
                         <h3>Custom Code Repos</h3>
-                        <div class="media-placeholder">[ Python Script Architecture View ]</div>
+                        <div class="media-placeholder"><img src="images/DSC09587.JPG" alt="Code Repos" loading="lazy"></div>
                         <p style="color:#86868b; font-size:0.9rem; margin:0;">Automated scripts, data pipelines, and browser app micro-services.</p>
                     </div>
                     <div style="margin-top: 15px;" class="card-action-default">View Code Repos <span>→</span></div>
@@ -1167,14 +1175,14 @@
                         <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Chess Action 1"></div>
+                    <div class="media-placeholder"><img src="images/DSC09519.JPG" alt="Chess Action 1" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>2. Tactical & Dynamic Temperament</h4>
                         <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Chess Action 2"></div>
+                    <div class="media-placeholder"><img src="images/DSC09620.JPG" alt="Chess Action 2" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
@@ -1214,16 +1222,16 @@
                         <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and vocal floor communication to shut down opposing drives.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Basketball Post Play"></div>
+                    <div class="media-placeholder"><img src="images/DSC09621.JPG" alt="Basketball Post Play" loading="lazy"></div>
                     
                     <div class="content-block">
                         <h4>Rebounding & High Post Distribution</h4>
                         <p>Securing defensive and offensive boards in traffic, initiating fast breaks with accurate outlet passes, and setting solid screens in the half-court set.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="DSC09540.jpg" alt="Basketball Contest"></div>
-                    <div class="media-placeholder"><img src="DSC09542.jpg" alt="Basketball Huddle"></div>
-                    <div class="media-placeholder"><img src="DSC09543.jpg" alt="Mediterranean Cup Action"></div>
+                    <div class="media-placeholder"><img src="images/DSC09540.JPG" alt="Basketball Contest" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="images/DSC09642.JPG" alt="Basketball Huddle" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="images/DSC09643.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
                 """
             },
             "coding": {
@@ -1258,7 +1266,7 @@
                         <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps directly to GitHub Pages.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09545.jpg" alt="Python Telemetry"></div>
+                    <div class="media-placeholder"><img src="images/DSC09545.JPG" alt="Python Telemetry" loading="lazy"></div>
                 """
             },
             "music": {
@@ -1284,7 +1292,7 @@
                         <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, dynamic phrasing, and pure tone production.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09547.jpg" alt="Violin Performance"></div>
+                    <div class="media-placeholder"><img src="images/DSC09547.JPG" alt="Violin Performance" loading="lazy"></div>
                 """
             },
             "presentations": {
@@ -1310,7 +1318,7 @@
                         <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09561.jpg" alt="Slide Deck Mockup"></div>
+                    <div class="media-placeholder"><img src="images/DSC09561.JPG" alt="Slide Deck Mockup" loading="lazy"></div>
                 """
             },
             "portfolios": {
@@ -1332,7 +1340,7 @@
                         <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ Design Grid Showcase Placeholder ]</div>
+                    <div class="media-placeholder"><img src="images/DSC09585.JPG" alt="Design Grid Showcase" loading="lazy"></div>
                 """
             },
             "projects": {
@@ -1358,7 +1366,7 @@
                         <p>Showcases custom Python scripts and interactive browser apps built for maximum performance.</p>
                     </div>
                     
-                    <div class="media-placeholder">[ GitHub Commit Graph & Repository Tree ]</div>
+                    <div class="media-placeholder"><img src="images/DSC09586.JPG" alt="GitHub Commit Architecture" loading="lazy"></div>
                 """
             },
             "proj_basketball": {
@@ -1385,7 +1393,7 @@
                         <p>Captained the team through the highly competitive Mediterranean Cup, demanding intense communication and paint leadership.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09519.jpg" alt="Tournament Trophy & Team"></div>
+                    <div class="media-placeholder"><img src="images/DSC09519.JPG" alt="Tournament Trophy & Team" loading="lazy"></div>
                 """
             },
             "proj_website": {
@@ -1411,7 +1419,7 @@
                         <p>Developed to replicate a high-end presentation utilizing Python directly in the browser via PyScript.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09520.jpg" alt="Source Code Diagram"></div>
+                    <div class="media-placeholder"><img src="images/DSC09620.JPG" alt="Source Code Diagram" loading="lazy"></div>
                 """
             },
             "proj_chess": {
@@ -1438,7 +1446,7 @@
                         <p>Representing the school team on top boards, securing the Best Player award for highest win rate.</p>
                     </div>
                     
-                    <div class="media-placeholder"><img src="DSC09521.jpg" alt="Chess Tournament Board"></div>
+                    <div class="media-placeholder"><img src="images/DSC09621.JPG" alt="Chess Tournament Board" loading="lazy"></div>
                 """
             }
         }
