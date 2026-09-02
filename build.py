@@ -44,8 +44,6 @@ def build() -> None:
         connect_links=content.CONNECT_LINKS,
         domain_cards=content.DOMAIN_CARDS,
         highlight_projects=content.HIGHLIGHT_PROJECTS,
-        carousel_images=content.CAROUSEL_IMAGES,
-        action_shots=content.ACTION_SHOTS,
         creative_archive=content.CREATIVE_ARCHIVE,
         goals=content.GOALS,
         now=content.NOW,
