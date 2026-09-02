@@ -12,8 +12,8 @@ HTML/CSS/JS with no runtime to download.
   the site. **This is the file to edit for day-to-day changes.**
 - `templates/index.html.j2` — the page structure (Jinja2 template).
 - `build.py` — reads `content.py` + the template, writes `index.html`.
-- `assets/css/style.css` — all styling (previously inline in the page).
-- `assets/js/main.js` — all interactivity: tabs, the detail modal, the
+- `assets/style.css` — all styling (previously inline in the page).
+- `assets/main.js` — all interactivity: tabs, the detail modal, the
   custom cursor, sound effects, keyboard shortcuts, etc.
 - `index.html` — the generated output. **This is what GitHub Pages serves.**
   Don't hand-edit it — your edits will be overwritten next build.
@@ -31,6 +31,29 @@ HTML/CSS/JS with no runtime to download.
    Pages serves whatever `index.html` is committed — there's no build
    step on their end, so you do need to run `build.py` and commit the
    result before pushing.
+
+## Uploading this via GitHub's web interface (no git required)
+
+If you're using "Add file → Upload files" in the browser rather than git,
+folders can be unreliable — GitHub's upload **button** opens a file picker
+that generally can't select folders at all, and drag-and-drop of folders
+depends on your browser. The most foolproof way to get a nested file like
+`assets/style.css` into the repo through the web UI:
+
+1. Go to **Add file → Create new file** (not "Upload files").
+2. In the filename box, type the full path: `assets/style.css` — GitHub
+   will automatically create the `assets` folder for you as you type the `/`.
+3. Paste the file's contents in and commit.
+4. Repeat for `assets/main.js`.
+
+For everything else here (`index.html`, `content.py`, `build.py`,
+`templates/index.html.j2`, `requirements.txt`, `README.md`), plain
+"Upload files" works fine since none of them need more than one folder
+level deep, which is what caused the last break — `assets/css/style.css`
+and `assets/js/main.js` were two folders deep and silently never uploaded,
+which is why the site lost all its styling. If you'd rather avoid this
+entire class of problem going forward, consider GitHub Desktop or the
+`git` command line — both handle nested folders without any of this.
 
 ## What's *not* included here
 
