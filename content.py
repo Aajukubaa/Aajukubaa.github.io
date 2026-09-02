@@ -87,61 +87,61 @@ HIGHLIGHT_PROJECTS = [
      "desc": "Captaining the team through a high-stakes basketball tournament. "
              "Required on-court leadership and paint dominance.",
      "cta": "View Tournament Details",
-     "image": {"id": "mediterranean-image", "src": "compressedImages/DSC09519.JPG",
+     "image": {"id": "mediterranean-image", "src": "compressedImages/DSC09521.JPG",
                "alt": "Mediterranean Cup Action"}},
     {"category": "proj_website", "pill": "Full-Stack Development",
      "title": "Engineering This Showcase",
      "desc": "The technical breakdown of building this portfolio with a Python "
              "static-site generator, compiled into fast, dependency-free HTML/CSS/JS.",
      "cta": "View Architecture",
-     "image": {"id": None, "src": "compressedImages/DSC09620.JPG",
-               "alt": "Website Architecture"}},
+     "image": None},
     {"category": "proj_chess", "pill": "Competitive Strategy",
      "title": "Chess: School & Circuit",
      "desc": "Representing the school team with top-board performance, securing "
              "the Best Player award, and competing in external circuits.",
      "cta": "View Match Analysis",
-     "image": {"id": None, "src": "compressedImages/DSC09621.JPG",
-               "alt": "Chess Circuit"}},
-]
-
-# The 29-shot action carousel. Filenames are the original camera-dump names.
-CAROUSEL_IMAGES = [
-    "DSC09519.JPG", "DSC09620.JPG", "DSC09621.JPG", "DSC09540.JPG", "DSC09642.JPG",
-    "DSC09543.JPG", "DSC09545.JPG", "DSC09547.JPG", "DSC08561.JPG", "DSC09585.JPG",
-    "DSC09586.JPG", "DSC08587.JPG", "DSC09588.JPG", "DSC09589.JPG", "DSC09590.JPG",
-    "DSC09597.JPG", "DSC09603.JPG", "DSC09615.JPG", "DSC09714.JPG", "DSC09715.JPG",
-    "DSC09716.JPG", "DSC09717.JPG", "DSC09729.JPG", "DSC09732.JPG", "DSC09736.JPG",
-    "DSC09737.JPG", "DSC09741.JPG", "DSC09743.JPG", "DSC09744.JPG",
-]
-CAROUSEL_IMAGES = [
-    {"src": f"compressedImages/{name}", "alt": f"Action {i + 1}"}
-    for i, name in enumerate(CAROUSEL_IMAGES)
-]
-
-ACTION_SHOTS = [
-    {"src": "compressedImages/DSC09540.JPG", "alt": "Shot 1"},
-    {"src": "compressedImages/DSC09642.JPG", "alt": "Shot 2"},
-    {"src": "compressedImages/DSC09543.JPG", "alt": "Shot 3"},
-    {"src": "compressedImages/DSC09545.JPG", "alt": "Shot 4"},
-    {"src": "compressedImages/DSC09547.JPG", "alt": "Shot 5"},
-    {"src": "compressedImages/DSC08561.JPG", "alt": "Shot 6"},
+     "image": None},
 ]
 
 CREATIVE_ARCHIVE = [
     {"category": "presentations", "pill": "Keynote Decks", "title": "PowerPoint Presentations",
-     "image": {"src": "compressedImages/DSC09585.JPG", "alt": "Slide Deck Preview"},
+     "image": None,
      "desc": "Dynamic visual slide decks engineered with minimalist layouts.",
      "cta": "View Presentations"},
     {"category": "portfolios", "pill": "Creative Showcase", "title": "Design Portfolios",
-     "image": {"src": "compressedImages/DSC09586.JPG", "alt": "Design Portfolio"},
+     "image": None,
      "desc": "Curated archive of 9+ comprehensive design project portfolios.",
      "cta": "View Design Work"},
     {"category": "projects", "pill": "Python Workflows", "title": "Custom Code Repos",
-     "image": {"src": "compressedImages/DSC08587.JPG", "alt": "Code Repos"},
+     "image": None,
      "desc": "Automated scripts, data pipelines, and browser app micro-services.",
      "cta": "View Code Repos"},
 ]
+
+# All 28 Mediterranean Cup photos (the higher-quality replacement set).
+# Most of the site's photo content now lives on the Mediterranean Cup
+# project's own detail page (see CATEGORIES["proj_basketball"] below) —
+# a handful are reused on the Basketball domain card/category too, since
+# that's the same tournament. Everything else (chess, coding, music,
+# presentations, portfolios, projects, proj_website, proj_chess) doesn't
+# have matching photos, so those show an honest "Photo coming soon" box
+# instead of a mismatched basketball shot.
+MEDITERRANEAN_CUP_PHOTOS = [
+    "DSC09519.JPG", "DSC09520.JPG", "DSC09521.JPG", "DSC09540.JPG", "DSC09542.JPG",
+    "DSC09543.JPG", "DSC09546.JPG", "DSC09547.JPG", "DSC09561.JPG", "DSC09586.JPG",
+    "DSC09587.JPG", "DSC09588.JPG", "DSC09589.JPG", "DSC09590.JPG", "DSC09597.JPG",
+    "DSC09603.JPG", "DSC09615.JPG", "DSC09714.JPG", "DSC09715.JPG", "DSC09716.JPG",
+    "DSC09717.JPG", "DSC09729.JPG", "DSC09732.JPG", "DSC09736.JPG", "DSC09737.JPG",
+    "DSC09741.JPG", "DSC09743.JPG", "DSC09744.JPG",
+]
+
+_MED_CUP_GALLERY_HTML = "\n".join(
+    f'                    <div class="media-placeholder"><img src="compressedImages/{name}" '
+    f'alt="Mediterranean Cup — photo {i}" loading="lazy"></div>'
+    for i, name in enumerate(MEDITERRANEAN_CUP_PHOTOS, start=1)
+)
+
+_PHOTO_COMING_SOON = '<div class="media-placeholder">Photo coming soon</div>'
 
 GOALS = [
     {"emoji": "♟️", "title": "FIDE Rating Target: 1800", "current": "1545",
@@ -198,14 +198,12 @@ CATEGORIES = {
                         <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09519.JPG" alt="Chess Action 1" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
 
                     <div class="content-block">
                         <h4>2. Tactical & Dynamic Temperament</h4>
                         <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
                     </div>
-
-                    <div class="media-placeholder"><img src="compressedImages/DSC09620.JPG" alt="Chess Action 2" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
@@ -245,16 +243,16 @@ CATEGORIES = {
                         <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and vocal floor communication to shut down opposing drives.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09621.JPG" alt="Basketball Post Play" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="compressedImages/DSC09540.JPG" alt="Basketball Post Play" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>Rebounding & High Post Distribution</h4>
                         <p>Securing defensive and offensive boards in traffic, initiating fast breaks with accurate outlet passes, and setting solid screens in the half-court set.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09540.JPG" alt="Basketball Contest" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="compressedImages/DSC09642.JPG" alt="Basketball Huddle" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="compressedImages/DSC09543.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="compressedImages/DSC09542.JPG" alt="Basketball Contest" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="compressedImages/DSC09543.JPG" alt="Basketball Huddle" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="compressedImages/DSC09546.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
                 """,
     },
     "coding": {
@@ -289,7 +287,7 @@ CATEGORIES = {
                         <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps directly to GitHub Pages.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09545.JPG" alt="Python Telemetry" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "music": {
@@ -315,7 +313,7 @@ CATEGORIES = {
                         <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, dynamic phrasing, and pure tone production.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09547.JPG" alt="Violin Performance" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "presentations": {
@@ -341,7 +339,7 @@ CATEGORIES = {
                         <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC08561.JPG" alt="Slide Deck Mockup" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "portfolios": {
@@ -363,7 +361,7 @@ CATEGORIES = {
                         <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09585.JPG" alt="Design Grid Showcase" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "projects": {
@@ -389,7 +387,7 @@ CATEGORIES = {
                         <p>Showcases custom Python scripts and interactive browser apps built for maximum performance.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC08587.JPG" alt="GitHub Commit Architecture" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "proj_basketball": {
@@ -416,7 +414,13 @@ CATEGORIES = {
                         <p>Captained the team through the highly competitive Mediterranean Cup, demanding intense communication and paint leadership.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09519.JPG" alt="Tournament Trophy & Team" loading="lazy"></div>
+                    <div class="content-block">
+                        <h4>Tournament Gallery</h4>
+                        <p>The full photo set from the tournament.</p>
+                    </div>
+                    <div class="photo-grid">
+""" + _MED_CUP_GALLERY_HTML + """
+                    </div>
                 """,
     },
     "proj_website": {
@@ -442,7 +446,7 @@ CATEGORIES = {
                         <p>Built with a Python static-site generator: Jinja2 templates and a small Python content model compile into a single dependency-free HTML page, so visitors never download a runtime just to view it.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09620.JPG" alt="Source Code Diagram" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "proj_chess": {
@@ -469,7 +473,7 @@ CATEGORIES = {
                         <p>Representing the school team on top boards, securing the Best Player award for highest win rate.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09621.JPG" alt="Chess Tournament Board" loading="lazy"></div>
+                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
 }
