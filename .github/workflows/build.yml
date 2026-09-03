@@ -1,0 +1,47 @@
+name: Build site
+
+# Runs automatically whenever you push a change to the files that feed
+# the build (content, templates, styles, script, or the build script
+# itself). It regenerates index.html and commits it back for you, so
+# you never have to remember to run build.py and re-upload index.html
+# by hand again.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content.py"
+      - "templates/**"
+      - "assets/**"
+      - "build.py"
+      - "requirements.txt"
+
+# Required so this workflow is allowed to commit the rebuilt index.html
+# back to the repo. If this is missing, the build succeeds but the
+# commit-back step fails — see the README for the one-time repo
+# setting this depends on.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build index.html
+        run: python build.py
+
+      - name: Commit rebuilt index.html (if it changed)
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Auto-build index.html [skip ci]"
+          file_pattern: index.html
