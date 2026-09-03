@@ -18,7 +18,23 @@ HTML/CSS/JS with no runtime to download.
 - `index.html` — the generated output. **This is what GitHub Pages serves.**
   Don't hand-edit it — your edits will be overwritten next build.
 
-## Making a change
+## Making a change (automatic — via GitHub Action)
+
+As of `.github/workflows/build.yml`, you no longer need to manually run
+`build.py` or upload `index.html` yourself. Just edit `content.py` (or
+`templates/index.html.j2`, `assets/style.css`, `assets/main.js`) directly
+on GitHub (pencil ✏️ icon → edit → commit), and a GitHub Action
+automatically rebuilds `index.html` and commits it back for you within
+a minute or two. Refresh the live site after that to see your change.
+
+**One-time setup required** for the auto-commit step to be allowed to
+push: go to your repo's **Settings → Actions → General → Workflow
+permissions**, and select **"Read and write permissions"**, then Save.
+Without this, the build will run but fail at the final "commit" step.
+
+You can watch it run under the **Actions** tab of your repo.
+
+## Making a change (manual — if you ever need to build locally)
 
 1. Edit `content.py` (text/links/stats) and/or `templates/index.html.j2`
    (layout) and/or `assets/`.
@@ -29,8 +45,8 @@ HTML/CSS/JS with no runtime to download.
    ```
 3. Commit and push `index.html` along with your source changes. GitHub
    Pages serves whatever `index.html` is committed — there's no build
-   step on their end, so you do need to run `build.py` and commit the
-   result before pushing.
+   step on their end unless the Action above is set up, so without it
+   you do need to run `build.py` and commit the result yourself.
 
 ## Uploading this via GitHub's web interface (no git required)
 
