@@ -14,8 +14,11 @@ SITE = {
     "title": "Kabir Bhuchar",
     "description": "Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist.",
     "url": "https://aajukubaa.github.io/",
-    "og_image": "images/DSC09519.JPG",
-    "favicon": "K.png",
+    "og_image": "med-cup-photos/DSC09519.JPG",
+    "favicon": "images/Favicon.png",
+    # Not wired into any page yet — stored here so it's ready whenever
+    # you want it placed (nav bar, footer, etc.).
+    "logo": "images/Logo.png",
 }
 
 NAV_TABS = [
@@ -69,7 +72,7 @@ DOMAIN_CARDS = [
      "preview": "1545 FIDE tournament rating specializing in sharp tactical combat "
                 "and aggressive 1.e4 openings."},
     {"category": "basketball", "pill": "Athletics", "title": "Basketball",
-     "image": {"id": "basketball-image", "src": "compressedImages/DSC09520.JPG",
+     "image": {"id": "basketball-image", "src": "med-cup-photos/DSC09520.JPG",
                "alt": "Basketball action"},
      "preview": "6'0\" Center dominating paint defense, rim protection, "
                 "and high-intensity rebounding."},
@@ -87,7 +90,7 @@ HIGHLIGHT_PROJECTS = [
      "desc": "Captaining the team through a high-stakes basketball tournament. "
              "Required on-court leadership and paint dominance.",
      "cta": "View Tournament Details",
-     "image": {"id": "mediterranean-image", "src": "compressedImages/DSC09521.JPG",
+     "image": {"id": "mediterranean-image", "src": "med-cup-photos/DSC09521.JPG",
                "alt": "Mediterranean Cup Action"}},
     {"category": "proj_website", "pill": "Full-Stack Development",
      "title": "Engineering This Showcase",
@@ -118,25 +121,26 @@ CREATIVE_ARCHIVE = [
      "cta": "View Code Repos"},
 ]
 
-# All 28 Mediterranean Cup photos (the higher-quality replacement set).
-# Most of the site's photo content now lives on the Mediterranean Cup
-# project's own detail page (see CATEGORIES["proj_basketball"] below) —
-# a handful are reused on the Basketball domain card/category too, since
-# that's the same tournament. Everything else (chess, coding, music,
-# presentations, portfolios, projects, proj_website, proj_chess) doesn't
-# have matching photos, so those show an honest "Photo coming soon" box
-# instead of a mismatched basketball shot.
+# All 29 Mediterranean Cup photos (the original, uncompressed replacement
+# set — authoritative list as of the images/ folder reorg). Most of the
+# site's photo content lives on the Mediterranean Cup project's own detail
+# page (see CATEGORIES["proj_basketball"] below) — a handful are reused on
+# the Basketball domain card/category too, since that's the same
+# tournament. Everything else (chess, coding, music, presentations,
+# portfolios, projects, proj_website, proj_chess) doesn't have matching
+# photos, so those show an honest "Photo coming soon" box instead of a
+# mismatched basketball shot.
 MEDITERRANEAN_CUP_PHOTOS = [
-    "DSC09519.JPG", "DSC09520.JPG", "DSC09521.JPG", "DSC09540.JPG", "DSC09542.JPG",
-    "DSC09543.JPG", "DSC09546.JPG", "DSC09547.JPG", "DSC09561.JPG", "DSC09586.JPG",
-    "DSC09587.JPG", "DSC09588.JPG", "DSC09589.JPG", "DSC09590.JPG", "DSC09597.JPG",
-    "DSC09603.JPG", "DSC09615.JPG", "DSC09714.JPG", "DSC09715.JPG", "DSC09716.JPG",
-    "DSC09717.JPG", "DSC09729.JPG", "DSC09732.JPG", "DSC09736.JPG", "DSC09737.JPG",
-    "DSC09741.JPG", "DSC09743.JPG", "DSC09744.JPG",
+    "DSC09519.JPG", "DSC09520.JPG", "DSC09521.JPG", "DSC09640.JPG", "DSC09642.JPG",
+    "DSC09543.JPG", "DSC09545.JPG", "DSC09547.JPG", "DSC09561.JPG", "DSC09585.JPG",
+    "DSC09586.JPG", "DSC09587.JPG", "DSC09588.JPG", "DSC09589.JPG", "DSC09590.JPG",
+    "DSC09597.JPG", "DSC09603.JPG", "DSC09615.JPG", "DSC09714.JPG", "DSC09715.JPG",
+    "DSC09716.JPG", "DSC09717.JPG", "DSC09729.JPG", "DSC09732.JPG", "DSC09736.JPG",
+    "DSC09737.JPG", "DSC09741.JPG", "DSC09743.JPG", "DSC09744.JPG",
 ]
 
 _MED_CUP_GALLERY_HTML = "\n".join(
-    f'                    <div class="media-placeholder"><img src="compressedImages/{name}" '
+    f'                    <div class="media-placeholder"><img src="med-cup-photos/{name}" '
     f'alt="Mediterranean Cup — photo {i}" loading="lazy"></div>'
     for i, name in enumerate(MEDITERRANEAN_CUP_PHOTOS, start=1)
 )
@@ -243,16 +247,16 @@ CATEGORIES = {
                         <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and vocal floor communication to shut down opposing drives.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09540.JPG" alt="Basketball Post Play" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="med-cup-photos/DSC09640.JPG" alt="Basketball Post Play" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>Rebounding & High Post Distribution</h4>
                         <p>Securing defensive and offensive boards in traffic, initiating fast breaks with accurate outlet passes, and setting solid screens in the half-court set.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="compressedImages/DSC09542.JPG" alt="Basketball Contest" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="compressedImages/DSC09543.JPG" alt="Basketball Huddle" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="compressedImages/DSC09546.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="med-cup-photos/DSC09642.JPG" alt="Basketball Contest" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="med-cup-photos/DSC09543.JPG" alt="Basketball Huddle" loading="lazy"></div>
+                    <div class="media-placeholder"><img src="med-cup-photos/DSC09561.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
                 """,
     },
     "coding": {
