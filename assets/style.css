@@ -117,6 +117,23 @@ body.modal-active #custom-cursor { display: none !important; }
     transform: scale(1.06);
 }
 
+.sound-toggle {
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    opacity: 0.75;
+}
+.sound-toggle:hover { opacity: 1; }
+.sound-toggle.is-muted { opacity: 0.4; }
+
+@media (max-width: 600px) {
+    .top-nav-container { top: 14px; padding: 8px 14px; gap: 6px; }
+    .top-nav-container:hover { padding: 8px 14px; transform: translateX(-50%); }
+    .nav-tab { padding: 8px 14px; font-size: 0.85rem; }
+    .sound-toggle { padding: 8px 10px; }
+    .hero-container { height: calc(100vh - 90px); height: calc(100dvh - 90px); }
+    .tab-content { padding-top: 80px; }
+}
+
 .tab-content {
     display: none;
     opacity: 0;
@@ -129,7 +146,13 @@ body.modal-active #custom-cursor { display: none !important; }
 }
 
 .hero-container {
+    /* 100vh on mobile browsers includes space the address bar can cover,
+       which was clipping the hero text on phones. 100dvh tracks the
+       actually-visible viewport; the plain vh line is a fallback for
+       browsers that don't support dvh (it's simply ignored otherwise). */
     height: calc(100vh - 160px);
+    height: calc(100dvh - 160px);
+    min-height: 420px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -142,15 +165,19 @@ body.modal-active #custom-cursor { display: none !important; }
 
 .hero-title {
     font-family: 'Syne', sans-serif;
-    font-size: clamp(3rem, 9.5vw, 11rem);
+    font-size: clamp(2.5rem, 9.5vw, 11rem);
     font-weight: 800;
-    line-height: 0.9;
+    line-height: 0.95;
     text-transform: uppercase;
     margin: 0;
     letter-spacing: -0.03em;
     color: #ffffff;
 }
 .hero-title span { display: block; }
+
+@media (max-width: 400px) {
+    .hero-title { font-size: 2.4rem; }
+}
 
 .intro-banner {
     max-width: 900px;
@@ -284,6 +311,14 @@ body.modal-active #custom-cursor { display: none !important; }
     overflow: hidden;
     transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease, margin-top 0.3s ease;
     margin-top: 0;
+}
+
+/* Devices with no real hover (phones/tablets) never trigger the
+   :hover reveal below, so the preview text would otherwise never be
+   readable before tapping in. Show it by default there instead. */
+@media (hover: none) {
+    .card-preview { max-height: 220px; opacity: 1; margin-top: 16px; }
+    .pro-card .card-action-default { opacity: 1; }
 }
 
 .card-preview p {
@@ -519,6 +554,12 @@ body.modal-active #custom-cursor { display: none !important; }
     transition: transform 0.2s, background 0.2s;
 }
 .interactive-btn:hover { background: #d0d0d0; transform: scale(1.03); }
+@keyframes btnPulse {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+.interactive-btn.pulse { animation: btnPulse 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
 
 /* Bento Grid Detail Modal */
 #detail-view {
@@ -555,10 +596,15 @@ body.modal-active #custom-cursor { display: none !important; }
     border-radius: 50%;
     font-size: 1.2rem;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+    display: none;
+    align-items: center; justify-content: center;
     transition: background 0.2s, color 0.2s;
     z-index: 100000;
 }
+/* Shown only while a modal is open (body.modal-active) — see main.js.
+   Living outside #detail-view means it's never affected by that
+   element's transform, so it can't drift while scrolling. */
+body.modal-active .close-btn { display: flex; }
 .close-btn:hover { background: #2e2e34; color: #ffffff; }
 
 .bento-hero {
@@ -625,6 +671,25 @@ body.modal-active #custom-cursor { display: none !important; }
 .bento-tile h2 { font-size: 3rem; font-weight: 800; color: #ffffff; margin: 0; line-height: 1; font-family: 'Syne', sans-serif;}
 .bento-tile p { color: #86868b; margin: 0; font-size: 0.95rem; }
 
+/* Bento tiles that double as links out to a related account/profile. */
+.bento-tile-link {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+.bento-tile-link:hover {
+    border-color: #ffffff;
+}
+.bento-tile-link h4 { display: flex; align-items: center; gap: 8px; font-size: 1.15rem; }
+.bento-link-arrow {
+    position: absolute;
+    top: 22px; right: 24px;
+    color: #86868b;
+    font-size: 1.1rem;
+    transition: color 0.2s, transform 0.2s;
+}
+.bento-tile-link:hover .bento-link-arrow { color: #ffffff; transform: translate(2px, -2px); }
+
 .bento-deep-content {
     max-width: 900px;
     margin: 0 auto;
@@ -659,6 +724,63 @@ body.modal-active #custom-cursor { display: none !important; }
     color: #86868b;
     letter-spacing: 0.5px;
 }
+
+/* Click-to-expand tiles: used for the presentation/portfolio
+   placeholders and the chess-puzzle reveal. */
+.reveal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 20px 0 40px 0;
+}
+.reveal-tile {
+    background: #141418;
+    border: 2px solid #28282e;
+    border-radius: 16px;
+    padding: 16px 20px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+.reveal-tile:hover, .reveal-tile:focus-visible {
+    border-color: #666670;
+    background: #1a1a1e;
+}
+.reveal-tile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.reveal-tile-title { font-weight: 700; color: #fff; font-size: 1rem; }
+.reveal-tile-icon {
+    color: #86868b;
+    font-size: 1.3rem;
+    line-height: 1;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+.reveal-tile.expanded .reveal-tile-icon { transform: rotate(45deg); }
+.reveal-tile-body {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease, margin-top 0.25s ease;
+    margin-top: 0;
+}
+.reveal-tile.expanded .reveal-tile-body {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 10px;
+}
+.reveal-tile-body p {
+    color: #a1a1a6;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+.reveal-tile.correct.expanded { border-color: #4ade80; }
+.reveal-tile.correct.expanded .reveal-tile-body p { color: #86efac; font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
