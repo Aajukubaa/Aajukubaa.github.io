@@ -47,7 +47,6 @@ def build() -> None:
         creative_archive=content.CREATIVE_ARCHIVE,
         goals=content.GOALS,
         now=content.NOW,
-        status_widgets=content.STATUS_WIDGETS,
         categories_json=categories_json,
     )
 
