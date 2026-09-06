@@ -147,6 +147,61 @@ _MED_CUP_GALLERY_HTML = "\n".join(
 
 _PHOTO_COMING_SOON = '<div class="media-placeholder">Photo coming soon</div>'
 
+
+def _account_tile(link_name):
+    """Render one CONNECT_LINKS entry as a clickable bento tile."""
+    link = next(l for l in CONNECT_LINKS if l["name"] == link_name)
+    return (
+        f'<a href="{link["url"]}" target="_blank" class="bento-tile bento-tile-link">'
+        f'<h4>{link["icon"]} {link["name"]}</h4>'
+        f'<p>{link["desc"]}</p>'
+        f'<span class="bento-link-arrow">↗</span></a>'
+    )
+
+
+def _reveal_grid(items):
+    """Render a grid of click-to-expand tiles (used for the temporary
+    presentation/portfolio placeholders below). Each item needs a
+    "title" and "description"."""
+    tiles = "\n".join(
+        f'''                    <div class="reveal-tile" tabindex="0" role="button" aria-expanded="false">
+                        <div class="reveal-tile-header">
+                            <span class="reveal-tile-title">{item["title"]}</span>
+                            <span class="reveal-tile-icon">+</span>
+                        </div>
+                        <div class="reveal-tile-body">
+                            <p>{item["description"]}</p>
+                        </div>
+                    </div>'''
+        for item in items
+    )
+    return f'<div class="reveal-grid">\n{tiles}\n                    </div>'
+
+
+# Temporary placeholders — titles/descriptions are generic until you send
+# the real ones. Easy to replace: just edit the "title"/"description"
+# text below (and add a "url" key + link once each one is uploaded
+# somewhere, which the reveal tile isn't wired to yet).
+PRESENTATIONS_LIST = [
+    {"title": "Presentation 1", "description": "Title and summary coming soon."},
+    {"title": "Presentation 2", "description": "Title and summary coming soon."},
+]
+
+PORTFOLIOS_LIST = [
+    {"title": "Grade 6 Portfolio 1", "description": "Title and summary coming soon."},
+    {"title": "Grade 6 Portfolio 2", "description": "Title and summary coming soon."},
+    {"title": "Grade 6 Portfolio 3", "description": "Title and summary coming soon."},
+    {"title": "Grade 7 Portfolio 1", "description": "Title and summary coming soon."},
+    {"title": "Grade 7 Portfolio 2", "description": "Title and summary coming soon."},
+    {"title": "Grade 7 Portfolio 3", "description": "Title and summary coming soon."},
+    {"title": "Grade 8 Portfolio 1", "description": "Title and summary coming soon."},
+    {"title": "Grade 8 Portfolio 2", "description": "Title and summary coming soon."},
+    {"title": "Grade 8 Portfolio 3", "description": "Title and summary coming soon."},
+]
+
+_PRESENTATIONS_GALLERY_HTML = _reveal_grid(PRESENTATIONS_LIST)
+_PORTFOLIOS_GALLERY_HTML = _reveal_grid(PORTFOLIOS_LIST)
+
 GOALS = [
     {"emoji": "♟️", "title": "FIDE Rating Target: 1800", "current": "1545",
      "target": "1800", "percent": 85},
@@ -194,6 +249,7 @@ CATEGORIES = {
                         <h4>Club Standing</h4>
                         <p style="color:#fff; font-weight:600;">Top Board Representative & School Team MVP</p>
                     </div>
+                    """ + _account_tile("FIDE Profile") + _account_tile("Chess.com") + _account_tile("Lichess") + """
                 """,
         "content": """
                     <div class="content-block">
@@ -284,6 +340,7 @@ CATEGORIES = {
                         <h4>Automation</h4>
                         <p style="color:#fff; font-weight:600;">Scripting & Data Pipelines</p>
                     </div>
+                    """ + _account_tile("GitHub") + _account_tile("Replit") + """
                 """,
         "content": """
                     <div class="content-block">
@@ -343,7 +400,11 @@ CATEGORIES = {
                         <p>Engineered dynamic visual presentations featuring clean hierarchical typography and synchronized animations.</p>
                     </div>
 
-                    """ + _PHOTO_COMING_SOON + """
+                    <div class="content-block">
+                        <h4>Presentations</h4>
+                        <p>Tap any presentation for a quick summary.</p>
+                    </div>
+                    """ + _PRESENTATIONS_GALLERY_HTML + """
                 """,
     },
     "portfolios": {
@@ -365,7 +426,11 @@ CATEGORIES = {
                         <p>A curated compilation of 9+ comprehensive design project portfolios highlighting minimalist layout grids.</p>
                     </div>
 
-                    """ + _PHOTO_COMING_SOON + """
+                    <div class="content-block">
+                        <h4>Portfolios (Grades 6–8)</h4>
+                        <p>Tap any portfolio for a quick summary.</p>
+                    </div>
+                    """ + _PORTFOLIOS_GALLERY_HTML + """
                 """,
     },
     "projects": {
@@ -384,6 +449,7 @@ CATEGORIES = {
                         <h4>Runtime</h4>
                         <p style="color:#fff; font-weight:600;">Static Site (Python-built)</p>
                     </div>
+                    """ + _account_tile("GitHub") + _account_tile("Replit") + """
                 """,
         "content": """
                     <div class="content-block">
@@ -443,6 +509,7 @@ CATEGORIES = {
                         <h4>Philosophy</h4>
                         <p style="color:#fff; font-weight:600;">Zero-bloat performance: Python builds it, plain JS/CSS run it.</p>
                     </div>
+                    """ + _account_tile("GitHub") + """
                 """,
         "content": """
                     <div class="content-block">
@@ -470,6 +537,7 @@ CATEGORIES = {
                         <h4>Record</h4>
                         <p style="color:#fff; font-weight:600;">Undefeated streak on Board 1 during regional school matches.</p>
                     </div>
+                    """ + _account_tile("FIDE Profile") + _account_tile("Chess.com") + _account_tile("Lichess") + """
                 """,
         "content": """
                     <div class="content-block">
@@ -481,24 +549,3 @@ CATEGORIES = {
                 """,
     },
 }
-
-# The two "run a script" buttons. They were hardcoded JS alerts before too —
-# that part isn't new — but the copy no longer pretends PyScript is executing
-# them live, since there's no Python runtime in the browser anymore.
-STATUS_WIDGETS = [
-    {
-        "pill": "Domain Status Check",
-        "heading": "Run Domain Status Script",
-        "desc": "Quick status check across all four domains.",
-        "button_label": "Run Check",
-        "alert": "Status: All 4 domains operating at peak performance. "
-                 "FIDE 1545, Center 6'0\\\", Python 3.12, Violin Book 3.",
-    },
-    {
-        "pill": "Quick Stats",
-        "heading": "Run Stats Script",
-        "desc": "Output a snapshot of current stats.",
-        "button_label": "Run Check",
-        "alert": "Status: Rating=1545, Status=Active, Domain=Optimal.",
-    },
-]
