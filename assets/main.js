@@ -9,7 +9,7 @@
     const categories = JSON.parse(document.getElementById("categories-data").textContent);
     let lastOpenedCardId = null;
 
-    // ---------- Sound effects (lazy AudioContext, event delegation) ----------
+    // ---------- Sound effects (lazy AudioContext, mute toggle) ----------
     // The AudioContext is created on first interaction rather than at load,
     // so the browser never has to warn about (or silently ignore) an
     // AudioContext started before any user gesture.
@@ -23,37 +23,88 @@
         return audioCtx;
     }
 
-    function playSound(freq = 500, type = "sine", duration = 0.03) {
+    let soundEnabled = true;
+    try {
+        soundEnabled = localStorage.getItem("soundEnabled") !== "off";
+    } catch (e) { /* localStorage can be unavailable (private mode etc.) — default on */ }
+
+    function playTone(freq, type, duration, startTime, gainPeak) {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, startTime);
+        // Small linear ramp up before the exponential decay avoids the
+        // audible "click" a hard instant-on can cause on short tones.
+        gain.gain.setValueAtTime(0.0001, startTime);
+        gain.gain.linearRampToValueAtTime(gainPeak, startTime + Math.min(0.008, duration / 4));
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + duration);
+    }
+
+    function playSound(freq = 500, type = "sine", duration = 0.03, gainPeak = 0.02) {
+        if (!soundEnabled) return;
         try {
-            const ctx = getAudioCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.type = type;
-            osc.frequency.setValueAtTime(freq, ctx.currentTime);
-            gain.gain.setValueAtTime(0.02, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-            osc.start();
-            osc.stop(ctx.currentTime + duration);
+            playTone(freq, type, duration, getAudioCtx().currentTime, gainPeak);
         } catch (e) { /* audio is a nice-to-have, never block on it */ }
     }
 
-    function playViolinTone() {
-        playSound(440, "triangle", 0.4);
+    function playChime(freqs, type = "sine", noteDuration = 0.16, gainPeak = 0.03) {
+        if (!soundEnabled) return;
+        try {
+            const ctx = getAudioCtx();
+            freqs.forEach((freq, i) => {
+                playTone(freq, type, noteDuration, ctx.currentTime + i * (noteDuration * 0.6), gainPeak);
+            });
+        } catch (e) { /* ditto */ }
     }
 
-    // Delegated listeners: this covers every current element AND anything
-    // shown inside the modal later, unlike a one-time querySelectorAll.
-    const SOUND_SELECTOR = "a, button, .pro-card, .standard-card, .highlight-card, .connect-card, .nav-tab";
-    document.addEventListener("mouseenter", (e) => {
-        if (e.target.closest && e.target.closest(SOUND_SELECTOR)) {
-            playSound(800, "sine", 0.01);
-        }
-    }, true);
+    function playViolinTone() {
+        // A short pleasant arpeggio rather than one flat tone.
+        playChime([392.0, 493.88, 587.33], "triangle", 0.35, 0.025); // G4, B4, D5
+    }
+
+    function playModalOpenSound() { playChime([440, 660], "sine", 0.09, 0.02); }
+    function playModalCloseSound() { playChime([660, 440], "sine", 0.09, 0.02); }
+
+    // Sound mute toggle, in the nav bar.
+    const soundToggle = document.getElementById("sound-toggle");
+    function updateSoundToggleUI() {
+        if (!soundToggle) return;
+        soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
+        soundToggle.classList.toggle("is-muted", !soundEnabled);
+        soundToggle.setAttribute("aria-pressed", String(!soundEnabled));
+    }
+    if (soundToggle) {
+        updateSoundToggleUI();
+        soundToggle.addEventListener("click", () => {
+            soundEnabled = !soundEnabled;
+            try { localStorage.setItem("soundEnabled", soundEnabled ? "on" : "off"); } catch (e) { /* ignore */ }
+            updateSoundToggleUI();
+            if (soundEnabled) playSound(600, "sine", 0.05, 0.03);
+        });
+    }
+
+    // Hover sound: only on the "big" clickable surfaces (cards/nav), not
+    // every tiny link or button — constant beeping on every element was
+    // the main complaint. Uses mouseover/mouseout (which bubble) with a
+    // relatedTarget check so moving between nested children of the same
+    // card doesn't retrigger the sound.
+    const HOVER_SOUND_SELECTOR = ".pro-card, .standard-card, .highlight-card, .connect-card, .nav-tab, .reveal-tile, .bento-tile-link";
+    const CLICK_SOUND_SELECTOR = HOVER_SOUND_SELECTOR + ", .interactive-btn, .card-action-btn";
+
+    document.addEventListener("mouseover", (e) => {
+        const el = e.target.closest(HOVER_SOUND_SELECTOR);
+        if (!el) return;
+        if (e.relatedTarget && el.contains(e.relatedTarget)) return;
+        playSound(800, "sine", 0.045, 0.012);
+    });
     document.addEventListener("click", (e) => {
-        if (e.target.closest && e.target.closest(SOUND_SELECTOR)) {
-            playSound(400, "sine", 0.04);
+        if (e.target.closest && e.target.closest(CLICK_SOUND_SELECTOR)) {
+            playSound(400, "sine", 0.05, 0.018);
         }
     });
 
@@ -69,8 +120,30 @@
     // back to a normal, visible cursor instead of vanishing.
     document.body.classList.add("js-ready");
 
+    // ---------- Body scroll lock (used by both modals) ----------
+    // overflow:hidden alone doesn't reliably stop background touch-scroll
+    // on iOS Safari. Pinning the body at its current scroll position and
+    // restoring it on close is the standard cross-device-reliable fix.
+    let lockedScrollY = 0;
+    function lockBodyScroll() {
+        lockedScrollY = window.scrollY;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${lockedScrollY}px`;
+        document.body.style.width = "100%";
+        document.body.classList.add("modal-active");
+    }
+    function unlockBodyScroll() {
+        document.body.classList.remove("modal-active");
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, lockedScrollY);
+    }
+
     // ---------- Tabs ----------
-    const navTabs = document.querySelectorAll(".nav-tab");
+    // Scoped to [data-target] specifically so the sound-mute button
+    // (also styled .nav-tab) never gets treated as a page tab.
+    const navTabs = document.querySelectorAll(".nav-tab[data-target]");
     const tabContents = document.querySelectorAll(".tab-content");
 
     navTabs.forEach((tab) => {
@@ -109,16 +182,17 @@
             detail.classList.add("modal-open");
         }, 10);
 
-        document.body.classList.add("modal-active");
+        lockBodyScroll();
         detail.scrollTop = 0;
         lastOpenedCardId = catId;
+        playModalOpenSound();
     }
 
     function closeCategory() {
         const detail = document.getElementById("detail-view");
         detail.classList.remove("modal-open");
         detail.classList.add("modal-closing");
-        document.body.classList.remove("modal-active");
+        unlockBodyScroll();
 
         if (lastOpenedCardId) {
             const cardEl = document.getElementById(lastOpenedCardId);
@@ -133,6 +207,7 @@
             detail.style.display = "none";
             detail.classList.remove("modal-closing");
         }, 400);
+        playModalCloseSound();
     }
 
     document.querySelectorAll("[data-category]").forEach((card) => {
@@ -147,14 +222,13 @@
         });
     });
 
-    document.querySelectorAll('[data-action="close-detail"]').forEach((btn) => {
-        btn.addEventListener("click", closeCategory);
-    });
-
     // ---------- Shortcuts modal ----------
     function toggleShortcuts(show) {
         const modal = document.getElementById("shortcuts-modal");
-        if (modal) modal.style.display = show ? "flex" : "none";
+        if (!modal) return;
+        modal.style.display = show ? "flex" : "none";
+        if (show) lockBodyScroll();
+        else unlockBodyScroll();
     }
 
     document.querySelectorAll('[data-action="close-shortcuts"]').forEach((el) => {
@@ -165,6 +239,20 @@
             toggleShortcuts(false);
         });
     });
+
+    // The one persistent close button (lives at body level, see index.html.j2)
+    // closes whichever overlay is currently open.
+    const globalCloseBtn = document.getElementById("global-close-btn");
+    if (globalCloseBtn) {
+        globalCloseBtn.addEventListener("click", () => {
+            const detail = document.getElementById("detail-view");
+            if (detail && detail.classList.contains("modal-open")) {
+                closeCategory();
+            } else {
+                toggleShortcuts(false);
+            }
+        });
+    }
 
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
@@ -186,11 +274,28 @@
         }
     });
 
-    // ---------- Status-check buttons & violin tone ----------
-    document.querySelectorAll("[data-alert]").forEach((btn) => {
-        btn.addEventListener("click", () => alert(btn.getAttribute("data-alert")));
+    // ---------- Reveal tiles (placeholder galleries + puzzle widget) ----------
+    function toggleReveal(tile) {
+        const expanded = tile.classList.toggle("expanded");
+        tile.setAttribute("aria-expanded", String(expanded));
+    }
+    document.addEventListener("click", (e) => {
+        const tile = e.target.closest(".reveal-tile");
+        if (tile) toggleReveal(tile);
     });
+    document.addEventListener("keydown", (e) => {
+        if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("reveal-tile")) {
+            e.preventDefault();
+            toggleReveal(e.target);
+        }
+    });
+
+    // ---------- Violin tone ----------
     document.querySelectorAll('[data-action="play-violin"]').forEach((btn) => {
-        btn.addEventListener("click", playViolinTone);
+        btn.addEventListener("click", () => {
+            playViolinTone();
+            btn.classList.add("pulse");
+            setTimeout(() => btn.classList.remove("pulse"), 400);
+        });
     });
 })();
