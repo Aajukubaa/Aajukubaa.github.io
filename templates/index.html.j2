@@ -23,10 +23,20 @@
 
     <div id="custom-cursor"></div>
 
+    <!-- Lives outside #detail-view on purpose: that element has a CSS
+         transform on it for its open/close animation, and a transform
+         creates a new containing block for position:fixed descendants —
+         which meant this button was "fixed" relative to the modal, not
+         the viewport, and could drift on scroll on some browsers
+         (iOS Safari especially). Living at the body level and toggling
+         visibility via body.modal-active sidesteps that entirely. -->
+    <button id="global-close-btn" class="close-btn" data-action="close-detail" aria-label="Close Modal">✕</button>
+
     <nav class="top-nav-container">
         {% for tab in nav_tabs %}
         <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}">{{ tab.label }}</button>
         {% endfor %}
+        <button class="nav-tab sound-toggle" id="sound-toggle" aria-label="Toggle sound effects" title="Toggle sound effects">🔊</button>
     </nav>
 
     <div id="tab-overview" class="tab-content active-view">
@@ -96,7 +106,7 @@
                 </div>
             </div>
 
-            <div style="max-width: 1100px; margin: 40px auto 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+            <div style="max-width: 500px; margin: 40px auto 0 auto;">
                 <div class="widget-box" style="margin-top:0;">
                     <span class="card-pill">Interactive Chess Puzzle Widget</span>
                     <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Lichess Daily Tactical Puzzle</h4>
@@ -104,12 +114,6 @@
                     <div style="width:100%; height:320px; border-radius:12px; overflow:hidden; background:#000; border:2px solid #28282e;">
                         <iframe src="https://lichess.org/training/frame?theme=auto&bg=auto" style="width:100%; height:100%; border:none;" allowtransparency="true" frameborder="0" loading="lazy"></iframe>
                     </div>
-                </div>
-                <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">{{ status_widgets[0].pill }}</span>
-                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">{{ status_widgets[0].heading }}</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">{{ status_widgets[0].desc }}</p>
-                    <button class="interactive-btn" data-alert="{{ status_widgets[0].alert }}">{{ status_widgets[0].button_label }}</button>
                 </div>
             </div>
         </section>
@@ -197,21 +201,22 @@
                         <span class="card-pill">Chess Puzzle</span>
                         <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Mate in 2 Tactical Test</h4>
                         <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">White to move and checkmate.</p>
-                        <button class="interactive-btn" data-alert="Correct! 1. Qh7+ Kxh7 2. Rh3#">Solve Puzzle</button>
+                        <div class="reveal-tile correct" tabindex="0" role="button" aria-expanded="false">
+                            <div class="reveal-tile-header">
+                                <span class="reveal-tile-title">Solve Puzzle</span>
+                                <span class="reveal-tile-icon">+</span>
+                            </div>
+                            <div class="reveal-tile-body">
+                                <p>Correct! 1. Qh7+ Kxh7 2. Rh3#</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="widget-box" style="margin-top:0;">
                         <span class="card-pill">Violin Audio</span>
                         <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Suzuki Book 3 Snippet</h4>
-                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Listen to tone articulation sample.</p>
-                        <button class="interactive-btn" data-action="play-violin">Play Audio Note</button>
-                    </div>
-
-                    <div class="widget-box" style="margin-top:0;">
-                        <span class="card-pill">{{ status_widgets[1].pill }}</span>
-                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">{{ status_widgets[1].heading }}</h4>
-                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">{{ status_widgets[1].desc }}</p>
-                        <button class="interactive-btn" data-alert="{{ status_widgets[1].alert }}">{{ status_widgets[1].button_label }}</button>
+                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Listen to a short tone sequence.</p>
+                        <button class="interactive-btn" data-action="play-violin">▶ Play Audio Note</button>
                     </div>
                 </div>
             </div>
@@ -219,8 +224,6 @@
     </div>
 
     <div id="detail-view">
-        <button class="close-btn" data-action="close-detail" aria-label="Close Modal">✕</button>
-
         <div class="bento-hero">
             <div class="bento-header-wrapper">
                 <div id="detail-badge" class="card-pill">PRO DETAIL</div>
