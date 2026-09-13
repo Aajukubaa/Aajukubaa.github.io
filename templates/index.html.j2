@@ -105,17 +105,6 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <div style="max-width: 500px; margin: 40px auto 0 auto;">
-                <div class="widget-box" style="margin-top:0;">
-                    <span class="card-pill">Interactive Chess Puzzle Widget</span>
-                    <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Lichess Daily Tactical Puzzle</h4>
-                    <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Live tactical chess board integrated directly.</p>
-                    <div style="width:100%; height:320px; border-radius:12px; overflow:hidden; background:#000; border:2px solid #28282e;">
-                        <iframe src="https://lichess.org/training/frame?theme=auto&bg=auto" style="width:100%; height:100%; border:none;" allowtransparency="true" frameborder="0" loading="lazy"></iframe>
-                    </div>
-                </div>
-            </div>
         </section>
     </div>
 
@@ -250,8 +239,14 @@
         </div>
     </div>
 
+    <div id="lightbox" data-action="close-lightbox">
+        <button class="lightbox-close" data-action="close-lightbox" aria-label="Close image">✕</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
     <script type="application/json" id="categories-data">{{ categories_json | safe }}</script>
     <script src="assets/main.js"></script>
+    <script src="assets/chess-dashboard.js"></script>
 
     <footer class="site-footer">
         <p>This website was made on GitHub Pages with the <strong>help</strong> of artificial intelligence.</p>
