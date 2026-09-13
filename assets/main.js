@@ -111,9 +111,19 @@
     // ---------- Custom cursor ----------
     const cursor = document.getElementById("custom-cursor");
     document.addEventListener("mousemove", (e) => {
-        if (cursor && !document.body.classList.contains("modal-active")) {
+        if (cursor) {
             cursor.style.transform = `translate3d(${e.clientX - 15}px, ${e.clientY - 15}px, 0)`;
         }
+    });
+    // Fade out (not just leave in place) once the pointer actually leaves
+    // the browser window — checking relatedTarget is null is the standard
+    // cross-browser way to distinguish "left the window" from "moved to
+    // a child element".
+    document.addEventListener("mouseout", (e) => {
+        if (cursor && !e.relatedTarget) cursor.classList.add("cursor-hidden");
+    });
+    document.addEventListener("mouseover", () => {
+        if (cursor) cursor.classList.remove("cursor-hidden");
     });
     // Only hide the native cursor once we know this script actually ran.
     // If it's ever blocked, body never gets .js-ready and the CSS falls
@@ -125,19 +135,26 @@
     // on iOS Safari. Pinning the body at its current scroll position and
     // restoring it on close is the standard cross-device-reliable fix.
     let lockedScrollY = 0;
+    let scrollLockCount = 0;
     function lockBodyScroll() {
-        lockedScrollY = window.scrollY;
-        document.body.style.position = "fixed";
-        document.body.style.top = `-${lockedScrollY}px`;
-        document.body.style.width = "100%";
-        document.body.classList.add("modal-active");
+        if (scrollLockCount === 0) {
+            lockedScrollY = window.scrollY;
+            document.body.style.position = "fixed";
+            document.body.style.top = `-${lockedScrollY}px`;
+            document.body.style.width = "100%";
+            document.body.classList.add("modal-active");
+        }
+        scrollLockCount++;
     }
     function unlockBodyScroll() {
-        document.body.classList.remove("modal-active");
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        window.scrollTo(0, lockedScrollY);
+        scrollLockCount = Math.max(0, scrollLockCount - 1);
+        if (scrollLockCount === 0) {
+            document.body.classList.remove("modal-active");
+            document.body.style.position = "";
+            document.body.style.top = "";
+            document.body.style.width = "";
+            window.scrollTo(0, lockedScrollY);
+        }
     }
 
     // ---------- Tabs ----------
@@ -186,6 +203,13 @@
         detail.scrollTop = 0;
         lastOpenedCardId = catId;
         playModalOpenSound();
+
+        // The dashboard's containers only exist in the DOM once this
+        // category's HTML has just been injected above, so it can only
+        // be initialized from here — not on page load.
+        if (catId === "chess" && window.initChessDashboard) {
+            window.initChessDashboard();
+        }
     }
 
     function closeCategory() {
@@ -272,6 +296,44 @@
             const index = parseInt(e.key, 10) - 1;
             if (navTabs[index]) navTabs[index].click();
         }
+    });
+
+    // ---------- Image lightbox ----------
+    // Scoped to .media-placeholder img specifically — that's every real
+    // content photo on the site (domain/highlight/archive thumbnails,
+    // the Mediterranean Cup gallery, the chess portraits), and nothing
+    // else (chessboard pieces, icons, etc. live outside that wrapper).
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+
+    function openLightbox(imgEl) {
+        if (!lightbox || !lightboxImg) return;
+        lightboxImg.src = imgEl.currentSrc || imgEl.src;
+        lightboxImg.alt = imgEl.alt || "";
+        lightbox.classList.add("lightbox-open");
+        lockBodyScroll();
+    }
+    function closeLightbox() {
+        if (!lightbox) return;
+        lightbox.classList.remove("lightbox-open");
+        unlockBodyScroll();
+    }
+
+    document.addEventListener("click", (e) => {
+        const img = e.target.closest(".media-placeholder img");
+        if (img) {
+            // Stop the click from also bubbling up to a card's own
+            // click-to-open-detail handler — clicking the photo itself
+            // should open the photo, not the card behind it.
+            e.stopPropagation();
+            openLightbox(img);
+        }
+    }, true);
+
+    document.querySelectorAll('[data-action="close-lightbox"]').forEach((el) => {
+        el.addEventListener("click", (e) => {
+            if (e.target === el) closeLightbox();
+        });
     });
 
     // ---------- Reveal tiles (placeholder galleries + puzzle widget) ----------
