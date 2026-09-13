@@ -2,17 +2,19 @@
 // Loaded on every page view, but does nothing (and loads no external
 // libraries) until the chess card is actually opened — see the
 // window.initChessDashboard hook called from main.js's openCategory().
+//
+// Data comes from chess-data.json (same origin, refreshed periodically
+// by .github/workflows/build.yml running fetch_chess_data.py), NOT
+// directly from api.chess.com — Chess.com's public API does not
+// reliably support CORS for browser fetch(), which is why the
+// dashboard previously always failed to load.
 
 (function () {
     "use strict";
 
-    // Hardcoded per request — this is the one place to change it.
-    var CHESS_USERNAME = "Aajukubaa";
+    var CHESS_USERNAME = "Aajukubaa"; // hardcoded per request
 
     // ---------- Lazy-load jQuery + chess.js + chessboard.js ----------
-    // Nothing here costs the page anything until someone actually opens
-    // the chess card — these are real (small) library downloads, so they
-    // stay off the critical path for every other visit.
     var chessLibsPromise = null;
 
     function loadScript(src) {
@@ -24,7 +26,6 @@
             document.head.appendChild(el);
         });
     }
-
     function loadStylesheet(href) {
         if (document.querySelector('link[href="' + href + '"]')) return;
         var link = document.createElement("link");
@@ -32,13 +33,9 @@
         link.href = href;
         document.head.appendChild(link);
     }
-
     function ensureChessLibs() {
         if (chessLibsPromise) return chessLibsPromise;
         loadStylesheet("https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css");
-        // chessboard.js requires jQuery to already be present when it
-        // loads, so that has to finish first; chess.js is independent
-        // and can load in parallel with it.
         chessLibsPromise = loadScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js")
             .then(function () {
                 return Promise.all([
@@ -49,79 +46,51 @@
         return chessLibsPromise;
     }
 
-    // ---------- Chess.com API ----------
-    var API_BASE = "https://api.chess.com/pub/player/" + CHESS_USERNAME.toLowerCase();
-    var CACHE_MS = 5 * 60 * 1000; // avoid re-hitting the API every time the card is reopened
-    var cache = { stats: null, games: null, fetchedAt: 0 };
-
-    function fetchJSON(url) {
-        return fetch(url).then(function (res) {
-            if (!res.ok) throw new Error("Request failed: " + url);
-            return res.json();
-        });
+    // ---------- Data (same-origin static JSON, not a live API call) ----------
+    var dataPromise = null;
+    function loadChessData() {
+        if (!dataPromise) {
+            dataPromise = fetch("chess-data.json?_=" + Date.now())
+                .then(function (res) {
+                    if (!res.ok) throw new Error("chess-data.json missing");
+                    return res.json();
+                });
+        }
+        return dataPromise;
     }
 
     var RATING_TYPES = [
-        { key: "chess_bullet", label: "Bullet" },
-        { key: "chess_blitz", label: "Blitz" },
-        { key: "chess_rapid", label: "Rapid" },
+        { key: "chess_bullet", label: "Bullet", icon: "⚡" },
+        { key: "chess_blitz", label: "Blitz", icon: "🔥" },
+        { key: "chess_rapid", label: "Rapid", icon: "♟" },
     ];
 
     function renderStats(container, stats) {
         container.innerHTML = RATING_TYPES.map(function (t) {
-            var s = stats[t.key];
+            var s = stats ? stats[t.key] : null;
             if (!s || !s.last) {
-                return '<div class="chess-stat-card"><h4>' + t.label + '</h4>' +
-                    '<p class="chess-stat-rating">—</p>' +
+                return '<div class="chess-stat-card"><span class="chess-stat-icon">' + t.icon + '</span>' +
+                    '<h4>' + t.label + '</h4><p class="chess-stat-rating">—</p>' +
                     '<p class="chess-stat-record">No rated games yet</p></div>';
             }
             var rec = s.record || { win: 0, loss: 0, draw: 0 };
-            return '<div class="chess-stat-card"><h4>' + t.label + '</h4>' +
+            return '<div class="chess-stat-card"><span class="chess-stat-icon">' + t.icon + '</span>' +
+                '<h4>' + t.label + '</h4>' +
                 '<p class="chess-stat-rating">' + s.last.rating + '</p>' +
-                '<p class="chess-stat-record">' + rec.win + 'W – ' + rec.loss + 'L – ' + rec.draw + 'D</p></div>';
+                '<p class="chess-stat-record">' + rec.win + 'W · ' + rec.loss + 'L · ' + rec.draw + 'D</p></div>';
         }).join("");
     }
 
-    function statsErrorHTML() {
-        return '<p class="chess-dashboard-error">Couldn\u2019t load live ratings right now — try refreshing, or see the profile directly on ' +
-            '<a href="https://www.chess.com/member/' + CHESS_USERNAME + '" target="_blank">Chess.com</a>.</p>';
-    }
-    function gamesErrorHTML() {
-        return '<p class="chess-dashboard-error">Couldn\u2019t load recent games right now — try refreshing, or see the profile directly on ' +
+    function errorHTML(what) {
+        return '<p class="chess-dashboard-error">Couldn\u2019t load ' + what + ' right now — try refreshing, or see the profile directly on ' +
             '<a href="https://www.chess.com/member/' + CHESS_USERNAME + '" target="_blank">Chess.com</a>.</p>';
     }
 
-    // Chess.com's per-side "result" field, mapped to an outcome from
-    // that side's point of view. Anything not listed here (checkmated,
-    // resigned, timeout, abandoned, lose, kingofthehill, threecheck,
-    // bughousepartnerlose) counts as a loss for that side.
     var DRAW_RESULTS = ["agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"];
     function outcomeFor(result) {
         if (result === "win") return "win";
         if (DRAW_RESULTS.indexOf(result) !== -1) return "draw";
         return "loss";
-    }
-
-    function fetchStatsAndGames() {
-        var now = Date.now();
-        if (cache.stats && cache.games && now - cache.fetchedAt < CACHE_MS) {
-            return Promise.resolve(cache);
-        }
-        var statsPromise = fetchJSON(API_BASE + "/stats").catch(function () { return null; });
-        var gamesPromise = fetchJSON(API_BASE + "/games/archives")
-            .then(function (data) {
-                var archives = data.archives || [];
-                if (!archives.length) return { games: [] };
-                return fetchJSON(archives[archives.length - 1]);
-            })
-            .catch(function () { return null; });
-
-        return Promise.all([statsPromise, gamesPromise]).then(function (results) {
-            cache.stats = results[0];
-            cache.games = results[1];
-            cache.fetchedAt = now;
-            return cache;
-        });
     }
 
     // ---------- Board + move stepping ----------
@@ -131,29 +100,25 @@
 
     function renderPositionAt(index) {
         var replay = new window.Chess();
-        for (var i = 0; i < index; i++) {
-            replay.move(currentHistory[i].san);
-        }
+        for (var i = 0; i < index; i++) replay.move(currentHistory[i].san);
         if (boardInstance) boardInstance.position(replay.fen());
 
         var indicator = document.getElementById("chess-move-indicator");
         var prevBtn = document.getElementById("chess-prev-move");
         var nextBtn = document.getElementById("chess-next-move");
         if (indicator) {
-            indicator.textContent = currentHistory.length
-                ? "Move " + index + " / " + currentHistory.length
-                : "No moves recorded";
+            indicator.textContent = currentHistory.length ? "Move " + index + " / " + currentHistory.length : "No moves recorded";
         }
         if (prevBtn) prevBtn.disabled = index <= 0;
         if (nextBtn) nextBtn.disabled = index >= currentHistory.length;
     }
 
-    function selectGame(game, listEl) {
+    function selectGame(game) {
         var chess = new window.Chess();
         var loaded = false;
         try { loaded = chess.load_pgn(game.pgn, { sloppy: true }); } catch (e) { loaded = false; }
         currentHistory = loaded ? chess.history({ verbose: true }) : [];
-        currentIndex = currentHistory.length; // land on the final position
+        currentIndex = currentHistory.length;
 
         var boardEl = document.getElementById("chesscom-board");
         if (!boardInstance && boardEl && window.Chessboard) {
@@ -162,12 +127,11 @@
                 pieceTheme: "https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/img/chesspieces/wikipedia/{piece}.png",
             });
             if (window.jQuery) {
-                window.jQuery(window).on("resize", function () {
-                    if (boardInstance) boardInstance.resize();
-                });
+                window.jQuery(window).on("resize", function () { if (boardInstance) boardInstance.resize(); });
             }
         }
         renderPositionAt(currentIndex);
+        if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
     }
 
     function renderGamesList(listEl, games) {
@@ -183,12 +147,14 @@
             row.className = "chess-game-row" + (i === 0 ? " active" : "");
             row.innerHTML =
                 '<span class="chess-game-outcome outcome-' + outcome + '">' + outcome.charAt(0).toUpperCase() + "</span>" +
-                '<span class="chess-game-opponent">vs ' + opponent.username + " (" + opponent.rating + ")</span>" +
-                '<span class="chess-game-class">' + game.time_class + "</span>";
+                '<span class="chess-game-info">' +
+                '<span class="chess-game-opponent">vs ' + opponent.username + '</span>' +
+                '<span class="chess-game-meta">' + opponent.rating + ' rated · ' + game.time_class + '</span>' +
+                '</span>';
             row.addEventListener("click", function () {
                 listEl.querySelectorAll(".chess-game-row").forEach(function (r) { r.classList.remove("active"); });
                 row.classList.add("active");
-                selectGame(game, listEl);
+                selectGame(game);
             });
             listEl.appendChild(row);
         });
@@ -196,12 +162,38 @@
 
     document.addEventListener("click", function (e) {
         if (e.target && e.target.id === "chess-prev-move" && currentIndex > 0) {
-            currentIndex--;
-            renderPositionAt(currentIndex);
+            currentIndex--; renderPositionAt(currentIndex);
         }
         if (e.target && e.target.id === "chess-next-move" && currentIndex < currentHistory.length) {
-            currentIndex++;
-            renderPositionAt(currentIndex);
+            currentIndex++; renderPositionAt(currentIndex);
+        }
+    });
+
+    // ---------- Fullscreen board ----------
+    function closeChessBoardFullscreen() {
+        var panel = document.querySelector(".chess-board-panel.board-fullscreen");
+        if (!panel) return false;
+        panel.classList.remove("board-fullscreen");
+        if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
+        return true;
+    }
+    window.closeChessBoardFullscreen = closeChessBoardFullscreen;
+
+    document.addEventListener("click", function (e) {
+        var boardEl = e.target.closest && e.target.closest("#chesscom-board");
+        if (boardEl) {
+            var panel = boardEl.closest(".chess-board-panel");
+            if (panel && !panel.classList.contains("board-fullscreen")) {
+                panel.classList.add("board-fullscreen");
+                if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
+            }
+            return;
+        }
+        var closeBtn = e.target.closest && e.target.closest(".chess-board-fullscreen-close");
+        if (closeBtn) { closeChessBoardFullscreen(); return; }
+        // Click on the fullscreen backdrop itself (not the board/controls) closes it.
+        if (e.target.classList && e.target.classList.contains("board-fullscreen")) {
+            closeChessBoardFullscreen();
         }
     });
 
@@ -209,33 +201,40 @@
     function initChessDashboard() {
         var statsEl = document.getElementById("chesscom-stats");
         var gamesListEl = document.getElementById("chesscom-games-list");
+        var updatedEl = document.getElementById("chesscom-updated");
         if (!statsEl || !gamesListEl) return; // chess card isn't open
 
         statsEl.innerHTML = '<p class="chess-dashboard-loading">Loading live ratings…</p>';
         gamesListEl.innerHTML = '<p class="chess-dashboard-loading">Loading recent games…</p>';
 
-        ensureChessLibs()
-            .then(fetchStatsAndGames)
-            .then(function (data) {
+        Promise.all([ensureChessLibs(), loadChessData()])
+            .then(function (results) {
+                var data = results[1];
+
                 if (data.stats) {
                     renderStats(statsEl, data.stats);
                 } else {
-                    statsEl.innerHTML = statsErrorHTML();
+                    statsEl.innerHTML = errorHTML("live ratings");
                 }
 
-                var games = (data.games && data.games.games) ? data.games.games.filter(function (g) { return g.pgn; }) : [];
+                if (updatedEl && data.fetched_at) {
+                    var d = new Date(data.fetched_at);
+                    updatedEl.textContent = "Updated " + d.toLocaleString(undefined, {
+                        month: "short", day: "numeric", hour: "numeric", minute: "2-digit",
+                    });
+                }
+
+                var games = data.recent_games || [];
                 if (!games.length) {
-                    gamesListEl.innerHTML = data.games ? '<p class="chess-dashboard-error">No games found this month yet.</p>' : gamesErrorHTML();
+                    gamesListEl.innerHTML = data.stats ? '<p class="chess-dashboard-error">No recent games found.</p>' : errorHTML("recent games");
                     return;
                 }
-                games.sort(function (a, b) { return b.end_time - a.end_time; });
-                var recent = games.slice(0, 10);
-                renderGamesList(gamesListEl, recent);
-                selectGame(recent[0], gamesListEl);
+                renderGamesList(gamesListEl, games);
+                selectGame(games[0]);
             })
             .catch(function () {
-                statsEl.innerHTML = statsErrorHTML();
-                gamesListEl.innerHTML = gamesErrorHTML();
+                statsEl.innerHTML = errorHTML("live ratings");
+                gamesListEl.innerHTML = errorHTML("recent games");
             });
     }
 
