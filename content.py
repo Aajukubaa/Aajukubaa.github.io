@@ -253,21 +253,61 @@ CATEGORIES = {
                 """,
         "content": """
                     <div class="content-block">
-                        <h4>1. Opening Repertoire: Aggressive and Direct</h4>
-                        <p><strong>With the White Pieces:</strong> I almost exclusively kick off games with 1. e4, signaling an immediate intent to open up lines, challenge the center, and steer the game into tactical territory. Whether meeting the Sicilian Defense (1...c5) or open responses (1...e5), I look for active piece development and quick initiative.</p>
-                        <p><strong>With the Black Pieces:</strong> I am versatile but favor fighting counter-attacking systems. You will frequently see me deploy the Sicilian Defense (1. e4 c5) or the Scandinavian Defense (1. e4 d5) to put immediate pressure on White's center. Against Queen's Pawn openings, I lean toward flexible Indian game setups and fianchetto structures (1. d4 Nf6).</p>
-                    </div>
-
-                    """ + _PHOTO_COMING_SOON + """
-
-                    <div class="content-block">
-                        <h4>2. Tactical & Dynamic Temperament</h4>
-                        <p>My games rarely end in quiet, symmetrical draws. I thrive in complications, often entering sharp middle-game battles involving early piece exchanges, tactical combinations, and exposed king positions. I am not afraid to launch aggressive pawn storms or jump into tactical lines where one precise move decides the game.</p>
+                        <p class="lead-paragraph">My game is defined by high-octane, uncompromising, and direct aggression. Whenever I sit down with the White pieces, I strictly initiate the battle with 1. e4, grabbing immediate central territory and laying the groundwork to drag my opponents into sharp, tactical struggles where they rarely get room to breathe.</p>
                     </div>
 
                     <div class="content-block">
-                        <h4>3. Fast-Paced & Time-Pressure Resilience</h4>
-                        <p>A huge part of my playstyle is shaped by fast time controls—predominantly 60+1 bullet/hyper-bullet and 3-minute blitz matches. Because of this, my chess is built for speed and survival under pressure. Many of my games feature intense time scrambles where keeping cool, maintaining clock pressure, and capitalizing on opponent mistakes in the endgame make all the difference.</p>
+                        <h4>My Opening Repertoire & Philosophical Foundations</h4>
+                        <p>My goal in the opening is rapid piece activation, immediate central dominance, and forcing my opponents out of their comfort zones right from move one:</p>
+                        <ul>
+                            <li><strong>Against 1...e5 (Italian Game):</strong> I steer directly into the sharp, classic lines of the Italian Game with 3. Bc4. From there, I love launching the Italian Knight Attack with an early 4. Ng5, placing immediate, relentless pressure on the vulnerable f7-square to test whether my opponent knows their theory or buckles under early tension.</li>
+                            <li><strong>Against the French Defense (1...e6):</strong> I claim full central control using 2. d4 d5 3. Nc3 to set up active piece play, or I pivot into a King's Indian Attack setup with 2. d3, coiling my pieces for a long-term kingside buildup.</li>
+                            <li><strong>Against the Scandinavian Defense (1...d5):</strong> I accept the challenge immediately with 2. exd5 Qxd5, followed by 3. Nc3 to kick their queen with tempo and accelerate my development.</li>
+                            <li><strong>Against the Caro-Kann Defense (1...c6):</strong> I refuse to let Black settle behind a quiet pawn wall, pushing 2. d4 d5 3. Nc3 to assert early space and maintain an active, commanding presence.</li>
+                        </ul>
+                    </div>
+
+                    <div class="media-placeholder chess-portrait"><img src="chess-photos/20250614_110030.jpg" alt="Kabir playing chess 1" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <h4>Midgame Execution & Tactical DNA</h4>
+                        <p>Once the opening transitions into the middlegame, my primary focus turns toward heavy pawn storms and direct, decisive assaults on the enemy king. When I secure a spatial advantage, I do not hesitate to launch my wing pawns forward—marching g4, h4, and h5 straight down the board, particularly against kingside fianchetto structures. My objective is simple: rip open attacking files, tear down enemy pawn shelters, and unleash dynamic piece activity. I thrive in chaotic, sharp tactical scrambles where forcing checks and unrelenting threats take absolute priority over slow positional maneuvering. I actively trade off key defensive pieces—such as central knights or bishops—if doing so dismantles my opponent's protective cover and exposes key weak squares around their king.</p>
+                    </div>
+
+                    <div class="media-placeholder chess-portrait"><img src="chess-photos/20250614_111530.jpg" alt="Kabir playing chess 2" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <h4>Endgame Strategy & Rating Progression</h4>
+                        <p>If a match reaches the endgame, my approach shifts toward relentless pawn promotion and active king participation. I push passed pawns with urgency while marching my king aggressively into the action to dominate key central squares.</p>
+                    </div>
+
+                    <div class="media-placeholder chess-portrait"><img src="chess-photos/20250614_120820.jpg" alt="Kabir playing chess 3" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <p>This high-pressure playing identity has fueled my steady climb from sub-1000 levels up to a peak rating above 1451 Elo in longer rapid time controls. Along the way, I have secured memorable victories against strong 1300–1400+ opponents, including key wins over malcgriff (1406 Elo), Italyane (1342 Elo), EliasRO51 (1337 Elo), and Luxa1988 (1302 Elo). Whether I am competing in fast-paced 60-second bullet battles or deeply calculated 10-minute rapid games, my ultimate ambition remains the same: grab the initiative, maintain constant pressure, and force defensive mistakes.</p>
+                    </div>
+
+                    <div class="media-placeholder chess-portrait"><img src="chess-photos/20250614_140223.jpg" alt="Kabir playing chess 4" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <h4>Live Chess.com Dashboard</h4>
+                        <p>Live ratings, records, and recent games — pulled directly from Chess.com.</p>
+                        <div id="chesscom-stats" class="chess-stats-grid">
+                            <p class="chess-dashboard-loading">Loading live ratings…</p>
+                        </div>
+                        <div class="chess-dashboard">
+                            <div id="chesscom-games-list" class="chess-games-list">
+                                <p class="chess-dashboard-loading">Loading recent games…</p>
+                            </div>
+                            <div class="chess-board-panel">
+                                <div id="chesscom-board"></div>
+                                <div class="chess-board-controls">
+                                    <button id="chess-prev-move" class="interactive-btn" disabled>← Prev</button>
+                                    <span id="chess-move-indicator">Select a game</span>
+                                    <button id="chess-next-move" class="interactive-btn" disabled>Next →</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 """,
     },
