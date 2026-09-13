@@ -280,8 +280,13 @@
 
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
+            const lightboxOpen = lightbox && lightbox.classList.contains("lightbox-open");
             const detail = document.getElementById("detail-view");
-            if (detail && detail.classList.contains("modal-open")) {
+            if (lightboxOpen) {
+                closeLightbox();
+            } else if (window.closeChessBoardFullscreen && window.closeChessBoardFullscreen()) {
+                // handled
+            } else if (detail && detail.classList.contains("modal-open")) {
                 closeCategory();
             } else {
                 toggleShortcuts(false);
@@ -298,35 +303,49 @@
         }
     });
 
-    // ---------- Image lightbox ----------
-    // Scoped to .media-placeholder img specifically — that's every real
-    // content photo on the site (domain/highlight/archive thumbnails,
-    // the Mediterranean Cup gallery, the chess portraits), and nothing
-    // else (chessboard pieces, icons, etc. live outside that wrapper).
+    // ---------- Image/video lightbox ----------
+    // Scoped to .media-placeholder img/video specifically — that's every
+    // real content photo or clip on the site (thumbnails, galleries, the
+    // chess portraits, the basketball clips), and nothing else
+    // (chessboard pieces, icons, etc. live outside that wrapper).
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxVideo = document.getElementById("lightbox-video");
 
-    function openLightbox(imgEl) {
-        if (!lightbox || !lightboxImg) return;
-        lightboxImg.src = imgEl.currentSrc || imgEl.src;
-        lightboxImg.alt = imgEl.alt || "";
+    function openLightbox(mediaEl) {
+        if (!lightbox) return;
+        if (mediaEl.tagName === "VIDEO") {
+            lightboxVideo.src = mediaEl.currentSrc || mediaEl.querySelector("source")?.src || mediaEl.src;
+            lightboxVideo.classList.add("lightbox-active");
+            lightboxImg.classList.remove("lightbox-active");
+            lightboxVideo.currentTime = 0;
+            lightboxVideo.play().catch(() => { /* autoplay-with-sound can be blocked; controls still work */ });
+        } else {
+            lightboxImg.src = mediaEl.currentSrc || mediaEl.src;
+            lightboxImg.alt = mediaEl.alt || "";
+            lightboxImg.classList.add("lightbox-active");
+            lightboxVideo.classList.remove("lightbox-active");
+        }
         lightbox.classList.add("lightbox-open");
         lockBodyScroll();
     }
     function closeLightbox() {
         if (!lightbox) return;
         lightbox.classList.remove("lightbox-open");
+        lightboxVideo.pause();
+        lightboxVideo.removeAttribute("src");
+        lightboxVideo.load();
         unlockBodyScroll();
     }
 
     document.addEventListener("click", (e) => {
-        const img = e.target.closest(".media-placeholder img");
-        if (img) {
+        const media = e.target.closest(".media-placeholder img, .media-placeholder video");
+        if (media) {
             // Stop the click from also bubbling up to a card's own
-            // click-to-open-detail handler — clicking the photo itself
-            // should open the photo, not the card behind it.
+            // click-to-open-detail handler — clicking the photo/video
+            // itself should open it, not the card behind it.
             e.stopPropagation();
-            openLightbox(img);
+            openLightbox(media);
         }
     }, true);
 
