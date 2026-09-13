@@ -45,3 +45,6 @@ jobs:
         with:
           commit_message: "Auto-build index.html [skip ci]"
           file_pattern: index.html
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          
