@@ -291,20 +291,27 @@ CATEGORIES = {
 
                     <div class="content-block">
                         <h4>Live Chess.com Dashboard</h4>
-                        <p>Live ratings, records, and recent games — pulled directly from Chess.com.</p>
-                        <div id="chesscom-stats" class="chess-stats-grid">
-                            <p class="chess-dashboard-loading">Loading live ratings…</p>
-                        </div>
-                        <div class="chess-dashboard">
-                            <div id="chesscom-games-list" class="chess-games-list">
-                                <p class="chess-dashboard-loading">Loading recent games…</p>
+                        <div class="chess-widget">
+                            <div class="chess-widget-header">
+                                <span class="card-pill">Live from Chess.com</span>
+                                <span id="chesscom-updated" class="chess-updated"></span>
                             </div>
-                            <div class="chess-board-panel">
-                                <div id="chesscom-board"></div>
-                                <div class="chess-board-controls">
-                                    <button id="chess-prev-move" class="interactive-btn" disabled>← Prev</button>
-                                    <span id="chess-move-indicator">Select a game</span>
-                                    <button id="chess-next-move" class="interactive-btn" disabled>Next →</button>
+                            <div id="chesscom-stats" class="chess-stats-grid">
+                                <p class="chess-dashboard-loading">Loading live ratings…</p>
+                            </div>
+                            <div class="chess-dashboard">
+                                <div id="chesscom-games-list" class="chess-games-list">
+                                    <p class="chess-dashboard-loading">Loading recent games…</p>
+                                </div>
+                                <div class="chess-board-panel">
+                                    <button class="chess-board-fullscreen-close" aria-label="Exit fullscreen board">✕</button>
+                                    <div id="chesscom-board"></div>
+                                    <div class="chess-board-controls">
+                                        <button id="chess-prev-move" class="interactive-btn" disabled>← Prev</button>
+                                        <span id="chess-move-indicator">Select a game</span>
+                                        <button id="chess-next-move" class="interactive-btn" disabled>Next →</button>
+                                    </div>
+                                    <p class="chess-board-hint">Tap the board to expand it</p>
                                 </div>
                             </div>
                         </div>
@@ -339,20 +346,59 @@ CATEGORIES = {
                 """,
         "content": """
                     <div class="content-block">
-                        <h4>Paint Dominance & Defensive Anchoring</h4>
-                        <p>Operating as a 6'0" (182 cm) Center. Combines vertical leap, aggressive rim protection, strong defensive box-outs, and vocal floor communication to shut down opposing drives.</p>
+                        <p class="lead-paragraph">At 6'0" playing center, my game is built around mobile physical dominance, blending traditional low-post grit with face-up perimeter versatility. I leverage my body control, active footwork, and length to anchor the paint while constantly keeping opposing bigs guessing off the bounce.</p>
                     </div>
 
-                    <div class="media-placeholder"><img src="med-cup-photos/DSC09640.JPG" alt="Basketball Post Play" loading="lazy"></div>
+                    <div class="media-placeholder basketball-media"><img src="med-cup-photos/DSC09640.JPG" alt="Basketball action" loading="lazy"></div>
 
                     <div class="content-block">
-                        <h4>Rebounding & High Post Distribution</h4>
-                        <p>Securing defensive and offensive boards in traffic, initiating fast breaks with accurate outlet passes, and setting solid screens in the half-court set.</p>
+                        <h4>Offensive Arsenal: Post Touch & Face-Up Drives</h4>
+                        <p>My scoring identity revolves around high-efficiency interior moves and capitalizing on mismatches when slower defenders guard me:</p>
+                        <ul>
+                            <li><strong>Low-Post Scoring & Soft Touch:</strong> I establish firm deep post position, using patient pump fakes, drop steps, and a soft turnaround hook shot over contesting arms to finish smoothly around the basket.</li>
+                            <li><strong>Face-Up Dribble Attacks:</strong> I don't just stay stuck in the paint; I readily receive the ball at the top of the key or wing, put the ball on the deck, and drive hard through the lane to finish at the rim.</li>
+                            <li><strong>Glass Cleaning & Putbacks:</strong> On the offensive boards, I track flight paths relentlessly, carving out space to grab missed shots and cash in on immediate second-chance points.</li>
+                        </ul>
                     </div>
 
-                    <div class="media-placeholder"><img src="med-cup-photos/DSC09642.JPG" alt="Basketball Contest" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="med-cup-photos/DSC09543.JPG" alt="Basketball Huddle" loading="lazy"></div>
-                    <div class="media-placeholder"><img src="med-cup-photos/DSC09561.JPG" alt="Mediterranean Cup Action" loading="lazy"></div>
+                    <div class="media-placeholder has-video basketball-media"><video src="basketball-media/20260201_115601.mp4" muted loop autoplay playsinline></video></div>
+
+                    <div class="content-block">
+                        <h4>Defensive Anchor & Rim Protection</h4>
+                        <p>On the defensive end, I set the physical tone by locking down the key and controlling the defensive glass:</p>
+                        <ul>
+                            <li><strong>Verticality & Shot Contests:</strong> I use proper timing and vertical extension to disrupt interior drives at the rim, altering shots without getting baited into cheap foul trouble.</li>
+                            <li><strong>Physical Box-Outs:</strong> I use my lower center of gravity and core strength to body up opposing centers early, sealing them off to secure defensive rebounds cleanly.</li>
+                            <li><strong>High Motor & Recovery:</strong> My mobility allows me to hedge on perimeter screens and recover quickly back into the paint to safeguard the basket.</li>
+                        </ul>
+                    </div>
+
+                    <div class="media-placeholder has-video basketball-media"><video src="basketball-media/20260201_120317.mp4" muted loop autoplay playsinline></video></div>
+
+                    <div class="media-placeholder basketball-media"><img src="med-cup-photos/DSC09543.JPG" alt="Basketball action" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <h4>Player Profile & On-Court Metrics</h4>
+                        <table class="content-table">
+                            <thead>
+                                <tr><th>Metric / Dimension</th><th>On-Court Execution</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Position / Archetype</td><td>Mobile Center / Modern Point-Center</td></tr>
+                                <tr><td>Offensive Strengths</td><td>Face-up dribble drives, soft turnaround hooks, offensive putbacks</td></tr>
+                                <tr><td>Defensive Role</td><td>Paint anchor, shot alteration, defensive glass control</td></tr>
+                                <tr><td>Tactical Advantage</td><td>Out-pacing traditional static big men with quickness and floor spacing</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="media-placeholder basketball-media"><img src="basketball-media/20260201_120254.jpg" alt="Kabir playing basketball" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <p>I play with an energetic, unrelenting interior presence, wearing down my matchup by forcing them to defend both in the paint and out on the perimeter.</p>
+                    </div>
+
+                    <div class="media-placeholder has-video basketball-media"><video src="basketball-media/20260317_163100.mp4" muted loop autoplay playsinline></video></div>
                 """,
     },
     "coding": {
