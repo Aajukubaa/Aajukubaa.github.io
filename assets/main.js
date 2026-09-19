@@ -9,10 +9,11 @@
     const categories = JSON.parse(document.getElementById("categories-data").textContent);
     let lastOpenedCardId = null;
 
-    // ---------- Sound effects (lazy AudioContext, mute toggle) ----------
+    // ---------- Sound effects (lazy AudioContext) ----------
     // The AudioContext is created on first interaction rather than at load,
     // so the browser never has to warn about (or silently ignore) an
-    // AudioContext started before any user gesture.
+    // AudioContext started before any user gesture. No in-page mute toggle
+    // here — every browser already has a native per-tab mute for this.
     let audioCtx = null;
     function getAudioCtx() {
         if (!audioCtx) {
@@ -22,11 +23,6 @@
         if (audioCtx.state === "suspended") audioCtx.resume();
         return audioCtx;
     }
-
-    let soundEnabled = true;
-    try {
-        soundEnabled = localStorage.getItem("soundEnabled") !== "off";
-    } catch (e) { /* localStorage can be unavailable (private mode etc.) — default on */ }
 
     function playTone(freq, type, duration, startTime, gainPeak) {
         const ctx = getAudioCtx();
@@ -46,14 +42,12 @@
     }
 
     function playSound(freq = 500, type = "sine", duration = 0.03, gainPeak = 0.02) {
-        if (!soundEnabled) return;
         try {
             playTone(freq, type, duration, getAudioCtx().currentTime, gainPeak);
         } catch (e) { /* audio is a nice-to-have, never block on it */ }
     }
 
     function playChime(freqs, type = "sine", noteDuration = 0.16, gainPeak = 0.03) {
-        if (!soundEnabled) return;
         try {
             const ctx = getAudioCtx();
             freqs.forEach((freq, i) => {
@@ -62,31 +56,8 @@
         } catch (e) { /* ditto */ }
     }
 
-    function playViolinTone() {
-        // A short pleasant arpeggio rather than one flat tone.
-        playChime([392.0, 493.88, 587.33], "triangle", 0.35, 0.025); // G4, B4, D5
-    }
-
     function playModalOpenSound() { playChime([440, 660], "sine", 0.09, 0.02); }
     function playModalCloseSound() { playChime([660, 440], "sine", 0.09, 0.02); }
-
-    // Sound mute toggle, in the nav bar.
-    const soundToggle = document.getElementById("sound-toggle");
-    function updateSoundToggleUI() {
-        if (!soundToggle) return;
-        soundToggle.textContent = soundEnabled ? "🔊" : "🔇";
-        soundToggle.classList.toggle("is-muted", !soundEnabled);
-        soundToggle.setAttribute("aria-pressed", String(!soundEnabled));
-    }
-    if (soundToggle) {
-        updateSoundToggleUI();
-        soundToggle.addEventListener("click", () => {
-            soundEnabled = !soundEnabled;
-            try { localStorage.setItem("soundEnabled", soundEnabled ? "on" : "off"); } catch (e) { /* ignore */ }
-            updateSoundToggleUI();
-            if (soundEnabled) playSound(600, "sine", 0.05, 0.03);
-        });
-    }
 
     // Hover sound: only on the "big" clickable surfaces (cards/nav), not
     // every tiny link or button — constant beeping on every element was
@@ -157,14 +128,27 @@
         }
     }
 
+    // ---------- Haptics ----------
+    // Very short, subtle pulses on a handful of meaningful interactions
+    // (opening/closing a card, an image, or switching tabs) — not on
+    // every hover or small tap. Vibration API support varies (notably
+    // absent on iOS Safari), so this silently does nothing where it's
+    // unsupported rather than trying to work around that.
+    function hapticTick(duration = 10) {
+        if (navigator.vibrate) {
+            try { navigator.vibrate(duration); } catch (e) { /* ignore */ }
+        }
+    }
+
     // ---------- Tabs ----------
-    // Scoped to [data-target] specifically so the sound-mute button
-    // (also styled .nav-tab) never gets treated as a page tab.
+    // Scoped to [data-target] specifically, since not every element
+    // sharing the .nav-tab look is a page-switching tab.
     const navTabs = document.querySelectorAll(".nav-tab[data-target]");
     const tabContents = document.querySelectorAll(".tab-content");
 
     navTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
+            hapticTick();
             navTabs.forEach((t) => t.classList.remove("active"));
             tabContents.forEach((c) => c.classList.remove("active-view"));
 
@@ -183,6 +167,7 @@
         const item = categories[catId];
         if (!item) return;
 
+        hapticTick();
         card.classList.add("card-pressed");
         setTimeout(() => card.classList.remove("card-pressed"), 350);
 
@@ -214,6 +199,7 @@
 
     function closeCategory() {
         const detail = document.getElementById("detail-view");
+        hapticTick();
         detail.classList.remove("modal-open");
         detail.classList.add("modal-closing");
         unlockBodyScroll();
@@ -314,6 +300,7 @@
 
     function openLightbox(mediaEl) {
         if (!lightbox) return;
+        hapticTick();
         if (mediaEl.tagName === "VIDEO") {
             lightboxVideo.src = mediaEl.currentSrc || mediaEl.querySelector("source")?.src || mediaEl.src;
             lightboxVideo.classList.add("lightbox-active");
@@ -331,6 +318,7 @@
     }
     function closeLightbox() {
         if (!lightbox) return;
+        hapticTick();
         lightbox.classList.remove("lightbox-open");
         lightboxVideo.pause();
         lightboxVideo.removeAttribute("src");
@@ -369,14 +357,5 @@
             e.preventDefault();
             toggleReveal(e.target);
         }
-    });
-
-    // ---------- Violin tone ----------
-    document.querySelectorAll('[data-action="play-violin"]').forEach((btn) => {
-        btn.addEventListener("click", () => {
-            playViolinTone();
-            btn.classList.add("pulse");
-            setTimeout(() => btn.classList.remove("pulse"), 400);
-        });
     });
 })();
