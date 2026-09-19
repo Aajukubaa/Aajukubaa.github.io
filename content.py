@@ -24,8 +24,8 @@ SITE = {
 NAV_TABS = [
     {"id": "tab-overview", "label": "Overview"},
     {"id": "tab-domains", "label": "Domains"},
-    {"id": "tab-archive", "label": "Projects & Archive"},
-    {"id": "tab-now-goals", "label": "Now & Goals"},
+    {"id": "tab-projects", "label": "Projects"},
+    {"id": "tab-archive", "label": "Archive"},
 ]
 
 HERO = {
@@ -115,10 +115,6 @@ CREATIVE_ARCHIVE = [
      "image": None,
      "desc": "Curated archive of 9+ comprehensive design project portfolios.",
      "cta": "View Design Work"},
-    {"category": "projects", "pill": "Python Workflows", "title": "Custom Code Repos",
-     "image": None,
-     "desc": "Automated scripts, data pipelines, and browser app micro-services.",
-     "cta": "View Code Repos"},
 ]
 
 # All 29 Mediterranean Cup photos (the original, uncompressed replacement
@@ -233,13 +229,25 @@ PROGRESS_REPORT_URLS = [
     "https://www.codingal.com/progress-reports/hTEKhhR0/",
     "https://www.codingal.com/progress-reports/7hj2i3NV/",
 ]
+PROGRESS_REPORT_NAMES = [
+    "Python Basics",
+    "Let's Begin with Loops",
+    "Python Functions and Modules",
+    "Data Structures in Python",
+    "Object Oriented Programming",
+    "Game Building with Pygame",
+    "GUI using Python Tkinter",
+    "Welcome to Data Science",
+    "SQL",
+    "SQL using Python II",
+]
 _PROGRESS_REPORTS_HTML = "\n".join(
     f'''                    <a href="{url}" target="_blank" class="progress-report-row">
                         <span class="progress-report-number">{i}</span>
-                        <span class="progress-report-label">Progress Report {i}</span>
+                        <span class="progress-report-label">{name}</span>
                         <span class="progress-report-arrow">↗</span>
                     </a>'''
-    for i, url in enumerate(PROGRESS_REPORT_URLS, start=1)
+    for i, (url, name) in enumerate(zip(PROGRESS_REPORT_URLS, PROGRESS_REPORT_NAMES), start=1)
 )
 _PROGRESS_REPORTS_LIST_HTML = f'<div class="progress-reports-list">\n{_PROGRESS_REPORTS_HTML}\n                    </div>'
 
@@ -248,7 +256,25 @@ GOALS = [
      "target": "1800", "percent": 85},
     {"emoji": "🎻", "title": "Suzuki Violin Goal: Reach Book 5", "current": "Book 3",
      "target": "Book 5", "percent": 60},
+    {"emoji": "🎻", "title": "Trinity Grade 3 Exam", "current": "In progress",
+     "target": "Pass Grade 3", "percent": 15},
 ]
+
+
+def _goal_bar_html(goal):
+    """Render one GOALS entry as the same progress-bar card that used to
+    live in the (now-removed) Now & Goals tab — now embedded directly in
+    the relevant domain card's detail content instead."""
+    return f'''<div class="goal-bar-card">
+                        <div class="goal-bar-header">
+                            <span class="goal-title">{goal["emoji"]} {goal["title"]}</span>
+                            <span class="goal-metric">Current: {goal["current"]} / Target: {goal["target"]}</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" style="width: {goal["percent"]}%;"></div>
+                        </div>
+                    </div>'''
+
 
 NOW = "Making this website..."
 
@@ -329,6 +355,11 @@ CATEGORIES = {
                     </div>
 
                     <div class="media-placeholder chess-portrait"><img src="chess-photos/20250614_140223.jpg" alt="Kabir playing chess 4" loading="lazy"></div>
+
+                    <div class="content-block">
+                        <h4>Goal</h4>
+                        """ + _goal_bar_html(GOALS[0]) + """
+                    </div>
 
                     <div class="content-block">
                         <h4>Live Chess.com Dashboard</h4>
@@ -516,11 +547,32 @@ CATEGORIES = {
                 """,
         "content": """
                     <div class="content-block">
-                        <h4>Musical Discipline</h4>
-                        <p>Advanced classical repertoire execution currently advancing through Suzuki Book 3. Emphasizes clean intonation, dynamic phrasing, and pure tone production.</p>
+                        <h4>Progressing Through Suzuki Book 3</h4>
+                        <p>My violin studies follow the Suzuki Method, a repertoire-based approach that builds technique piece by piece rather than through dry drills alone. Each book raises the technical bar — cleaner intonation, more controlled bowing, and more demanding dynamic phrasing — and I'm currently working through Book 3. Reaching this point reflects several years of consistent, steady practice rather than a quick jump.</p>
                     </div>
 
-                    """ + _PHOTO_COMING_SOON + """
+                    <div class="content-block">
+                        <h4>School Strings Ensemble</h4>
+                        <p>Alongside my individual Suzuki repertoire, I've been a member of my school's Strings Ensemble Group since Grade 6. The ensemble performs a broader, non-Suzuki repertoire, which has given me consistent experience playing alongside other musicians, following a conductor, and performing live in school concerts — a different skill set from solo practice, and one I've kept building every year since.</p>
+                    </div>
+
+                    <div class="content-block">
+                        <h4>Goals</h4>
+                        """ + _goal_bar_html(GOALS[1]) + _goal_bar_html(GOALS[2]) + """
+                    </div>
+
+                    <div class="content-block">
+                        <h4>Photos & Videos</h4>
+                        <p>More to come in a future update.</p>
+                        <div class="photo-grid">
+                            <div class="media-placeholder">Photo coming soon</div>
+                            <div class="media-placeholder">Photo coming soon</div>
+                            <div class="media-placeholder">Video coming soon</div>
+                            <div class="media-placeholder">Video coming soon</div>
+                            <div class="media-placeholder">Photo coming soon</div>
+                            <div class="media-placeholder">Video coming soon</div>
+                        </div>
+                    </div>
                 """,
     },
     "presentations": {
@@ -577,33 +629,6 @@ CATEGORIES = {
                         <p>Tap any portfolio for a quick summary.</p>
                     </div>
                     """ + _PORTFOLIOS_GALLERY_HTML + """
-                """,
-    },
-    "projects": {
-        "title": "REPOSITORIES",
-        "badge": "AUTOMATION & MICRO-APPS",
-        "bento": """
-                    <div class="bento-tile span-4">
-                        <h4>Repositories</h4>
-                        <p style="color:#fff; font-weight:600;">Automated scripts & dynamic browser utilities</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Hosting</h4>
-                        <p style="color:#fff; font-weight:600;">GitHub Pages</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Runtime</h4>
-                        <p style="color:#fff; font-weight:600;">Static Site (Python-built)</p>
-                    </div>
-                    """ + _account_tile("GitHub") + _account_tile("Replit") + """
-                """,
-        "content": """
-                    <div class="content-block">
-                        <h4>Open Source</h4>
-                        <p>Showcases custom Python scripts and interactive browser apps built for maximum performance.</p>
-                    </div>
-
-                    """ + _PHOTO_COMING_SOON + """
                 """,
     },
     "proj_basketball": {
