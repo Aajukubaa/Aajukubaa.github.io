@@ -15,6 +15,16 @@ HTML/CSS/JS with no runtime to download.
 - `assets/style.css` — all styling (previously inline in the page).
 - `assets/main.js` — all interactivity: tabs, the detail modal, the
   custom cursor, sound effects, keyboard shortcuts, etc.
+- `assets/chess-dashboard.js` — the live Chess.com widget on the Chess
+  card (lazy-loaded, only runs once that card is opened).
+- `fetch_chess_data.py` — runs in GitHub Actions (on push, on a
+  schedule, and on-demand) to pull your Chess.com ratings/games and
+  write `chess-data.json`. The dashboard reads that same-origin file
+  instead of calling Chess.com directly from the browser, because
+  Chess.com's API doesn't reliably support that (CORS).
+- `render_certificates.py` — runs in GitHub Actions to convert each PDF
+  in `certificates/` into a JPG (browsers can't show a raw PDF as an
+  `<img>`), named after a URL-safe version of the PDF's filename.
 - `index.html` — the generated output. **This is what GitHub Pages serves.**
   Don't hand-edit it — your edits will be overwritten next build.
 
