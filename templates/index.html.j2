@@ -17,7 +17,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/style.css?v={{ asset_versions['style.css'] }}">
 </head>
 <body>
 
@@ -246,8 +246,8 @@
     </div>
 
     <script type="application/json" id="categories-data">{{ categories_json | safe }}</script>
-    <script src="assets/main.js"></script>
-    <script src="assets/chess-dashboard.js"></script>
+    <script src="assets/main.js?v={{ asset_versions['main.js'] }}"></script>
+    <script src="assets/chess-dashboard.js?v={{ asset_versions['chess-dashboard.js'] }}"></script>
 
     <footer class="site-footer">
         <p>This website was made on GitHub Pages with the <strong>help</strong> of artificial intelligence.</p>
