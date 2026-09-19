@@ -56,7 +56,6 @@ def build() -> None:
         domain_cards=content.DOMAIN_CARDS,
         highlight_projects=content.HIGHLIGHT_PROJECTS,
         creative_archive=content.CREATIVE_ARCHIVE,
-        goals=content.GOALS,
         now=content.NOW,
         categories_json=categories_json,
         asset_versions=asset_versions,
