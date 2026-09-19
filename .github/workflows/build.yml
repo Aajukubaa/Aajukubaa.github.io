@@ -14,6 +14,8 @@ on:
       - "assets/**"
       - "build.py"
       - "fetch_chess_data.py"
+      - "render_certificates.py"
+      - "certificates/**"
       - "requirements.txt"
   schedule:
     # Every 6 hours, so live ratings/games stay reasonably current.
@@ -46,11 +48,14 @@ jobs:
         run: python fetch_chess_data.py
         continue-on-error: true  # a Chess.com hiccup shouldn't block the site build
 
+      - name: Render certificate PDFs to images
+        run: python render_certificates.py
+
       - name: Build index.html
         run: python build.py
 
       - name: Commit changes (if any)
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "Auto-build index.html + refresh chess data [skip ci]"
-          file_pattern: index.html chess-data.json
+          commit_message: "Auto-build index.html + refresh chess data + render certificates [skip ci]"
+          file_pattern: index.html chess-data.json certificates/*.jpg
