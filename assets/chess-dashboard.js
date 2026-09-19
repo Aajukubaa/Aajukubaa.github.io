@@ -85,6 +85,10 @@
         return '<p class="chess-dashboard-error">Couldn\u2019t load ' + what + ' right now — try refreshing, or see the profile directly on ' +
             '<a href="https://www.chess.com/member/' + CHESS_USERNAME + '" target="_blank">Chess.com</a>.</p>';
     }
+    function debugHTML(detail) {
+        if (!detail) return "";
+        return '<p class="chess-dashboard-debug">(' + String(detail).slice(0, 200) + ')</p>';
+    }
 
     var DRAW_RESULTS = ["agreed", "repetition", "stalemate", "insufficient", "50move", "timevsinsufficient"];
     function outcomeFor(result) {
@@ -207,14 +211,21 @@
         statsEl.innerHTML = '<p class="chess-dashboard-loading">Loading live ratings…</p>';
         gamesListEl.innerHTML = '<p class="chess-dashboard-loading">Loading recent games…</p>';
 
-        Promise.all([ensureChessLibs(), loadChessData()])
+        var libsPromise = ensureChessLibs().catch(function (e) {
+            throw new Error("chess libraries failed to load (" + (e && e.message ? e.message : e) + ")");
+        });
+        var dataPromise = loadChessData().catch(function (e) {
+            throw new Error("chess-data.json failed to load (" + (e && e.message ? e.message : e) + ")");
+        });
+
+        Promise.all([libsPromise, dataPromise])
             .then(function (results) {
                 var data = results[1];
 
                 if (data.stats) {
                     renderStats(statsEl, data.stats);
                 } else {
-                    statsEl.innerHTML = errorHTML("live ratings");
+                    statsEl.innerHTML = errorHTML("live ratings") + debugHTML(data.error);
                 }
 
                 if (updatedEl && data.fetched_at) {
@@ -226,14 +237,16 @@
 
                 var games = data.recent_games || [];
                 if (!games.length) {
-                    gamesListEl.innerHTML = data.stats ? '<p class="chess-dashboard-error">No recent games found.</p>' : errorHTML("recent games");
+                    gamesListEl.innerHTML = data.stats ? '<p class="chess-dashboard-error">No recent games found.</p>' : errorHTML("recent games") + debugHTML(data.error);
                     return;
                 }
                 renderGamesList(gamesListEl, games);
                 selectGame(games[0]);
             })
-            .catch(function () {
-                statsEl.innerHTML = errorHTML("live ratings");
+            .catch(function (err) {
+                var msg = err && err.message ? err.message : String(err);
+                console.error("Chess dashboard failed:", err);
+                statsEl.innerHTML = errorHTML("live ratings") + debugHTML(msg);
                 gamesListEl.innerHTML = errorHTML("recent games");
             });
     }
