@@ -202,6 +202,47 @@ PORTFOLIOS_LIST = [
 _PRESENTATIONS_GALLERY_HTML = _reveal_grid(PRESENTATIONS_LIST)
 _PORTFOLIOS_GALLERY_HTML = _reveal_grid(PORTFOLIOS_LIST)
 
+# Codingal certificates — PDFs are rendered to JPGs at build time by
+# render_certificates.py (browsers can't display a raw PDF as an <img>),
+# using a slugified version of each PDF's filename.
+CERTIFICATES = [
+    {"file": "python-programmer-certificate.jpg", "name": "Python Programmer"},
+    {"file": "advance-python-developer-certificate.jpg", "name": "Advance Python Developer"},
+    {"file": "python-game-developer-certificate.jpg", "name": "Python Game Developer"},
+    {"file": "sql-developer-certificate.jpg", "name": "SQL Developer"},
+]
+_CERTIFICATES_HTML = "\n".join(
+    f'''                    <figure class="certificate-item">
+                        <div class="media-placeholder certificate-frame"><img src="certificates/{c["file"]}" alt="{c["name"]} certificate" loading="lazy"></div>
+                        <figcaption>{c["name"]}</figcaption>
+                    </figure>'''
+    for c in CERTIFICATES
+)
+_CERTIFICATES_GRID_HTML = f'<div class="certificate-grid">\n{_CERTIFICATES_HTML}\n                    </div>'
+
+# Codingal progress reports, in the given order.
+PROGRESS_REPORT_URLS = [
+    "https://www.codingal.com/progress-reports/BF1vi6eL/",
+    "https://www.codingal.com/progress-reports/7spnyHqv/",
+    "https://www.codingal.com/progress-reports/ZJ9DEg33/",
+    "https://www.codingal.com/progress-reports/hYlhSUfp/",
+    "https://www.codingal.com/progress-reports/X8CeIftK/",
+    "https://www.codingal.com/progress-reports/LHAmYr9y/",
+    "https://www.codingal.com/progress-reports/jzQQUOGS/",
+    "https://www.codingal.com/progress-reports/p3mclR2g/",
+    "https://www.codingal.com/progress-reports/hTEKhhR0/",
+    "https://www.codingal.com/progress-reports/7hj2i3NV/",
+]
+_PROGRESS_REPORTS_HTML = "\n".join(
+    f'''                    <a href="{url}" target="_blank" class="progress-report-row">
+                        <span class="progress-report-number">{i}</span>
+                        <span class="progress-report-label">Progress Report {i}</span>
+                        <span class="progress-report-arrow">↗</span>
+                    </a>'''
+    for i, url in enumerate(PROGRESS_REPORT_URLS, start=1)
+)
+_PROGRESS_REPORTS_LIST_HTML = f'<div class="progress-reports-list">\n{_PROGRESS_REPORTS_HTML}\n                    </div>'
+
 GOALS = [
     {"emoji": "♟️", "title": "FIDE Rating Target: 1800", "current": "1545",
      "target": "1800", "percent": 85},
@@ -430,11 +471,30 @@ CATEGORIES = {
                 """,
         "content": """
                     <div class="content-block">
-                        <h4>Stack & Workflow</h4>
-                        <p>Specializes in Python 3.12 backend scripting, data workflows, DOM event handling, and deploying responsive micro-apps directly to GitHub Pages.</p>
+                        <p class="lead-paragraph">I learn to code through Codingal, a live, one-on-one online coding platform. Each session builds on the last through structured modules that combine short lessons with hands-on projects — which is where the certificates and progress reports below come from.</p>
                     </div>
 
-                    """ + _PHOTO_COMING_SOON + """
+                    <div class="content-block">
+                        <p>🌟 My journey began when I earned my first certificate as a Python Programmer! 🐍 This shows I've mastered the fundamental building blocks of programming. I learned how to handle different types of data, use operators to make calculations, and create clever loops to repeat actions. 🔄 I even brought my code to life by developing projects using cool turtle graphics! 🐢 This certificate proves I have a strong foundation in putting code together.</p>
+                        <p>💪 I then leveled up my skills tremendously to become an Advance Python Developer! 🚀 This achievement means I've dived much deeper into the world of programming. I learned how to organize complex information using data structures 📚 and how to build powerful, reusable code with object-oriented programming concepts like inheritance. 🧠 This certificate highlights my ability to tackle more sophisticated coding challenges and design efficient programs.</p>
+                        <p>🎮 And the adventure continued as I became a Python Game Developer! ✨ This is super exciting because it means I can now create my very own interactive games and applications. I mastered the basics of the Pygame library to bring my games to life and learned about GUI development with the Tkinter module to create engaging visual interfaces. 🎨 I even built an amazing game like Space Invaders! 👾 This certificate showcases my creativity and ability to build fun, playable experiences.</p>
+                        <p>My certificates clearly show an impressive progression in my coding abilities! 🌟 From understanding the core principles of Python programming to building advanced structures and ultimately creating interactive games, I've demonstrated remarkable problem-solving skills 💡 and a true talent for bringing ideas to life through code. I will keep exploring and building amazing things! 💻</p>
+                        <p class="text-caption">Generated on June 30, 2026</p>
+                    </div>
+
+                    <div class="content-block">
+                        <h4>Certificates Earned</h4>
+                        """ + _CERTIFICATES_GRID_HTML + """
+                    </div>
+
+                    <div class="content-block">
+                        <h4>Progress Reports</h4>
+                        """ + _PROGRESS_REPORTS_LIST_HTML + """
+                    </div>
+
+                    <div class="content-block">
+                        <p>All of this Codingal work is also on my <a href="https://github.com/aajukubaa" target="_blank">GitHub</a> — each completed module is its own repository, and inside each one you'll find a folder per lesson, named after that lesson. Inside those lesson folders are all the files I wrote to complete it, including every activity and the final project, saved as A1.py, A2.py, A3.py, and so on.</p>
+                    </div>
                 """,
     },
     "music": {
