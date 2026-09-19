@@ -36,7 +36,6 @@
         {% for tab in nav_tabs %}
         <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}">{{ tab.label }}</button>
         {% endfor %}
-        <button class="nav-tab sound-toggle" id="sound-toggle" aria-label="Toggle sound effects" title="Toggle sound effects">🔊</button>
     </nav>
 
     <div id="tab-overview" class="tab-content active-view">
@@ -59,6 +58,14 @@
                 <div class="spec-label">{{ spec.label }}</div>
             </div>
             {% endfor %}
+        </section>
+
+        <section class="current-status-section">
+            <div class="current-status-card">
+                <span class="card-pill">Current Status</span>
+                <h2>What I'm doing now</h2>
+                <p>{{ now }}</p>
+            </div>
         </section>
 
         <section class="connect-section">
@@ -108,12 +115,12 @@
         </section>
     </div>
 
-    <div id="tab-archive" class="tab-content">
+    <div id="tab-projects" class="tab-content">
         <section class="section-container" style="padding-top: 40px;">
             <h2 class="section-header-title">Highlight Projects</h2>
             <p class="section-subtitle">A deep dive into recent tournaments, leadership roles, and technical builds.</p>
 
-            <div class="highlight-grid" style="margin-bottom: 70px;">
+            <div class="highlight-grid">
                 {% for proj in highlight_projects %}
                 <div class="highlight-card" id="{{ proj.category }}" tabindex="0" role="button" aria-label="View {{ proj.title }} Details" data-category="{{ proj.category }}">
                     <div>
@@ -130,7 +137,11 @@
                 </div>
                 {% endfor %}
             </div>
+        </section>
+    </div>
 
+    <div id="tab-archive" class="tab-content">
+        <section class="section-container" style="padding-top: 40px;">
             <h2 class="section-header-title">Creative Archive</h2>
             <p class="section-subtitle">Development scripts, presentation slide decks, and design portfolios.</p>
 
@@ -150,64 +161,6 @@
                     <div style="margin-top: 15px;" class="card-action-default">{{ item.cta }} <span>→</span></div>
                 </div>
                 {% endfor %}
-            </div>
-        </section>
-    </div>
-
-    <div id="tab-now-goals" class="tab-content">
-        <section class="section-container" style="padding-top: 40px;">
-            <div style="max-width: 1000px; margin: 0 auto 50px auto; background: #121215; border: 2px solid #28282d; border-radius: 28px; padding: 35px;">
-                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Current Status</span>
-                <h2 style="color: #ffffff; font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">What I'm doing now</h2>
-                <p style="color: #86868b; font-size: 1.15rem; margin: 0;">{{ now }}</p>
-            </div>
-
-            <div style="max-width: 1000px; margin: 0 auto 60px auto;">
-                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Milestone Roadmap</span>
-                <h2 class="section-header-title">Active Goals & Progress</h2>
-                <p class="section-subtitle">Tracking target ratings and musical grade progression across the board.</p>
-
-                {% for goal in goals %}
-                <div class="goal-bar-card">
-                    <div class="goal-bar-header">
-                        <span class="goal-title">{{ goal.emoji }} {{ goal.title }}</span>
-                        <span class="goal-metric">Current: {{ goal.current }} / Target: {{ goal.target }}</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-fill" style="width: {{ goal.percent }}%;"></div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div style="max-width: 1000px; margin: 0 auto;">
-                <span class="card-pill" style="margin-bottom: 12px; display: inline-block;">Interactive Lab</span>
-                <h2 class="section-header-title">Skill Micro-Widgets</h2>
-                <p class="section-subtitle">Test out live embedded skill demos right here.</p>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                    <div class="widget-box" style="margin-top:0;">
-                        <span class="card-pill">Chess Puzzle</span>
-                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Mate in 2 Tactical Test</h4>
-                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">White to move and checkmate.</p>
-                        <div class="reveal-tile correct" tabindex="0" role="button" aria-expanded="false">
-                            <div class="reveal-tile-header">
-                                <span class="reveal-tile-title">Solve Puzzle</span>
-                                <span class="reveal-tile-icon">+</span>
-                            </div>
-                            <div class="reveal-tile-body">
-                                <p>Correct! 1. Qh7+ Kxh7 2. Rh3#</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="widget-box" style="margin-top:0;">
-                        <span class="card-pill">Violin Audio</span>
-                        <h4 style="color:#fff; margin: 10px 0 5px 0; font-size:1.1rem;">Suzuki Book 3 Snippet</h4>
-                        <p style="color:#86868b; font-size:0.85rem; margin-bottom:15px;">Listen to a short tone sequence.</p>
-                        <button class="interactive-btn" data-action="play-violin">▶ Play Audio Note</button>
-                    </div>
-                </div>
             </div>
         </section>
     </div>
@@ -232,8 +185,8 @@
             <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects & Archive</span><span><kbd class="kbd">3</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Now & Goals</span><span><kbd class="kbd">4</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span><kbd class="kbd">3</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span><kbd class="kbd">4</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" data-action="close-shortcuts">Got It</button>
         </div>
