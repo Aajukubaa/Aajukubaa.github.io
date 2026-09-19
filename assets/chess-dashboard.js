@@ -39,7 +39,12 @@
         chessLibsPromise = loadScript("https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js")
             .then(function () {
                 return Promise.all([
-                    loadScript("https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.13.4/chess.min.js"),
+                    // NOTE: cdnjs's chess.js@0.13.4 build ships an ES module
+                    // (uses `export`), which throws "Unexpected token export"
+                    // when loaded via a plain <script> tag — that was the
+                    // dashboard's actual bug. 0.12.0 is confirmed to be a
+                    // plain browser-global script (window.Chess), same API.
+                    loadScript("https://unpkg.com/chess.js@0.12.0/chess.js"),
                     loadScript("https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"),
                 ]);
             });
@@ -174,9 +179,16 @@
     });
 
     // ---------- Fullscreen board ----------
+    function hapticTick(duration) {
+        if (navigator.vibrate) {
+            try { navigator.vibrate(duration || 10); } catch (e) { /* ignore */ }
+        }
+    }
+
     function closeChessBoardFullscreen() {
         var panel = document.querySelector(".chess-board-panel.board-fullscreen");
         if (!panel) return false;
+        hapticTick();
         panel.classList.remove("board-fullscreen");
         if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
         return true;
@@ -188,6 +200,7 @@
         if (boardEl) {
             var panel = boardEl.closest(".chess-board-panel");
             if (panel && !panel.classList.contains("board-fullscreen")) {
+                hapticTick();
                 panel.classList.add("board-fullscreen");
                 if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
             }
