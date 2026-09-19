@@ -10,6 +10,7 @@ Usage:
     pip install -r requirements.txt   # first time only
     python build.py
 """
+import hashlib
 import json
 from pathlib import Path
 
@@ -20,6 +21,11 @@ import content
 ROOT = Path(__file__).parent
 TEMPLATES_DIR = ROOT / "templates"
 OUTPUT_FILE = ROOT / "index.html"
+ASSET_FILES = ["style.css", "main.js", "chess-dashboard.js"]
+
+
+def file_hash(path: Path, length: int = 8) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:length]
 
 
 def build() -> None:
@@ -36,6 +42,11 @@ def build() -> None:
     # can't break out of the embedding <script> tag.
     categories_json = json.dumps(content.CATEGORIES).replace("</", "<\\/")
 
+    # A content hash appended as a query string (assets/style.css?v=abcd1234)
+    # forces browsers/CDNs to fetch the new file the moment it actually
+    # changes, instead of serving a stale cached copy indefinitely.
+    asset_versions = {name: file_hash(ROOT / "assets" / name) for name in ASSET_FILES}
+
     html = template.render(
         site=content.SITE,
         nav_tabs=content.NAV_TABS,
@@ -48,6 +59,7 @@ def build() -> None:
         goals=content.GOALS,
         now=content.NOW,
         categories_json=categories_json,
+        asset_versions=asset_versions,
     )
 
     OUTPUT_FILE.write_text(html, encoding="utf-8")
