@@ -36,6 +36,7 @@
         {% for tab in nav_tabs %}
         <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}">{{ tab.label }}</button>
         {% endfor %}
+        <button class="nav-tab search-toggle" id="search-toggle" aria-label="Search (Ctrl+K)" title="Search (Ctrl+K)">🔍</button>
     </nav>
 
     <div id="tab-overview" class="tab-content active-view">
@@ -187,20 +188,36 @@
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span><kbd class="kbd">3</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span><kbd class="kbd">4</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">K</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" data-action="close-shortcuts">Got It</button>
         </div>
     </div>
 
+    <div id="search-modal" data-action="close-search">
+        <div class="search-box">
+            <div class="search-input-row">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="search-input" class="search-input" placeholder="Search the site…" autocomplete="off" spellcheck="false">
+                <button class="search-close" data-action="close-search" aria-label="Close search">✕</button>
+            </div>
+            <div id="search-results" class="search-results"></div>
+            <p class="search-hint">↑↓ to navigate · Enter to open · Esc to close</p>
+        </div>
+    </div>
+
     <div id="lightbox" data-action="close-lightbox">
         <button class="lightbox-close" data-action="close-lightbox" aria-label="Close">✕</button>
+        <button class="lightbox-nav lightbox-prev" data-action="lightbox-prev" aria-label="Previous">‹</button>
         <img id="lightbox-img" src="" alt="">
         <video id="lightbox-video" controls playsinline></video>
+        <button class="lightbox-nav lightbox-next" data-action="lightbox-next" aria-label="Next">›</button>
     </div>
 
     <script type="application/json" id="categories-data">{{ categories_json | safe }}</script>
     <script src="assets/main.js?v={{ asset_versions['main.js'] }}"></script>
     <script src="assets/chess-dashboard.js?v={{ asset_versions['chess-dashboard.js'] }}"></script>
+    <script src="assets/search.js?v={{ asset_versions['search.js'] }}"></script>
 
     <footer class="site-footer">
         <p>This website was made on GitHub Pages with the <strong>help</strong> of artificial intelligence.</p>

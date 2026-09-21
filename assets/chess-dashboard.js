@@ -122,6 +122,31 @@
         if (nextBtn) nextBtn.disabled = index >= currentHistory.length;
     }
 
+    // Piece images for chessboard.js were never actually published to npm
+    // (only bundled in the project's manual ZIP download), so ANY CDN
+    // pointing at the npm/unpkg/cdnjs package 404s on piece images —
+    // that was the "pieces don't show up" bug. Rendering them as inline
+    // SVG data URIs instead removes that external dependency entirely.
+    var PIECE_GLYPH = {
+        wK: "♔", wQ: "♕", wR: "♖", wB: "♗", wN: "♘", wP: "♙",
+        bK: "♚", bQ: "♛", bR: "♜", bB: "♝", bN: "♞", bP: "♟",
+    };
+    var pieceThemeCache = {};
+    function pieceTheme(piece) {
+        if (pieceThemeCache[piece]) return pieceThemeCache[piece];
+        var isWhite = piece.charAt(0) === "w";
+        var glyph = PIECE_GLYPH[piece];
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45">' +
+            '<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" ' +
+            'font-size="38" font-family="Georgia, \'Times New Roman\', serif" ' +
+            'fill="' + (isWhite ? "#f5f5f0" : "#1a1a1a") + '" ' +
+            'stroke="' + (isWhite ? "#1a1a1a" : "#f5f5f0") + '" stroke-width="1">' +
+            glyph + "</text></svg>";
+        var dataUri = "data:image/svg+xml;base64," + btoa(svg);
+        pieceThemeCache[piece] = dataUri;
+        return dataUri;
+    }
+
     function selectGame(game) {
         var chess = new window.Chess();
         var loaded = false;
@@ -133,14 +158,19 @@
         if (!boardInstance && boardEl && window.Chessboard) {
             boardInstance = window.Chessboard(boardEl.id, {
                 position: "start",
-                pieceTheme: "https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/img/chesspieces/wikipedia/{piece}.png",
+                pieceTheme: pieceTheme,
             });
             if (window.jQuery) {
                 window.jQuery(window).on("resize", function () { if (boardInstance) boardInstance.resize(); });
             }
         }
         renderPositionAt(currentIndex);
-        if (boardInstance) setTimeout(function () { boardInstance.resize(); }, 50);
+        // Defensive: if the container's layout wasn't fully settled at
+        // construction time (mid-modal-transition), this catches it.
+        if (boardInstance) {
+            setTimeout(function () { boardInstance.resize(); }, 50);
+            setTimeout(function () { boardInstance.resize(); }, 300);
+        }
     }
 
     function renderGamesList(listEl, games) {

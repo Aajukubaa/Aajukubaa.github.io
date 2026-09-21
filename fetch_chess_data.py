@@ -52,7 +52,9 @@ def fetch_recent_games() -> list:
     games = []
     for archive_url in reversed(archives[-MAX_MONTHS_BACK:]):
         month_games = fetch_json(archive_url).get("games", [])
-        games.extend(g for g in month_games if g.get("pgn"))
+        # Only rated games — unrated games (friendly matches, etc.) are
+        # excluded from the dashboard by request.
+        games.extend(g for g in month_games if g.get("pgn") and g.get("rated"))
         if len(games) >= MAX_GAMES:
             break
 

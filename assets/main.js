@@ -127,6 +127,10 @@
             window.scrollTo(0, lockedScrollY);
         }
     }
+    // Shared with search.js, which is a separate script and needs the
+    // same reference-counted lock rather than its own independent one.
+    window.lockBodyScroll = lockBodyScroll;
+    window.unlockBodyScroll = unlockBodyScroll;
 
     // ---------- Haptics ----------
     // Very short, subtle pulses on a handful of meaningful interactions
@@ -268,7 +272,9 @@
         if (e.key === "Escape") {
             const lightboxOpen = lightbox && lightbox.classList.contains("lightbox-open");
             const detail = document.getElementById("detail-view");
-            if (lightboxOpen) {
+            if (window.closeSearchModal && window.closeSearchModal()) {
+                // handled
+            } else if (lightboxOpen) {
                 closeLightbox();
             } else if (window.closeChessBoardFullscreen && window.closeChessBoardFullscreen()) {
                 // handled
@@ -277,6 +283,10 @@
             } else {
                 toggleShortcuts(false);
             }
+        }
+        if (lightbox && lightbox.classList.contains("lightbox-open")) {
+            if (e.key === "ArrowLeft") stepLightbox(-1);
+            if (e.key === "ArrowRight") stepLightbox(1);
         }
         if (e.key === "?") {
             e.preventDefault();
@@ -297,10 +307,13 @@
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
     const lightboxVideo = document.getElementById("lightbox-video");
+    const lightboxPrevBtn = document.querySelector(".lightbox-prev");
+    const lightboxNextBtn = document.querySelector(".lightbox-next");
 
-    function openLightbox(mediaEl) {
-        if (!lightbox) return;
-        hapticTick();
+    let lightboxGallery = [];
+    let lightboxIndex = 0;
+
+    function showLightboxMedia(mediaEl) {
         if (mediaEl.tagName === "VIDEO") {
             lightboxVideo.src = mediaEl.currentSrc || mediaEl.querySelector("source")?.src || mediaEl.src;
             lightboxVideo.classList.add("lightbox-active");
@@ -308,14 +321,45 @@
             lightboxVideo.currentTime = 0;
             lightboxVideo.play().catch(() => { /* autoplay-with-sound can be blocked; controls still work */ });
         } else {
+            lightboxVideo.pause();
+            lightboxVideo.removeAttribute("src");
             lightboxImg.src = mediaEl.currentSrc || mediaEl.src;
             lightboxImg.alt = mediaEl.alt || "";
             lightboxImg.classList.add("lightbox-active");
             lightboxVideo.classList.remove("lightbox-active");
         }
+    }
+
+    function openLightbox(mediaEl) {
+        if (!lightbox) return;
+        hapticTick();
+
+        // The gallery is every photo/video inside the same card's detail
+        // content (so arrows step through, say, the Mediterranean Cup
+        // gallery) — or just this one item if it's not inside a card
+        // (e.g. a domain-card thumbnail on the Domains tab).
+        const scope = mediaEl.closest("#detail-content") || mediaEl.closest(".media-placeholder");
+        lightboxGallery = scope
+            ? Array.from(scope.querySelectorAll(".media-placeholder img, .media-placeholder video"))
+            : [mediaEl];
+        lightboxIndex = Math.max(0, lightboxGallery.indexOf(mediaEl));
+
+        const showArrows = lightboxGallery.length > 1;
+        if (lightboxPrevBtn) lightboxPrevBtn.hidden = !showArrows;
+        if (lightboxNextBtn) lightboxNextBtn.hidden = !showArrows;
+
+        showLightboxMedia(mediaEl);
         lightbox.classList.add("lightbox-open");
         lockBodyScroll();
     }
+
+    function stepLightbox(delta) {
+        if (lightboxGallery.length < 2) return;
+        hapticTick();
+        lightboxIndex = (lightboxIndex + delta + lightboxGallery.length) % lightboxGallery.length;
+        showLightboxMedia(lightboxGallery[lightboxIndex]);
+    }
+
     function closeLightbox() {
         if (!lightbox) return;
         hapticTick();
@@ -341,6 +385,12 @@
         el.addEventListener("click", (e) => {
             if (e.target === el) closeLightbox();
         });
+    });
+    document.querySelectorAll('[data-action="lightbox-prev"]').forEach((el) => {
+        el.addEventListener("click", () => stepLightbox(-1));
+    });
+    document.querySelectorAll('[data-action="lightbox-next"]').forEach((el) => {
+        el.addEventListener("click", () => stepLightbox(1));
     });
 
     // ---------- Reveal tiles (placeholder galleries + puzzle widget) ----------

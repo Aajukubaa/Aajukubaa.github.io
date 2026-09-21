@@ -21,7 +21,7 @@ import content
 ROOT = Path(__file__).parent
 TEMPLATES_DIR = ROOT / "templates"
 OUTPUT_FILE = ROOT / "index.html"
-ASSET_FILES = ["style.css", "main.js", "chess-dashboard.js"]
+ASSET_FILES = ["style.css", "main.js", "chess-dashboard.js", "search.js"]
 
 
 def file_hash(path: Path, length: int = 8) -> str:
