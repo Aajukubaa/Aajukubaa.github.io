@@ -70,20 +70,29 @@
         </section>
 
         <section class="connect-section">
-            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
+            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px; text-align:center;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
                 <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
             </div>
 
-            <div class="connect-grid">
-                {% for link in connect_links %}
-                <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card">
-                    <div class="connect-icon">{{ link.icon }}</div>
-                    <div class="connect-details"><h4>{{ link.name }}</h4><p>{{ link.desc }}</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                {% endfor %}
+            <!-- Redesigned carousel-style connect section inspired by reference image -->
+            <div class="connect-carousel" aria-label="Connect carousel">
+                <button class="carousel-btn carousel-prev" aria-label="Previous">‹</button>
+                <div class="carousel-track" role="list">
+                    {% for link in connect_links %}
+                    <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card carousel-card" role="listitem" data-index="{{ loop.index0 }}">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">{{ link.icon }}</div>
+                            <div class="connect-details"><h4>{{ link.name }}</h4><p>{{ link.desc }}</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <button class="carousel-btn carousel-next" aria-label="Next">›</button>
             </div>
+
+            <div class="connect-carousel-caption" aria-hidden="true">Use ← → to navigate · Enter to open</div>
         </section>
     </div>
 
@@ -184,12 +193,12 @@
     <div id="shortcuts-modal" data-action="close-shortcuts" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); z-index:100000; justify-content:center; align-items:center;">
         <div class="shortcuts-box" style="background:#141416; border:2px solid #2e2e34; border-radius:24px; padding:40px; max-width:500px; width:90%;">
             <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span><kbd class="kbd">3</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span><kbd class="kbd">4</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">K</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span>1</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span>2</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span>3</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span>4</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span>Ctrl+K</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span>Esc</span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" data-action="close-shortcuts">Got It</button>
         </div>
     </div>
