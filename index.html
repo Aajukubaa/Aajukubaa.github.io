@@ -80,68 +80,97 @@
         </section>
 
         <section class="connect-section">
-            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
+            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px; text-align:center;">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
                 <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
             </div>
 
-            <div class="connect-grid">
-                <a href="http://ratings.fide.com/profile/498777" target="_blank" class="connect-card">
-                    <div class="connect-icon">♟️</div>
-                    <div class="connect-details"><h4>FIDE Profile</h4><p>Official 1545 tournament records</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://www.chess.com/member/aajukubaa" target="_blank" class="connect-card">
-                    <div class="connect-icon">♘</div>
-                    <div class="connect-details"><h4>Chess.com</h4><p>Blitz &amp; rapid online matches</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://lichess.org/@/onesandzeros" target="_blank" class="connect-card">
-                    <div class="connect-icon">♞</div>
-                    <div class="connect-details"><h4>Lichess</h4><p>Bullet &amp; puzzle training</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://github.com/aajukubaa" target="_blank" class="connect-card">
-                    <div class="connect-icon">💻</div>
-                    <div class="connect-details"><h4>GitHub</h4><p>Python repositories &amp; micro-apps</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://replit.com/@Aajukubaa" target="_blank" class="connect-card">
-                    <div class="connect-icon">⚡</div>
-                    <div class="connect-details"><h4>Replit</h4><p>Live Python code execution</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="connect-card">
-                    <div class="connect-icon">▶️</div>
-                    <div class="connect-details"><h4>YouTube</h4><p>Video edits &amp; athletic highlights</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://aajukubaa.medium.com/" target="_blank" class="connect-card">
-                    <div class="connect-icon">✍️</div>
-                    <div class="connect-details"><h4>Medium</h4><p>Articles and analytical logs</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://www.duolingo.com/profile/Aajukubaa" target="_blank" class="connect-card">
-                    <div class="connect-icon">🦉</div>
-                    <div class="connect-details"><h4>Duolingo</h4><p>Daily streak &amp; language stats</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://www.vinted.co.uk/member/284456392" target="_blank" class="connect-card">
-                    <div class="connect-icon">🏷️</div>
-                    <div class="connect-details"><h4>Vinted</h4><p>Curated style storefront</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="https://www.etsy.com/uk/shop/PotterybyRG" target="_blank" class="connect-card">
-                    <div class="connect-icon">🏺</div>
-                    <div class="connect-details"><h4>Pottery by RG</h4><p>Handmade ceramic works</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
-                <a href="mailto:kabirbhuchar@gmail.com" class="connect-card">
-                    <div class="connect-icon">✉️</div>
-                    <div class="connect-details"><h4>Gmail</h4><p>kabirbhuchar@gmail.com</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
+            <!-- Redesigned carousel-style connect section inspired by reference image -->
+            <div class="connect-carousel" aria-label="Connect carousel">
+                <button class="carousel-btn carousel-prev" aria-label="Previous">‹</button>
+                <div class="carousel-track" role="list">
+                    <a href="http://ratings.fide.com/profile/498777" target="_blank" class="connect-card carousel-card" role="listitem" data-index="0">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">♟️</div>
+                            <div class="connect-details"><h4>FIDE Profile</h4><p>Official 1545 tournament records</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://www.chess.com/member/aajukubaa" target="_blank" class="connect-card carousel-card" role="listitem" data-index="1">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">♘</div>
+                            <div class="connect-details"><h4>Chess.com</h4><p>Blitz &amp; rapid online matches</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://lichess.org/@/onesandzeros" target="_blank" class="connect-card carousel-card" role="listitem" data-index="2">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">♞</div>
+                            <div class="connect-details"><h4>Lichess</h4><p>Bullet &amp; puzzle training</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://github.com/aajukubaa" target="_blank" class="connect-card carousel-card" role="listitem" data-index="3">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">💻</div>
+                            <div class="connect-details"><h4>GitHub</h4><p>Python repositories &amp; micro-apps</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://replit.com/@Aajukubaa" target="_blank" class="connect-card carousel-card" role="listitem" data-index="4">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">⚡</div>
+                            <div class="connect-details"><h4>Replit</h4><p>Live Python code execution</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://www.youtube.com/@Aajukubaa" target="_blank" class="connect-card carousel-card" role="listitem" data-index="5">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">▶️</div>
+                            <div class="connect-details"><h4>YouTube</h4><p>Video edits &amp; athletic highlights</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://aajukubaa.medium.com/" target="_blank" class="connect-card carousel-card" role="listitem" data-index="6">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">✍️</div>
+                            <div class="connect-details"><h4>Medium</h4><p>Articles and analytical logs</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://www.duolingo.com/profile/Aajukubaa" target="_blank" class="connect-card carousel-card" role="listitem" data-index="7">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">🦉</div>
+                            <div class="connect-details"><h4>Duolingo</h4><p>Daily streak &amp; language stats</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://www.vinted.co.uk/member/284456392" target="_blank" class="connect-card carousel-card" role="listitem" data-index="8">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">🏷️</div>
+                            <div class="connect-details"><h4>Vinted</h4><p>Curated style storefront</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="https://www.etsy.com/uk/shop/PotterybyRG" target="_blank" class="connect-card carousel-card" role="listitem" data-index="9">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">🏺</div>
+                            <div class="connect-details"><h4>Pottery by RG</h4><p>Handmade ceramic works</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                    <a href="mailto:kabirbhuchar@gmail.com" class="connect-card carousel-card" role="listitem" data-index="10">
+                        <div class="connect-card-inner">
+                            <div class="connect-icon">✉️</div>
+                            <div class="connect-details"><h4>Gmail</h4><p>kabirbhuchar@gmail.com</p></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                    </a>
+                </div>
+                <button class="carousel-btn carousel-next" aria-label="Next">›</button>
             </div>
+
+            <div class="connect-carousel-caption" aria-hidden="true">Use ← → to navigate · Enter to open</div>
         </section>
     </div>
 
@@ -283,12 +312,12 @@
     <div id="shortcuts-modal" data-action="close-shortcuts" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); z-index:100000; justify-content:center; align-items:center;">
         <div class="shortcuts-box" style="background:#141416; border:2px solid #2e2e34; border-radius:24px; padding:40px; max-width:500px; width:90%;">
             <h3 style="color:#fff; margin-top:0; font-size:1.5rem;">Keyboard Shortcuts</h3>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span><kbd class="kbd">1</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span><kbd class="kbd">3</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span><kbd class="kbd">4</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">K</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Overview</span><span>1</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span>2</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span>3</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span>4</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span>Ctrl+K</span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span>Esc</span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" data-action="close-shortcuts">Got It</button>
         </div>
     </div>
