@@ -1,11 +1,11 @@
 {
-  "fetched_at": "2026-10-17T13:27:54.013831+00:00",
+  "fetched_at": "2026-10-23T02:59:22.477260+00:00",
   "username": "Aajukubaa",
   "stats": {
     "chess_daily": {
       "last": {
         "rating": 1332,
-        "date": 1790443954,
+        "date": 1792262475,
         "rd": 190
       },
       "best": {
@@ -17,7 +17,7 @@
         "win": 21,
         "loss": 9,
         "draw": 1,
-        "time_per_move": 19488,
+        "time_per_move": 21579,
         "timeout_percent": 0
       }
     },
