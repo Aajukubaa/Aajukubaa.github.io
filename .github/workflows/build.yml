@@ -18,8 +18,8 @@ on:
       - "certificates/**"
       - "requirements.txt"
   schedule:
-    # Every 6 hours, so live ratings/games stay reasonably current.
-    - cron: "0 */6 * * *"
+    # Weekly on Monday at 06:00 UTC to refresh ratings and games.
+    - cron: "0 6 * * 1"
   workflow_dispatch:
 
 # Required so this workflow is allowed to commit the rebuilt files back

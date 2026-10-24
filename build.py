@@ -13,6 +13,7 @@ Usage:
 import hashlib
 import json
 import copy
+import datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -64,6 +65,7 @@ def build() -> None:
         highlight_projects=content.HIGHLIGHT_PROJECTS,
         creative_archive=content.CREATIVE_ARCHIVE,
         now=content.NOW,
+        current_year=datetime.date.today().year,
         categories_json=categories_json,
         asset_versions=asset_versions,
     )
