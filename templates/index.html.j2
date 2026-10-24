@@ -86,9 +86,12 @@
                 <div class="connect-track" role="region" tabindex="0" aria-label="Connect profile cards">
                     {% for link in connect_links %}
                     <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card" data-category="{{ link.category }}">
-                        <div class="connect-icon">{{ link.icon }}</div>
-                        <div class="connect-details"><h4>{{ link.name }}</h4><div class="connect-description"><div><p>{{ link.desc }}</p></div></div></div>
-                        <div class="connect-arrow">↗</div>
+                        <div class="connect-card-header">
+                            <div class="connect-icon">{{ link.icon }}</div>
+                            <div class="connect-details"><h4>{{ link.name }}</h4></div>
+                            <div class="connect-arrow">↗</div>
+                        </div>
+                        <div class="connect-description"><div><p>{{ link.desc }}</p></div></div>
                     </a>
                     {% endfor %}
                 </div>

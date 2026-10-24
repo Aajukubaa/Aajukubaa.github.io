@@ -204,18 +204,19 @@ CHESS_EMBED_GAMES = [
 
 def _chess_featured_games_html():
     games = []
-    for game in CHESS_EMBED_GAMES:
+    for index, game in enumerate(CHESS_EMBED_GAMES):
         title = escape(str(game["title"]), quote=True)
         embed_id = game["embed_id"]
+        featured_class = " chess-game-featured" if index == 0 else ""
         if embed_id is not None and str(embed_id).isdigit():
             games.append(
-                f'<iframe src="https://www.chess.com/emboard?id={escape(str(embed_id), quote=True)}" '
+                f'<iframe class="chess-game-embed{featured_class}" src="https://www.chess.com/emboard?id={escape(str(embed_id), quote=True)}" '
                 f'loading="lazy" allowtransparency="true" frameborder="0" '
                 f'style="width:100%;border:none;" title="{title}"></iframe>'
             )
         else:
             games.append(
-                f'<div class="chess-game-placeholder">♟ {title} — Chess.com embed coming soon</div>'
+                f'<div class="chess-game-placeholder{featured_class}">♟ {title} — Chess.com embed coming soon</div>'
             )
     return (
         '<section class="chess-featured-games"><h4>Featured Games</h4>'
@@ -355,13 +356,13 @@ CATEGORIES = {
         "badge": "STRATEGY",
         "bento": [
         bento.tile('wide', '\n                        <h4>Current Rating</h4>\n                        <h2>1545 FIDE</h2>\n                        <p style="margin-top:auto;">Official competitive tournament bracket rating.</p>\n                    '),
-        bento.tile('wide', '\n                        <h4 style="color: #ffffff;">Opening Base</h4>\n                        <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>\n                    ', style='background: #1c1c22; border-color: #44444d;'),
-        bento.tile('wide', '\n                        <h4>Playstyle</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>\n                    '),
+        bento.tile('tall', '\n                        <h4 style="color: #ffffff;">Opening Base</h4>\n                        <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>\n                    ', style='background: #1c1c22; border-color: #44444d;'),
+        bento.tile('sm', '\n                        <h4>Playstyle</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>\n                    '),
         bento.tile('wide', '\n                        <h4>Time Controls</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">60+1 Hyper-Bullet & 3-Min Blitz</p>\n                    '),
-        bento.tile('wide', '\n                        <h4>Black Defenses</h4>\n                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>\n                    '),
-        bento.tile('wide', '\n                        <h4>Tactical Streak</h4>\n                        <p style="color:#fff; font-weight:600;">2800+ Puzzle Peak</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Black Defenses</h4>\n                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Tactical Streak</h4>\n                        <p style="color:#fff; font-weight:600;">2800+ Puzzle Peak</p>\n                    '),
         bento.tile('wide', '\n                        <h4>Club Standing</h4>\n                        <p style="color:#fff; font-weight:600;">Top Board Representative & School Team MVP</p>\n                    '),
-        _account_tile('FIDE Profile', size='wide'),
+        _account_tile('FIDE Profile'),
         _account_tile('Chess.com', size='wide'),
         _account_tile('Lichess', size='wide'),
     ],
@@ -427,7 +428,7 @@ CATEGORIES = {
         "title": "BASKETBALL",
         "badge": "ATHLETICS",
         "bento": [
-        bento.tile('wide', '\n                        <h4>Position</h4>\n                        <h2>6\'0" Forward</h2>\n                        <p style="margin-top:auto;">182 cm interior anchor.</p>\n                    '),
+        bento.tile('tall', '\n                        <h4>Position</h4>\n                        <h2>6\'0" Forward</h2>\n                        <p style="margin-top:auto;">182 cm interior anchor.</p>\n                    '),
         bento.tile('wide', '\n                        <h4>Focus Areas</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Rim Protection & Box-outs</p>\n                    '),
         bento.tile('sm', '\n                        <h4>Rebounding</h4>\n                        <p style="color:#fff; font-weight:600;">High-Intensity Glass Control</p>\n                    '),
         bento.tile('sm', '\n                        <h4>Tournament</h4>\n                        <p style="color:#fff; font-weight:600;">Mediterranean Cup Captain</p>\n                    '),

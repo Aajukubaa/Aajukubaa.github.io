@@ -40,8 +40,10 @@
             : `<p class="chess-stat-best">Best ${bestValue}</p>`;
 
         return `<article class="chess-stat-card">
-            <span class="chess-stat-icon">${escapeHtml(icon)}</span>
-            <h4>${escapeHtml(title)}</h4>
+            <div class="chess-stat-header">
+                <span class="chess-stat-icon">${escapeHtml(icon)}</span>
+                <h4>${escapeHtml(title)}</h4>
+            </div>
             <p class="chess-stat-rating">${last.rating == null ? "—" : escapeHtml(last.rating)}</p>
             ${bestMarkup}
             <p class="chess-stat-record">${escapeHtml(wins)}W · ${escapeHtml(losses)}L · ${escapeHtml(draws)}D</p>
@@ -60,8 +62,10 @@
             const highest = stats.tactics.highest && stats.tactics.highest.rating;
             const lowest = stats.tactics.lowest && stats.tactics.lowest.rating;
             cards.push(`<article class="chess-stat-card">
-                <span class="chess-stat-icon">🧩</span>
-                <h4>Tactics</h4>
+                <div class="chess-stat-header">
+                    <span class="chess-stat-icon">🧩</span>
+                    <h4>Tactics</h4>
+                </div>
                 <p class="chess-stat-rating">${highest == null ? "—" : escapeHtml(highest)}</p>
                 <p class="chess-stat-record">Highest rating</p>
                 <p class="chess-stat-winrate">Lowest ${lowest == null ? "—" : escapeHtml(lowest)}</p>
@@ -70,16 +74,20 @@
         if (stats && stats.puzzle_rush && typeof stats.puzzle_rush === "object") {
             const score = stats.puzzle_rush.best && stats.puzzle_rush.best.score;
             cards.push(`<article class="chess-stat-card">
-                <span class="chess-stat-icon">⚡</span>
-                <h4>Puzzle Rush</h4>
+                <div class="chess-stat-header">
+                    <span class="chess-stat-icon">⏱️</span>
+                    <h4>Puzzle Rush</h4>
+                </div>
                 <p class="chess-stat-rating">${score == null ? "—" : escapeHtml(score)}</p>
                 <p class="chess-stat-record">Best score</p>
             </article>`);
         }
         if (stats && stats.fide != null) {
             cards.push(`<article class="chess-stat-card">
-                <span class="chess-stat-icon">♟</span>
-                <h4>FIDE</h4>
+                <div class="chess-stat-header">
+                    <span class="chess-stat-icon">♟</span>
+                    <h4>FIDE</h4>
+                </div>
                 <p class="chess-stat-rating">${escapeHtml(stats.fide)}</p>
                 <p class="chess-stat-record">Official rating</p>
             </article>`);
