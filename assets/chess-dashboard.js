@@ -136,5 +136,15 @@
             });
     }
 
+    window.addEventListener("message", (event) => {
+        if (!/^https:\/\/([a-z0-9-]+\.)*chess\.com$/.test(event.origin)) return;
+        const data = event.data;
+        if (!data || data.id == null || data.frameHeight == null) return;
+        const frame = document.getElementById(String(data.id));
+        if (frame && frame.tagName === "IFRAME") {
+            frame.style.height = (Number(data.frameHeight) + 37) + "px";
+        }
+    });
+
     window.initChessDashboard = initChessDashboard;
 })();

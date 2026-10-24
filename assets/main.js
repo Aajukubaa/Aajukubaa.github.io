@@ -9,6 +9,14 @@
     const categories = JSON.parse(document.getElementById("categories-data").textContent);
     let lastOpenedCardId = null;
 
+    const isEditableTarget = (target) =>
+        target instanceof Element && target.closest("input, textarea, [contenteditable]");
+    ["contextmenu", "selectstart", "copy", "cut", "dragstart"].forEach((eventName) => {
+        document.addEventListener(eventName, (event) => {
+            if (!isEditableTarget(event.target)) event.preventDefault();
+        });
+    });
+
     // ---------- Sound effects (lazy AudioContext) ----------
     // The AudioContext is created on first interaction rather than at load,
     // so the browser never has to warn about (or silently ignore) an

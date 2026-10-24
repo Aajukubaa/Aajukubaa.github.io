@@ -17,6 +17,16 @@ body, html {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
+body {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+input, textarea, [contenteditable] {
+    user-select: text;
+    -webkit-user-select: text;
+}
+img, video { -webkit-user-drag: none; }
 
 /* Color Inverting Text Selection */
 ::selection {
@@ -119,11 +129,14 @@ body.modal-active {
     scroll-snap-align: center;
 }
 
-.nav-tab:hover {
-    color: #ffffff;
-    background: #222226;
-    transform: scale(1.1);
+@media (hover: hover) {
+    .nav-tab:hover {
+        color: #ffffff;
+        background: #222226;
+        transform: scale(1.08);
+    }
 }
+.nav-tab:active, .nav-tab:focus-visible { transform: scale(1.08); }
 
 .nav-tab.active {
     background: #ffffff;
@@ -138,19 +151,22 @@ body.modal-active {
     #custom-cursor { display: none !important; }
     .top-nav-container {
         top: auto;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        width: 100%;
+        left: 12px;
+        right: 12px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        width: auto;
         max-width: none;
         transform: none;
-        border: 0;
-        border-top: 1px solid #38383e;
-        border-radius: 0;
-        padding: 8px 8px env(safe-area-inset-bottom);
-        gap: 0;
-        overflow: hidden;
-        background: #141416;
+        border: 1px solid #2c2c2e;
+        border-radius: 32px;
+        padding: 6px;
+        gap: 2px;
+        overflow: visible;
+        white-space: normal;
+        -webkit-overflow-scrolling: auto;
+        scroll-snap-type: none;
+        background: #1c1c1e;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
     .top-nav-container:hover { border-color: #38383e; }
     .nav-tab {
@@ -160,15 +176,18 @@ body.modal-active {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 2px;
-        padding: 5px 2px;
-        border-radius: 12px;
-        font-size: 0.68rem;
+        gap: 1px;
+        padding: 4px 1px;
+        border-radius: 26px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: #8e8e93;
         box-sizing: border-box;
-        overflow: hidden;
+        overflow: visible;
     }
-    .nav-tab:hover, .nav-tab.active { transform: none; }
-    .nav-icon { font-size: 1.3rem; flex: 0 0 auto; }
+    .nav-tab.active { background: #2c2c2e; color: #ffffff; }
+    .nav-icon { width: 22px; height: 22px; flex: 0 0 auto; }
+    .nav-icon svg { width: 22px; height: 22px; }
     .nav-label {
         display: block;
         max-width: 100%;
@@ -176,11 +195,12 @@ body.modal-active {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        line-height: 1.15;
+        line-height: 1.2;
     }
-    .top-nav-container .search-toggle { padding: 5px 2px; font-size: 0.68rem; }
-    .hero-container { height: calc(100vh - 114px); height: calc(100dvh - 114px); }
-    .tab-content { padding-top: 24px; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+    .top-nav-container .search-toggle { padding: 4px 1px; font-size: 10.5px; }
+    .hero-container { height: calc(100vh - 110px); height: calc(100dvh - 110px); }
+    .tab-content { padding-top: 24px; padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
+    .site-footer { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
     body.modal-active .top-nav-container { display: none; }
 }
 
@@ -1237,6 +1257,16 @@ body.modal-active .close-btn { display: flex; }
     color: #86868b;
     letter-spacing: 0.5px;
 }
+.site-footer .copyright-line { margin-bottom: 6px; }
+.detail-copyright {
+    margin: 28px 0 0;
+    padding-top: 18px;
+    border-top: 1px solid #28282e;
+    color: #86868b;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
 
 /* Click-to-expand tiles: used for the presentation/portfolio
    placeholders and the chess-puzzle reveal. */
@@ -1382,19 +1412,37 @@ body.modal-active .close-btn { display: flex; }
 }
 .chess-game-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
 }
-.chess-game-grid iframe,
-.chess-game-placeholder {
-    min-height: 180px;
-    width: 100%;
-    border: 2px solid #28282e;
+.chess-game-card {
+    min-width: 0;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid #28282e;
     border-radius: 16px;
     background: #17171b;
 }
+.chess-game-title { margin: 0 0 12px; }
+.chess-game-title h5 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+.chess-game-embed {
+    display: block;
+    width: 100%;
+    height: 500px;
+    min-height: 500px;
+    border: 0;
+    border-radius: 10px;
+    background: #141416;
+}
 .chess-game-placeholder {
+    min-height: 180px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
@@ -1402,15 +1450,10 @@ body.modal-active .close-btn { display: flex; }
     text-align: center;
     line-height: 1.5;
 }
-.chess-game-featured { grid-column: span 2; }
-
-@media (max-width: 900px) {
-    .chess-game-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .chess-game-featured { grid-column: 1 / -1; }
-}
-@media (max-width: 600px) {
-    .chess-game-grid { grid-template-columns: 1fr; }
-    .chess-game-featured { grid-column: 1 / -1; }
+.chess-game-placeholder p {
+    margin: 0;
+    color: #86868b;
+    font-size: 0.9rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
