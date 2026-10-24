@@ -24,7 +24,7 @@ import bento
 ROOT = Path(__file__).parent
 TEMPLATES_DIR = ROOT / "templates"
 OUTPUT_FILE = ROOT / "index.html"
-ASSET_FILES = ["style.css", "main.js", "chess-dashboard.js", "search.js"]
+ASSET_FILES = ["style.css", "main.js", "chess-dashboard.js", "search.js", "assistant.js"]
 
 
 def file_hash(path: Path, length: int = 8) -> str:
@@ -48,6 +48,7 @@ def build() -> None:
         bento.validate(name, category["bento"])
         category["bento"] = bento.render(category["bento"])
     categories_json = json.dumps(categories).replace("</", "<\\/")
+    assistant_json = json.dumps(content.ASSISTANT).replace("</", "<\\/")
 
     # A content hash appended as a query string (assets/style.css?v=abcd1234)
     # forces browsers/CDNs to fetch the new file the moment it actually
@@ -57,6 +58,8 @@ def build() -> None:
     html = template.render(
         site=content.SITE,
         nav_tabs=content.NAV_TABS,
+        search=content.SEARCH,
+        assistant=content.ASSISTANT,
         hero=content.HERO,
         specs=content.SPECS,
         connect_links=content.CONNECT_LINKS,
@@ -67,6 +70,7 @@ def build() -> None:
         now=content.NOW,
         current_year=datetime.date.today().year,
         categories_json=categories_json,
+        assistant_json=assistant_json,
         asset_versions=asset_versions,
     )
 

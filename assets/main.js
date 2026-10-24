@@ -158,18 +158,24 @@
     const navTabs = document.querySelectorAll(".nav-tab[data-target]");
     const tabContents = document.querySelectorAll(".tab-content");
 
+    function showTab(id, { scrollTop = true } = {}) {
+        const targetView = document.getElementById(id);
+        const targetTab = Array.from(navTabs).find((tab) => tab.getAttribute("data-target") === id);
+        if (!targetView || !targetTab) return false;
+
+        navTabs.forEach((tab) => tab.classList.remove("active"));
+        tabContents.forEach((tab) => tab.classList.remove("active-view"));
+        targetTab.classList.add("active");
+        targetView.classList.add("active-view");
+        if (scrollTop) window.scrollTo({ top: 0, behavior: "smooth" });
+        return true;
+    }
+    window.showTab = showTab;
+
     navTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
             hapticTick();
-            navTabs.forEach((t) => t.classList.remove("active"));
-            tabContents.forEach((c) => c.classList.remove("active-view"));
-
-            tab.classList.add("active");
-            const targetView = document.getElementById(tab.getAttribute("data-target"));
-            if (targetView) {
-                targetView.classList.add("active-view");
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            }
+            showTab(tab.getAttribute("data-target"));
         });
     });
 
@@ -191,7 +197,7 @@
         return Boolean(
             document.getElementById("detail-view")?.classList.contains("modal-open") ||
             document.getElementById("lightbox")?.classList.contains("lightbox-open") ||
-            document.getElementById("search-modal")?.classList.contains("search-open") ||
+            document.getElementById("assistant-panel")?.classList.contains("assistant-open") ||
             document.getElementById("shortcuts-modal")?.style.display === "flex"
         );
     }
@@ -386,6 +392,12 @@
             window.initChessDashboard();
         }
     }
+    window.openCategoryById = (catId) => {
+        const card = document.getElementById(catId);
+        if (!card || !categories[catId]) return false;
+        openCategory(card);
+        return true;
+    };
 
     function closeCategory() {
         const detail = document.getElementById("detail-view");
@@ -458,7 +470,7 @@
         if (e.key === "Escape") {
             const lightboxOpen = lightbox && lightbox.classList.contains("lightbox-open");
             const detail = document.getElementById("detail-view");
-            if (window.closeSearchModal && window.closeSearchModal()) {
+            if (window.closeAssistant && window.closeAssistant()) {
                 // handled
             } else if (lightboxOpen) {
                 closeLightbox();
@@ -470,6 +482,15 @@
                 toggleShortcuts(false);
             }
         }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+            e.preventDefault();
+            showTab("tab-search");
+            const searchInput = document.getElementById("search-input");
+            if (searchInput) {
+                searchInput.focus();
+                searchInput.select();
+            }
+        }
         if (lightbox && lightbox.classList.contains("lightbox-open")) {
             if (e.key === "ArrowLeft") stepLightbox(-1);
             if (e.key === "ArrowRight") stepLightbox(1);
@@ -479,7 +500,10 @@
             const modal = document.getElementById("shortcuts-modal");
             toggleShortcuts(modal.style.display !== "flex");
         }
-        if (["1", "2", "3", "4"].includes(e.key) && !document.body.classList.contains("modal-active")) {
+        const activeElement = document.activeElement;
+        const editingText = activeElement?.matches?.("input, textarea, [contenteditable='true']");
+        if (["1", "2", "3", "4", "5"].includes(e.key) &&
+            !document.body.classList.contains("modal-active") && !editingText) {
             const index = parseInt(e.key, 10) - 1;
             if (navTabs[index]) navTabs[index].click();
         }

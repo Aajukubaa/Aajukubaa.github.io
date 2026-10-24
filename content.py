@@ -35,7 +35,47 @@ NAV_TABS = [
      "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/><path d="M3 10h18"/></svg>'},
     {"id": "tab-archive", "label": "Archive",
      "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4h18v5H3z"/><path d="M5 9v11h14V9M10 13h4"/></svg>'},
+    {"id": "tab-search", "label": "Search",
+     "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>'},
 ]
+
+SEARCH = {
+    "title": "Search",
+    "subtitle": "Find anything across Kabir's chess, basketball, coding and music pages.",
+    "placeholder": "Search the site…",
+    "suggestions": ["Suzuki", "Mediterranean Cup", "Python", "1.e4", "FIDE", "Strings Ensemble"],
+    "suggestions_label": "Suggested searches",
+    "status_empty": "Type at least 2 characters, or choose a suggestion.",
+    "status_minimum": "Enter at least 2 characters to search.",
+    "status_results_one": "{count} result for “{query}”",
+    "status_results_many": "{count} results for “{query}”",
+    "status_no_results": "No results for “{query}”. Try a suggestion.",
+    "keyboard_hint": "Use ↑/↓ to move through results · Enter to open",
+    "assistant_prompt": "Can't find it? Ask the AI assistant (coming soon)",
+    "assistant_button": "Ask AI",
+}
+
+ASSISTANT = {
+    "title": "Ask about Kabir",
+    "status": "Coming soon",
+    "greeting": "Hi! I'm Kabir's AI assistant. Soon I'll answer questions about his chess, basketball, coding and violin — I'm not connected yet, so this is just a preview.",
+    "suggestions": [
+        "What's Kabir's FIDE rating?",
+        "What position does Kabir play?",
+        "What is Kabir learning on violin?",
+        "What has Kabir built with Python?",
+    ],
+    "placeholder_reply": "I'm not connected to an AI model yet — this assistant is a preview. For now, try the Search tab to find what you're looking for.",
+    "input_placeholder": "Ask a question about Kabir…",
+    "disclaimer": "Preview only · no AI is connected yet",
+    "launcher_label": "Ask AI",
+    "close_label": "Close assistant",
+    "send_label": "Send",
+    "input_label": "Ask a question about Kabir",
+    "suggestions_label": "Suggested questions",
+    "typing_label": "Assistant is preparing a preview reply",
+    "avatar": "KB",
+}
 
 HERO = {
     "lines": ["Kabir", "Bhuchar"],
