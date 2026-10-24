@@ -10,6 +10,10 @@ assets/. After editing this file, run:
 ...to regenerate index.html.
 """
 
+from html import escape
+
+import bento
+
 SITE = {
     "title": "Kabir Bhuchar",
     "description": "Kabir Bhuchar's portfolio as a chess player, programmer, basketballer, violinist.",
@@ -22,21 +26,25 @@ SITE = {
 }
 
 NAV_TABS = [
-    {"id": "tab-overview", "label": "Overview"},
-    {"id": "tab-domains", "label": "Domains"},
-    {"id": "tab-projects", "label": "Projects"},
-    {"id": "tab-archive", "label": "Archive"},
+    {"id": "tab-overview", "label": "Overview",
+     "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/></svg>'},
+    {"id": "tab-domains", "label": "Domains",
+     "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>'},
+    {"id": "tab-projects", "label": "Projects",
+     "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10H3z"/><path d="M3 10h18"/></svg>'},
+    {"id": "tab-archive", "label": "Archive",
+     "icon": '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 4h18v5H3z"/><path d="M5 9v11h14V9M10 13h4"/></svg>'},
 ]
 
 HERO = {
     "lines": ["Kabir", "Bhuchar"],
-    "intro": "Competitive chess strategist, basketball center, Python architect, "
+    "intro": "Competitive chess strategist, basketball forward, Python architect, "
              "and classical violinist. Welcome to my digital control center.",
 }
 
 SPECS = [
     {"value": "1545", "label": "FIDE Rating"},
-    {"value": "182 cm", "label": "Basketball Center"},
+    {"value": "182 cm", "label": "Basketball Forward"},
     {"value": "Book 3", "label": "Suzuki Violin"},
     {"value": "Python 3.12", "label": "Engine Architecture"},
 ]
@@ -88,7 +96,7 @@ DOMAIN_CARDS = [
     {"category": "basketball", "pill": "Athletics", "title": "Basketball",
      "image": {"id": "basketball-image", "src": "med-cup-photos/DSC09520.JPG",
                "alt": "Basketball action"},
-     "preview": "6'0\" Center dominating paint defense, rim protection, "
+     "preview": "6'0\" Forward dominating paint defense, rim protection, "
                 "and high-intensity rebounding."},
     {"category": "coding", "pill": "Engineering", "title": "Coding", "image": None,
      "preview": "Building automated Python backends, web micro-apps, "
@@ -141,7 +149,7 @@ CREATIVE_ARCHIVE = [
 # photos, so those show an honest "Photo coming soon" box instead of a
 # mismatched basketball shot.
 MEDITERRANEAN_CUP_PHOTOS = [
-    "DSC09519.JPG", "DSC09520.JPG", "DSC09521.JPG", "DSC09640.JPG", "DSC09642.JPG",
+    "DSC09519.JPG", "DSC09520.JPG", "DSC09521.JPG", "DSC09540.JPG", "DSC09542.JPG",
     "DSC09543.JPG", "DSC09545.JPG", "DSC09547.JPG", "DSC09561.JPG", "DSC09585.JPG",
     "DSC09586.JPG", "DSC09587.JPG", "DSC09588.JPG", "DSC09589.JPG", "DSC09590.JPG",
     "DSC09597.JPG", "DSC09603.JPG", "DSC09615.JPG", "DSC09714.JPG", "DSC09715.JPG",
@@ -153,7 +161,7 @@ MEDITERRANEAN_CUP_PHOTOS = [
 # narrative below (see CATEGORIES["proj_basketball"]); everything else
 # stays in the tournament gallery grid at the end of that page.
 _MED_CUP_INLINE_PHOTOS = [
-    "DSC09519.JPG", "DSC09640.JPG", "DSC09543.JPG", "DSC09585.JPG",
+    "DSC09519.JPG", "DSC09540.JPG", "DSC09543.JPG", "DSC09585.JPG",
     "DSC09603.JPG", "DSC09714.JPG", "DSC09732.JPG", "DSC09744.JPG",
 ]
 _MED_CUP_GRID_PHOTOS = [p for p in MEDITERRANEAN_CUP_PHOTOS if p not in _MED_CUP_INLINE_PHOTOS]
@@ -172,14 +180,47 @@ _MED_CUP_GALLERY_HTML = "\n".join(
 _PHOTO_COMING_SOON = '<div class="media-placeholder">Photo coming soon</div>'
 
 
-def _account_tile(link_name):
-    """Render one CONNECT_LINKS entry as a clickable bento tile."""
+def _account_tile(link_name, size="sm"):
+    """Create one clickable bento tile for a CONNECT_LINKS entry."""
     link = next(l for l in CONNECT_LINKS if l["name"] == link_name)
+    return bento.tile(
+        size,
+        f'<h4>{link["icon"]} {link["name"]}</h4><p>{link["desc"]}</p>'
+        '<span class="bento-link-arrow">↗</span>',
+        href=link["url"],
+    )
+
+
+# Add a Chess.com game ID from Share → Embed → the number in
+# https://www.chess.com/emboard?id=XXXX.
+CHESS_EMBED_GAMES = [
+    {"title": "Game 1", "embed_id": None},
+    {"title": "Game 2", "embed_id": None},
+    {"title": "Game 3", "embed_id": None},
+    {"title": "Game 4", "embed_id": None},
+    {"title": "Game 5", "embed_id": None},
+]
+
+
+def _chess_featured_games_html():
+    games = []
+    for index, game in enumerate(CHESS_EMBED_GAMES):
+        title = escape(str(game["title"]), quote=True)
+        embed_id = game["embed_id"]
+        featured_class = " chess-game-featured" if index == 0 else ""
+        if embed_id is not None and str(embed_id).isdigit():
+            games.append(
+                f'<iframe class="chess-game-embed{featured_class}" src="https://www.chess.com/emboard?id={escape(str(embed_id), quote=True)}" '
+                f'loading="lazy" allowtransparency="true" frameborder="0" '
+                f'style="width:100%;border:none;" title="{title}"></iframe>'
+            )
+        else:
+            games.append(
+                f'<div class="chess-game-placeholder{featured_class}">♟ {title} — Chess.com embed coming soon</div>'
+            )
     return (
-        f'<a href="{link["url"]}" target="_blank" class="bento-tile bento-tile-link">'
-        f'<h4>{link["icon"]} {link["name"]}</h4>'
-        f'<p>{link["desc"]}</p>'
-        f'<span class="bento-link-arrow">↗</span></a>'
+        '<section class="chess-featured-games"><h4>Featured Games</h4>'
+        '<div class="chess-game-grid">' + "".join(games) + "</div></section>"
     )
 
 
@@ -307,45 +348,24 @@ def _goal_bar_html(goal):
 NOW = "Making this website..."
 
 # Full detail-view content for every clickable card. Keys match the
-# "category" fields above. "bento" and "content" are hand-authored HTML
-# fragments (kept as HTML, same as the original design) — main.js drops
-# them straight into the detail modal when a card is clicked.
+# "category" fields above. Bento tiles use the validated helpers in
+# bento.py; longer-form content remains HTML for the detail modal.
 CATEGORIES = {
     "chess": {
         "title": "CHESS",
         "badge": "STRATEGY",
-        "bento": """
-                    <div class="bento-tile span-2">
-                        <h4>Current Rating</h4>
-                        <h2>1545 FIDE</h2>
-                        <p style="margin-top:auto;">Official competitive tournament bracket rating.</p>
-                    </div>
-                    <div class="bento-tile row-2" style="background: #1c1c22; border-color: #44444d;">
-                        <h4 style="color: #ffffff;">Opening Base</h4>
-                        <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Playstyle</h4>
-                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Time Controls</h4>
-                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">60+1 Hyper-Bullet & 3-Min Blitz</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Black Defenses</h4>
-                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Tactical Streak</h4>
-                        <p style="color:#fff; font-weight:600;">2800+ Puzzle Peak</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Club Standing</h4>
-                        <p style="color:#fff; font-weight:600;">Top Board Representative & School Team MVP</p>
-                    </div>
-                    """ + _account_tile("FIDE Profile") + _account_tile("Chess.com") + _account_tile("Lichess") + """
-                """,
+        "bento": [
+        bento.tile('wide', '\n                        <h4>Current Rating</h4>\n                        <h2>1545 FIDE</h2>\n                        <p style="margin-top:auto;">Official competitive tournament bracket rating.</p>\n                    '),
+        bento.tile('tall', '\n                        <h4 style="color: #ffffff;">Opening Base</h4>\n                        <h2 style="font-size: 5rem; margin-top:20px;">1.e4</h2>\n                    ', style='background: #1c1c22; border-color: #44444d;'),
+        bento.tile('sm', '\n                        <h4>Playstyle</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Aggressive & Direct</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Time Controls</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">60+1 Hyper-Bullet & 3-Min Blitz</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Black Defenses</h4>\n                        <p>Sicilian (1...c5)<br>Scandinavian (1...d5)</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Tactical Streak</h4>\n                        <p style="color:#fff; font-weight:600;">2800+ Puzzle Peak</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Club Standing</h4>\n                        <p style="color:#fff; font-weight:600;">Top Board Representative & School Team MVP</p>\n                    '),
+        _account_tile('FIDE Profile'),
+        _account_tile('Chess.com', size='wide'),
+        _account_tile('Lichess', size='wide'),
+    ],
         "content": """
                     <div class="content-block">
                         <p class="lead-paragraph">My game is defined by high-octane, uncompromising, and direct aggression. Whenever I sit down with the White pieces, I strictly initiate the batt[...]
@@ -399,21 +419,7 @@ CATEGORIES = {
                             <div id="chesscom-stats" class="chess-stats-grid">
                                 <p class="chess-dashboard-loading">Loading live ratings…</p>
                             </div>
-                            <div class="chess-dashboard">
-                                <div id="chesscom-games-list" class="chess-games-list">
-                                    <p class="chess-dashboard-loading">Loading recent games…</p>
-                                </div>
-                                <div class="chess-board-panel">
-                                    <button class="chess-board-fullscreen-close" aria-label="Exit fullscreen board">✕</button>
-                                    <div id="chesscom-board"></div>
-                                    <div class="chess-board-controls">
-                                        <button id="chess-prev-move" class="interactive-btn" disabled>← Prev</button>
-                                        <span id="chess-move-indicator">Select a game</span>
-                                        <button id="chess-next-move" class="interactive-btn" disabled>Next →</button>
-                                    </div>
-                                    <p class="chess-board-hint">Tap the board to expand it</p>
-                                </div>
-                            </div>
+                            """ + _chess_featured_games_html() + """
                         </div>
                     </div>
                 """,
@@ -421,35 +427,19 @@ CATEGORIES = {
     "basketball": {
         "title": "BASKETBALL",
         "badge": "ATHLETICS",
-        "bento": """
-                    <div class="bento-tile span-2">
-                        <h4>Position</h4>
-                        <h2>6'0\" Center</h2>
-                        <p style="margin-top:auto;">182 cm interior anchor.</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Focus Areas</h4>
-                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Rim Protection & Box-outs</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Rebounding</h4>
-                        <p style="color:#fff; font-weight:600;">High-Intensity Glass Control</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Tournament</h4>
-                        <p style="color:#fff; font-weight:600;">Mediterranean Cup Captain</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Court Vision</h4>
-                        <p style="color:#fff; font-weight:600;">High Post Passing & Screen Setting</p>
-                    </div>
-                """,
+        "bento": [
+        bento.tile('tall', '\n                        <h4>Position</h4>\n                        <h2>6\'0" Forward</h2>\n                        <p style="margin-top:auto;">182 cm interior anchor.</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Focus Areas</h4>\n                        <p style="color:#fff; font-size:1.1rem; font-weight:600; margin-top:10px;">Rim Protection & Box-outs</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Rebounding</h4>\n                        <p style="color:#fff; font-weight:600;">High-Intensity Glass Control</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Tournament</h4>\n                        <p style="color:#fff; font-weight:600;">Mediterranean Cup Captain</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Court Vision</h4>\n                        <p style="color:#fff; font-weight:600;">High Post Passing & Screen Setting</p>\n                    '),
+    ],
         "content": """
                     <div class="content-block">
-                        <p class="lead-paragraph">At 6'0" playing center, my game is built around mobile physical dominance, blending traditional low-post grit with face-up perimeter versatility.[...]
+                        <p class="lead-paragraph">At 6'0" playing forward, my game is built around mobile physical dominance, blending traditional low-post grit with face-up perimeter versatility.[...]
                     </div>
 
-                    <div class="media-placeholder basketball-media"><img src="med-cup-photos/DSC09640.JPG" alt="Basketball action" loading="lazy"></div>
+                    <div class="media-placeholder basketball-media"><img src="basketball-media/20260201_115535.jpg" alt="Basketball action" loading="lazy"></div>
 
                     <div class="content-block">
                         <h4>Offensive Arsenal: Post Touch & Face-Up Drives</h4>
@@ -484,7 +474,7 @@ CATEGORIES = {
                                 <tr><th>Metric / Dimension</th><th>On-Court Execution</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>Position / Archetype</td><td>Mobile Center / Modern Point-Center</td></tr>
+                                <tr><td>Position / Archetype</td><td>Mobile Forward / Modern Point-Forward</td></tr>
                                 <tr><td>Offensive Strengths</td><td>Face-up dribble drives, soft turnaround hooks, offensive putbacks</td></tr>
                                 <tr><td>Defensive Role</td><td>Paint anchor, shot alteration, defensive glass control</td></tr>
                                 <tr><td>Tactical Advantage</td><td>Out-pacing traditional static big men with quickness and floor spacing</td></tr>
@@ -509,30 +499,15 @@ CATEGORIES = {
     "coding": {
         "title": "CODING",
         "badge": "ENGINEERING",
-        "bento": """
-                    <div class="bento-tile row-2 span-2">
-                        <h4>Architecture</h4>
-                        <h2>Python 3.12</h2>
-                        <p style="margin-top:auto;">Building automated backend scripts, data pipelines, and this very site's Python build system.</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Frontend</h4>
-                        <p style="color:#fff; font-weight:600;">HTML5, CSS3, DOM</p>
-                    </div>
-                    <div class="bento-tile">
-                        <h4>Deployment</h4>
-                        <p style="color:#fff; font-weight:600;">GitHub Pages</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Design Focus</h4>
-                        <p style="color:#fff; font-weight:600;">Minimalist Solid Matte Interface</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Automation</h4>
-                        <p style="color:#fff; font-weight:600;">Scripting & Data Pipelines</p>
-                    </div>
-                    """ + _account_tile("GitHub") + _account_tile("Replit") + """
-                """,
+        "bento": [
+        bento.tile('big', '\n                        <h4>Architecture</h4>\n                        <h2>Python 3.12</h2>\n                        <p style="margin-top:auto;">Building automated backend scripts, data pipelines, and this very site\'s Python build system.</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Frontend</h4>\n                        <p style="color:#fff; font-weight:600;">HTML5, CSS3, DOM</p>\n                    '),
+        bento.tile('sm', '\n                        <h4>Deployment</h4>\n                        <p style="color:#fff; font-weight:600;">GitHub Pages</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Design Focus</h4>\n                        <p style="color:#fff; font-weight:600;">Minimalist Solid Matte Interface</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Automation</h4>\n                        <p style="color:#fff; font-weight:600;">Scripting & Data Pipelines</p>\n                    '),
+        _account_tile('GitHub', size='sm'),
+        _account_tile('Replit', size='sm'),
+    ],
         "content": """
                     <div class="content-block">
                         <p class="lead-paragraph">I learn to code through Codingal, a live, one-on-one online coding platform. Each session builds on the last through structured modules that comb[...]
@@ -564,20 +539,11 @@ CATEGORIES = {
     "music": {
         "title": "VIOLIN",
         "badge": "PERFORMANCE",
-        "bento": """
-                    <div class="bento-tile span-2">
-                        <h4>Repertoire Level</h4>
-                        <h2>Suzuki Book 3</h2>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Focus</h4>
-                        <p style="color:#fff; font-weight:600;">Clean intonation & controlled bowing articulation</p>
-                    </div>
-                    <div class="bento-tile span-4">
-                        <h4>Artistic Discipline</h4>
-                        <p style="color:#fff; font-weight:600;">Classical piece interpretation, vibrato control, and tone purity.</p>
-                    </div>
-                """,
+        "bento": [
+        bento.tile('wide', '\n                        <h4>Repertoire Level</h4>\n                        <h2>Suzuki Book 3</h2>\n                    '),
+        bento.tile('wide', '\n                        <h4>Focus</h4>\n                        <p style="color:#fff; font-weight:600;">Clean intonation & controlled bowing articulation</p>\n                    '),
+        bento.tile('full', '\n                        <h4>Artistic Discipline</h4>\n                        <p style="color:#fff; font-weight:600;">Classical piece interpretation, vibrato control, and tone purity.</p>\n                    '),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Progressing Through Suzuki Book 3</h4>
@@ -622,20 +588,11 @@ CATEGORIES = {
     "presentations": {
         "title": "POWERPOINT",
         "badge": "ACADEMIC DECK ARCHITECTURE",
-        "bento": """
-                    <div class="bento-tile span-4">
-                        <h4>Design Standard</h4>
-                        <p style="color:#fff; font-weight:600; font-size:1.2rem;">Minimalist typography & synchronized visual storytelling</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Layouts</h4>
-                        <p style="color:#fff; font-weight:600;">Grid-aligned structure</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Visuals</h4>
-                        <p style="color:#fff; font-weight:600;">High-impact contrast</p>
-                    </div>
-                """,
+        "bento": [
+        bento.tile('full', '\n                        <h4>Design Standard</h4>\n                        <p style="color:#fff; font-weight:600; font-size:1.2rem;">Minimalist typography & synchronized visual storytelling</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Layouts</h4>\n                        <p style="color:#fff; font-weight:600;">Grid-aligned structure</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Visuals</h4>\n                        <p style="color:#fff; font-weight:600;">High-impact contrast</p>\n                    '),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Slide Deck Design</h4>
@@ -652,16 +609,10 @@ CATEGORIES = {
     "portfolios": {
         "title": "PORTFOLIOS",
         "badge": "CREATIVE SHOWCASE",
-        "bento": """
-                    <div class="bento-tile span-4">
-                        <h4>Archive Volume</h4>
-                        <h2>9+ Portfolios</h2>
-                    </div>
-                    <div class="bento-tile span-4">
-                        <h4>Aesthetic</h4>
-                        <p style="color:#fff; font-weight:600;">Monochromatic dark palettes & precision card architectures</p>
-                    </div>
-                """,
+        "bento": [
+        bento.tile('full', '\n                        <h4>Archive Volume</h4>\n                        <h2>9+ Portfolios</h2>\n                    '),
+        bento.tile('full', '\n                        <h4>Aesthetic</h4>\n                        <p style="color:#fff; font-weight:600;">Monochromatic dark palettes & precision card architectures</p>\n                    '),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Visual Identity</h4>
@@ -678,21 +629,11 @@ CATEGORIES = {
     "proj_basketball": {
         "title": "MEDITERRANEAN CUP",
         "badge": "TOURNAMENT CAPTAIN",
-        "bento": """
-                    <div class="bento-tile span-4">
-                        <h4>Role</h4>
-                        <h2>Team Captain</h2>
-                        <p style="margin-top:auto;">Lead team strategy and on-court execution.</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Venue</h4>
-                        <p style="color:#fff; font-weight:600;">International Circuit</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Impact</h4>
-                        <p style="color:#fff; font-weight:600;">Paint Defense & Leadership</p>
-                    </div>
-                """,
+        "bento": [
+        bento.tile('full', '\n                        <h4>Role</h4>\n                        <h2>Team Captain</h2>\n                        <p style="margin-top:auto;">Lead team strategy and on-court execution.</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Venue</h4>\n                        <p style="color:#fff; font-weight:600;">International Circuit</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Impact</h4>\n                        <p style="color:#fff; font-weight:600;">Paint Defense & Leadership</p>\n                    '),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Flying Out Alone</h4>
@@ -708,7 +649,7 @@ CATEGORIES = {
                         <p>What none of us realized yet was how much that single cancelled day was going to change everything that followed. The tournament still had eight games scheduled for our[...]
                     </div>
 
-                    """ + _med_cup_photo_html("DSC09640.JPG", 2) + """
+                    """ + _med_cup_photo_html("DSC09540.JPG", 2) + """
 
                     <div class="content-block">
                         <h4>The Fall</h4>
@@ -754,21 +695,12 @@ CATEGORIES = {
     "proj_website": {
         "title": "THIS SHOWCASE",
         "badge": "ARCHITECTURE",
-        "bento": """
-                    <div class="bento-tile span-2">
-                        <h4>Engine</h4>
-                        <h2>Python</h2>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Style</h4>
-                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">Solid Matte & Bento Grids</p>
-                    </div>
-                    <div class="bento-tile span-4">
-                        <h4>Philosophy</h4>
-                        <p style="color:#fff; font-weight:600;">Zero-bloat performance: Python builds it, plain JS/CSS run it.</p>
-                    </div>
-                    """ + _account_tile("GitHub") + """
-                """,
+        "bento": [
+        bento.tile('wide', '\n                        <h4>Engine</h4>\n                        <h2>Python</h2>\n                    '),
+        bento.tile('wide', '\n                        <h4>Style</h4>\n                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">Solid Matte & Bento Grids</p>\n                    '),
+        bento.tile('full', '\n                        <h4>Philosophy</h4>\n                        <p style="color:#fff; font-weight:600;">Zero-bloat performance: Python builds it, plain JS/CSS run it.</p>\n                    '),
+        _account_tile('GitHub', size='full'),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Where This Started</h4>
@@ -823,22 +755,14 @@ CATEGORIES = {
     "proj_chess": {
         "title": "CHESS CIRCUIT",
         "badge": "SCHOOL REPRESENTATIVE",
-        "bento": """
-                    <div class="bento-tile span-2">
-                        <h4>Accolade</h4>
-                        <h2>Best Player</h2>
-                        <p style="margin-top:auto;">Top board performance.</p>
-                    </div>
-                    <div class="bento-tile span-2">
-                        <h4>Format</h4>
-                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">In-School & External Circuits</p>
-                    </div>
-                    <div class="bento-tile span-4">
-                        <h4>Record</h4>
-                        <p style="color:#fff; font-weight:600;">Undefeated streak on Board 1 during regional school matches.</p>
-                    </div>
-                    """ + _account_tile("FIDE Profile") + _account_tile("Chess.com") + _account_tile("Lichess") + """
-                """,
+        "bento": [
+        bento.tile('wide', '\n                        <h4>Accolade</h4>\n                        <h2>Best Player</h2>\n                        <p style="margin-top:auto;">Top board performance.</p>\n                    '),
+        bento.tile('wide', '\n                        <h4>Format</h4>\n                        <p style="color:#fff; font-weight:600; font-size:1.1rem; margin-top:10px;">In-School & External Circuits</p>\n                    '),
+        bento.tile('full', '\n                        <h4>Record</h4>\n                        <p style="color:#fff; font-weight:600;">Undefeated streak on Board 1 during regional school matches.</p>\n                    '),
+        _account_tile('FIDE Profile', size='full'),
+        _account_tile('Chess.com', size='wide'),
+        _account_tile('Lichess', size='wide'),
+    ],
         "content": """
                     <div class="content-block">
                         <h4>Competitive Milestones</h4>

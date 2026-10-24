@@ -65,7 +65,7 @@
     // relatedTarget check so moving between nested children of the same
     // card doesn't retrigger the sound.
     const HOVER_SOUND_SELECTOR = ".pro-card, .standard-card, .highlight-card, .connect-card, .nav-tab, .reveal-tile, .bento-tile-link";
-    const CLICK_SOUND_SELECTOR = HOVER_SOUND_SELECTOR + ", .interactive-btn, .card-action-btn, .filter-tab, .carousel-nav";
+    const CLICK_SOUND_SELECTOR = HOVER_SOUND_SELECTOR + ", .interactive-btn, .card-action-btn, .filter-tab";
 
     document.addEventListener("mouseover", (e) => {
         const el = e.target.closest(HOVER_SOUND_SELECTOR);
@@ -165,148 +165,181 @@
         });
     });
 
-    // ---------- Connect section: filterable auto-rotating carousel ----------
+    // ---------- Connect section: filterable infinite carousel ----------
     const connectTrack = document.querySelector(".connect-track");
-    const connectCards = document.querySelectorAll(".connect-card");
-    const filterTabs = document.querySelectorAll(".filter-tab");
-    const prevBtn = document.querySelector(".carousel-prev");
-    const nextBtn = document.querySelector(".carousel-next");
-
-    let carouselInterval = null;
-    let isPaused = false;
+    const connectSection = document.querySelector(".connect-section");
+    const connectCards = Array.from(document.querySelectorAll(".connect-card"));
+    const filterTabs = Array.from(document.querySelectorAll(".filter-tab"));
     const CAROUSEL_DELAY = 4000;
+    let carouselInterval = null;
+    let matchingCards = connectCards;
+    let trackCards = [];
+    let currentIndex = 0;
+    let resizeTimer = null;
+    let dragStart = null;
+    let dragged = false;
 
-    function visibleCards() {
-        return Array.from(connectCards).filter((c) => !c.classList.contains("hidden"));
+    function isAnyModalOpen() {
+        return Boolean(
+            document.getElementById("detail-view")?.classList.contains("modal-open") ||
+            document.getElementById("lightbox")?.classList.contains("lightbox-open") ||
+            document.getElementById("search-modal")?.classList.contains("search-open") ||
+            document.getElementById("shortcuts-modal")?.style.display === "flex"
+        );
     }
 
-    function snapIndex() {
-        if (!connectTrack) return 0;
-        const items = visibleCards();
-        if (!items.length) return 0;
-        const containerCenter = connectTrack.scrollLeft + connectTrack.clientWidth / 2;
-        let best = items[0];
-        let bestDist = Math.abs(items[0].offsetLeft + items[0].offsetWidth / 2 - containerCenter);
-        for (const item of items) {
-            const d = Math.abs(item.offsetLeft + item.offsetWidth / 2 - containerCenter);
-            if (d < bestDist) { best = item; bestDist = d; }
+    function centerCard(index, withoutTransition = false) {
+        if (!connectTrack || !trackCards[index]) return;
+        const card = trackCards[index];
+        currentIndex = index;
+        trackCards.forEach((item, i) => item.classList.toggle("active", i === index));
+        if (withoutTransition) connectTrack.style.transition = "none";
+        const x = window.innerWidth / 2 - (card.offsetLeft + card.offsetWidth / 2);
+        connectTrack.style.transform = `translateX(${x}px)`;
+        if (withoutTransition) {
+            void connectTrack.offsetHeight;
+            connectTrack.style.transition = "";
         }
-        return items.indexOf(best);
     }
 
-    function updateActiveCard() {
-        const idx = snapIndex();
-        connectCards.forEach((c) => c.classList.remove("active"));
-        const items = visibleCards();
-        if (items[idx]) items[idx].classList.add("active");
-        updateNavButtons();
+    function cloneCard(card) {
+        const clone = card.cloneNode(true);
+        clone.classList.remove("active");
+        clone.setAttribute("aria-hidden", "true");
+        clone.tabIndex = -1;
+        clone.querySelectorAll("a, button, input, select, textarea, [tabindex]").forEach((item) => {
+            item.tabIndex = -1;
+        });
+        return clone;
     }
 
-    function updateNavButtons() {
-        if (!connectTrack || !prevBtn || !nextBtn) return;
-        const atStart = connectTrack.scrollLeft <= 2;
-        const maxScroll = connectTrack.scrollWidth - connectTrack.clientWidth;
-        const atEnd = connectTrack.scrollLeft >= maxScroll - 2;
-        prevBtn.disabled = atStart;
-        nextBtn.disabled = atEnd;
+    function rebuildCarousel(category) {
+        if (!connectTrack) return;
+        matchingCards = connectCards.filter((card) =>
+            category === "all" || card.getAttribute("data-category") === category
+        );
+        const fragment = document.createDocumentFragment();
+        if (matchingCards.length > 1) {
+            matchingCards.forEach((card) => fragment.appendChild(cloneCard(card)));
+            matchingCards.forEach((card) => fragment.appendChild(card));
+            matchingCards.forEach((card) => fragment.appendChild(cloneCard(card)));
+            currentIndex = matchingCards.length;
+        } else {
+            matchingCards.forEach((card) => fragment.appendChild(card));
+            currentIndex = 0;
+        }
+        connectTrack.replaceChildren(fragment);
+        trackCards = Array.from(connectTrack.querySelectorAll(".connect-card"));
+        centerCard(currentIndex, true);
     }
 
-    function scrollByCard(delta) {
-        const items = visibleCards();
-        if (!items.length) return;
-        const current = snapIndex();
-        let target = current + delta;
-        if (target < 0) target = 0;
-        if (target >= items.length) target = items.length - 1;
-        const targetEl = items[target];
-        if (!targetEl) return;
-        hapticTick();
-        connectTrack.scrollLeft = targetEl.offsetLeft - connectTrack.clientWidth / 2 + targetEl.offsetWidth / 2;
-        updateActiveCard();
+    function normalizeLoopIndex() {
+        if (matchingCards.length < 2) return;
+        const middleStart = matchingCards.length;
+        const middleEnd = middleStart * 2 - 1;
+        if (currentIndex < middleStart) {
+            centerCard(currentIndex + matchingCards.length, true);
+        } else if (currentIndex > middleEnd) {
+            centerCard(currentIndex - matchingCards.length, true);
+        }
     }
 
-    if (prevBtn) prevBtn.addEventListener("click", () => scrollByCard(-1));
-    if (nextBtn) nextBtn.addEventListener("click", () => scrollByCard(1));
+    function stepCarousel(delta, manual = true) {
+        if (!connectTrack || matchingCards.length < 2) return;
+        if (manual) hapticTick();
+        centerCard(currentIndex + delta);
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) normalizeLoopIndex();
+        if (manual) resetCarouselTimer();
+    }
 
     function startCarousel() {
-        if (!connectTrack || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        stopCarousel();
+        if (carouselInterval) clearInterval(carouselInterval);
         carouselInterval = setInterval(() => {
-            if (isPaused) return;
-            const items = visibleCards();
-            if (!items.length) return;
-            const current = snapIndex();
-            const target = (current + 1) % items.length;
-            const targetEl = items[target];
-            connectTrack.scrollLeft = targetEl.offsetLeft - connectTrack.clientWidth / 2 + targetEl.offsetWidth / 2;
-            updateActiveCard();
+            if (
+                document.hidden ||
+                isAnyModalOpen() ||
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+                connectTrack?.matches(":hover")
+            ) return;
+            stepCarousel(1, false);
         }, CAROUSEL_DELAY);
     }
 
-    function stopCarousel() {
-        if (carouselInterval) clearInterval(carouselInterval);
-        carouselInterval = null;
+    function resetCarouselTimer() {
+        startCarousel();
     }
 
-    // Pause auto-rotation on hover / while any modal is open.
     if (connectTrack) {
-        connectTrack.addEventListener("mouseenter", () => { isPaused = true; });
-        connectTrack.addEventListener("mouseleave", () => { isPaused = false; });
+        connectTrack.addEventListener("transitionend", (event) => {
+            if (event.target === connectTrack && event.propertyName === "transform") normalizeLoopIndex();
+        });
+        connectTrack.addEventListener("pointerdown", (event) => {
+            dragStart = { x: event.clientX, y: event.clientY };
+            dragged = false;
+        });
+        connectTrack.addEventListener("pointerup", (event) => {
+            if (!dragStart) return;
+            const deltaX = event.clientX - dragStart.x;
+            const deltaY = event.clientY - dragStart.y;
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY)) {
+                dragged = true;
+                stepCarousel(deltaX < 0 ? 1 : -1);
+                setTimeout(() => { dragged = false; }, 0);
+            }
+            dragStart = null;
+        });
+        connectTrack.addEventListener("pointercancel", () => { dragStart = null; });
+        connectTrack.addEventListener("click", (event) => {
+            if (!dragged) return;
+            event.preventDefault();
+            event.stopPropagation();
+            dragged = false;
+        });
     }
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            const detail = document.getElementById("detail-view");
-            const lightboxOpen = lightbox && lightbox.classList.contains("lightbox-open");
-            const searchOpen = document.getElementById("search-modal")?.classList.contains("search-open");
-            const shortcutsOpen = document.getElementById("shortcuts-modal")?.style.display === "flex";
-            if (detail && detail.classList.contains("modal-open")) isPaused = true;
-            else if (lightboxOpen || searchOpen || shortcutsOpen) isPaused = true;
-            else isPaused = false;
-        }
-    });
 
-    // Category filter: show/hide cards, reset scroll, re-snap active card.
     filterTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
             hapticTick();
             const category = tab.getAttribute("data-category");
-            filterTabs.forEach((t) => {
-                t.classList.remove("active");
-                t.setAttribute("aria-pressed", "false");
+            filterTabs.forEach((item) => {
+                item.classList.remove("active");
+                item.setAttribute("aria-pressed", "false");
             });
             tab.classList.add("active");
             tab.setAttribute("aria-pressed", "true");
-
-            connectCards.forEach((card) => {
-                const match = category === "all" || card.getAttribute("data-category") === category;
-                card.classList.toggle("hidden", !match);
-            });
-            connectTrack.scrollLeft = 0;
-            stopCarousel();
-            startCarousel();
-            updateActiveCard();
+            rebuildCarousel(category);
+            resetCarouselTimer();
         });
-        // Arrow-key navigation between filter tabs.
-        tab.addEventListener("keydown", (e) => {
-            if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-            e.preventDefault();
-            const tabs = Array.from(filterTabs);
-            const i = tabs.indexOf(tab);
-            const next = e.key === "ArrowRight" ? (i + 1) % tabs.length : (i - 1 + tabs.length) % tabs.length;
-            tabs[next].focus();
-            tabs[next].click();
+        tab.addEventListener("keydown", (event) => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            const index = filterTabs.indexOf(tab);
+            const next = event.key === "ArrowRight"
+                ? (index + 1) % filterTabs.length
+                : (index - 1 + filterTabs.length) % filterTabs.length;
+            filterTabs[next].focus();
+            filterTabs[next].click();
         });
     });
 
-    connectTrack.addEventListener("scroll", () => {
-        clearTimeout(window._connectScrollTimer);
-        window._connectScrollTimer = setTimeout(updateActiveCard, 120);
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        if (event.defaultPrevented || event.target.closest?.(".filter-tab")) return;
+        if (!document.querySelector('.nav-tab.active[data-target="tab-overview"]')) return;
+        if (isAnyModalOpen() || /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName || "")) return;
+        const bounds = connectSection?.getBoundingClientRect();
+        if (!bounds || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+        event.preventDefault();
+        stepCarousel(event.key === "ArrowRight" ? 1 : -1);
     });
 
-    // Kick off once the DOM is ready.
+    window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => centerCard(currentIndex, true), 120);
+    });
+
     if (connectTrack) {
-        updateNavButtons();
-        updateActiveCard();
+        rebuildCarousel("all");
         startCarousel();
     }
 

@@ -12,11 +12,13 @@ Usage:
 """
 import hashlib
 import json
+import copy
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 import content
+import bento
 
 ROOT = Path(__file__).parent
 TEMPLATES_DIR = ROOT / "templates"
@@ -40,7 +42,11 @@ def build() -> None:
     # Categories are consumed by main.js at runtime to fill in the detail
     # modal. Escape "</" so a literal "</script>" inside any content string
     # can't break out of the embedding <script> tag.
-    categories_json = json.dumps(content.CATEGORIES).replace("</", "<\\/")
+    categories = copy.deepcopy(content.CATEGORIES)
+    for name, category in categories.items():
+        bento.validate(name, category["bento"])
+        category["bento"] = bento.render(category["bento"])
+    categories_json = json.dumps(categories).replace("</", "<\\/")
 
     # A content hash appended as a query string (assets/style.css?v=abcd1234)
     # forces browsers/CDNs to fetch the new file the moment it actually
@@ -53,6 +59,7 @@ def build() -> None:
         hero=content.HERO,
         specs=content.SPECS,
         connect_links=content.CONNECT_LINKS,
+        connect_category_order=content.CONNECT_CATEGORY_ORDER,
         domain_cards=content.DOMAIN_CARDS,
         highlight_projects=content.HIGHLIGHT_PROJECTS,
         creative_archive=content.CREATIVE_ARCHIVE,

@@ -10,6 +10,46 @@
     let activeResultIndex = -1;
     let currentResults = [];
 
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+        })[character]);
+    }
+
+    function queryTerms(query) {
+        const seen = new Set();
+        return query.trim().split(/\s+/)
+            .filter((term) => {
+                const key = term.toLowerCase();
+                if (term.length < 2 || seen.has(key)) return false;
+                seen.add(key);
+                return true;
+            })
+            .sort((a, b) => b.length - a.length);
+    }
+
+    function escapeRegex(value) {
+        return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    }
+
+    function highlightMatches(value, terms) {
+        if (!terms.length) return escapeHtml(value);
+        const matcher = new RegExp(terms.map(escapeRegex).join("|"), "gi");
+        let output = "";
+        let lastIndex = 0;
+        let match;
+        while ((match = matcher.exec(value)) !== null) {
+            output += escapeHtml(value.slice(lastIndex, match.index));
+            output += '<mark class="search-hit">' + escapeHtml(match[0]) + "</mark>";
+            lastIndex = match.index + match[0].length;
+        }
+        return output + escapeHtml(value.slice(lastIndex));
+    }
+
     function stripHtml(html) {
         const div = document.createElement("div");
         div.innerHTML = html || "";
@@ -47,18 +87,20 @@
     }
 
     function runSearch(query) {
-        const q = query.trim().toLowerCase();
-        if (q.length < 2) return [];
+        const terms = queryTerms(query);
+        if (!terms.length) return [];
         if (!searchIndex) searchIndex = buildSearchIndex();
 
         const results = [];
-        for (const entry of searchIndex) {
+        for (const [index, entry] of searchIndex.entries()) {
             const lower = entry.plain.toLowerCase();
-            const idx = lower.indexOf(q);
-            if (idx === -1) continue;
+            const matchedTerms = terms.filter((term) => lower.includes(term.toLowerCase()));
+            if (!matchedTerms.length) continue;
+            const firstTermIndex = Math.min(...matchedTerms.map((term) => lower.indexOf(term.toLowerCase())));
+            const firstTerm = matchedTerms.find((term) => lower.indexOf(term.toLowerCase()) === firstTermIndex);
 
-            const start = Math.max(0, idx - 40);
-            const end = Math.min(entry.plain.length, idx + q.length + 70);
+            const start = Math.max(0, firstTermIndex - 40);
+            const end = Math.min(entry.plain.length, firstTermIndex + firstTerm.length + 70);
             let snippet = entry.plain.slice(start, end).trim();
             if (start > 0) snippet = "…" + snippet;
             if (end < entry.plain.length) snippet = snippet + "…";
@@ -67,10 +109,14 @@
                 id: entry.id,
                 title: entry.cardTitle || entry.title,
                 snippet: snippet || entry.blurb,
+                matchedTerms,
+                matchCount: matchedTerms.length,
+                index,
             });
-            if (results.length >= 8) break;
         }
-        return results;
+        return results
+            .sort((a, b) => b.matchCount - a.matchCount || a.index - b.index)
+            .slice(0, 8);
     }
 
     function renderResults(results, query) {
@@ -84,16 +130,16 @@
             return;
         }
         if (!results.length) {
-            container.innerHTML = '<p class="search-empty">No matches for "' + query.replace(/</g, "&lt;") + '".</p>';
+            container.innerHTML = '<p class="search-empty">No matches for "' + escapeHtml(query) + '".</p>';
             return;
         }
 
         container.innerHTML = results
             .map(
                 (r, i) =>
-                    '<button type="button" class="search-result-row' + (i === 0 ? " active" : "") + '" data-result-id="' + r.id + '">' +
-                    '<span class="search-result-title">' + r.title + "</span>" +
-                    '<span class="search-result-snippet">' + r.snippet + "</span>" +
+                    '<button type="button" class="search-result-row' + (i === 0 ? " active" : "") + '" data-result-id="' + escapeHtml(r.id) + '">' +
+                    '<span class="search-result-title">' + highlightMatches(r.title, r.matchedTerms) + "</span>" +
+                    '<span class="search-result-snippet">' + highlightMatches(r.snippet, r.matchedTerms) + "</span>" +
                     "</button>"
             )
             .join("");
