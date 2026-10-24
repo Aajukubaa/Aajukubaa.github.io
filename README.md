@@ -58,6 +58,15 @@ You can watch it run under the **Actions** tab of your repo.
    step on their end unless the Action above is set up, so without it
    you do need to run `build.py` and commit the result yourself.
 
+## Bento tile layouts
+
+Category bento grids are defined in `content.py` with `bento.tile(...)`.
+The sizes are `sm` (1×1), `wide` (2×1), `tall` (1×2), `big` (2×2), and
+`full` (4×1) on desktop; at two columns, `full` spans both columns, and at
+one column all tiles become 1×1. `build.py` validates every category at
+four and two columns and reports an occupancy map if a layout contains
+holes.
+
 ## Uploading this via GitHub's web interface (no git required)
 
 If you're using "Add file → Upload files" in the browser rather than git,

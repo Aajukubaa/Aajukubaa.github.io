@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>{{ site.title }}</title>
 
     <meta name="description" content="{{ site.description }}" />
@@ -34,9 +34,9 @@
 
     <nav class="top-nav-container">
         {% for tab in nav_tabs %}
-        <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}">{{ tab.label }}</button>
+        <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}"><span class="nav-icon">{{ tab.icon|safe }}</span><span class="nav-label">{{ tab.label }}</span></button>
         {% endfor %}
-        <button class="nav-tab search-toggle" id="search-toggle" aria-label="Search (Ctrl+K)" title="Search (Ctrl+K)">🔍</button>
+        <button class="nav-tab search-toggle" id="search-toggle" aria-label="Search (Ctrl+K)" title="Search (Ctrl+K)"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span class="nav-label">Search</span></button>
     </nav>
 
     <div id="tab-overview" class="tab-content active-view">
@@ -70,7 +70,7 @@
         </section>
 
         <section class="connect-section">
-            <div style="max-width: 1300px; margin: 0 auto 30px auto; padding: 0 10px;">
+            <div class="connect-heading">
                 <h2 class="section-header-title">Connect with <span class="kabir-cursive">Kabir</span></h2>
                 <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
             </div>
@@ -82,20 +82,16 @@
                 {% endfor %}
             </div>
 
-            <!-- Auto-rotating carousel of profile cards -->
             <section class="connect-carousel" aria-label="Profiles carousel">
-                <button class="carousel-nav carousel-prev" aria-label="Previous profile">‹</button>
-                <div class="connect-track" role="region" aria-live="polite">
+                <div class="connect-track" role="region" tabindex="0" aria-label="Connect profile cards">
                     {% for link in connect_links %}
                     <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card" data-category="{{ link.category }}">
-                        <span class="card-pill">{{ link.category }}</span>
                         <div class="connect-icon">{{ link.icon }}</div>
-                        <div class="connect-details"><h4>{{ link.name }}</h4><p>{{ link.desc }}</p></div>
+                        <div class="connect-details"><h4>{{ link.name }}</h4><div class="connect-description"><div><p>{{ link.desc }}</p></div></div></div>
                         <div class="connect-arrow">↗</div>
                     </a>
                     {% endfor %}
                 </div>
-                <button class="carousel-nav carousel-next" aria-label="Next profile">›</button>
             </section>
         </section>
     </div>
