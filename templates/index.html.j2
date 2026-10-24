@@ -75,15 +75,28 @@
                 <p class="section-subtitle" style="margin-bottom: 25px;">Official profiles, channels, and direct contacts.</p>
             </div>
 
-            <div class="connect-grid">
-                {% for link in connect_links %}
-                <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card">
-                    <div class="connect-icon">{{ link.icon }}</div>
-                    <div class="connect-details"><h4>{{ link.name }}</h4><p>{{ link.desc }}</p></div>
-                    <div class="connect-arrow">↗</div>
-                </a>
+            <!-- Category filter tabs -->
+            <div class="connect-filters" role="tablist" aria-label="Filter profiles by category">
+                {% for key, label in connect_category_order %}
+                <button class="filter-tab{% if loop.first %} active{% endif %}" role="tab" aria-pressed="{% if loop.first %}true{% else %}false{% endif %}" data-category="{{ key }}">{{ label }}</button>
                 {% endfor %}
             </div>
+
+            <!-- Auto-rotating carousel of profile cards -->
+            <section class="connect-carousel" aria-label="Profiles carousel">
+                <button class="carousel-nav carousel-prev" aria-label="Previous profile">‹</button>
+                <div class="connect-track" role="region" aria-live="polite">
+                    {% for link in connect_links %}
+                    <a href="{{ link.url }}"{% if not link.url.startswith('mailto:') %} target="_blank"{% endif %} class="connect-card" data-category="{{ link.category }}">
+                        <span class="card-pill">{{ link.category }}</span>
+                        <div class="connect-icon">{{ link.icon }}</div>
+                        <div class="connect-details"><h4>{{ link.name }}</h4><p>{{ link.desc }}</p></div>
+                        <div class="connect-arrow">↗</div>
+                    </a>
+                    {% endfor %}
+                </div>
+                <button class="carousel-nav carousel-next" aria-label="Next profile">›</button>
+            </section>
         </section>
     </div>
 

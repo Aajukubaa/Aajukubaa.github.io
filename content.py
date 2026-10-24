@@ -42,28 +42,42 @@ SPECS = [
 ]
 
 CONNECT_LINKS = [
+    # Chess category
     {"icon": "♟️", "name": "FIDE Profile", "desc": "Official 1545 tournament records",
-     "url": "http://ratings.fide.com/profile/498777"},
+     "url": "http://ratings.fide.com/profile/498777", "category": "chess"},
     {"icon": "♘", "name": "Chess.com", "desc": "Blitz & rapid online matches",
-     "url": "https://www.chess.com/member/aajukubaa"},
+     "url": "https://www.chess.com/member/aajukubaa", "category": "chess"},
     {"icon": "♞", "name": "Lichess", "desc": "Bullet & puzzle training",
-     "url": "https://lichess.org/@/onesandzeros"},
+     "url": "https://lichess.org/@/onesandzeros", "category": "chess"},
+    # Coding/Tech category
     {"icon": "💻", "name": "GitHub", "desc": "Python repositories & micro-apps",
-     "url": "https://github.com/aajukubaa"},
+     "url": "https://github.com/aajukubaa", "category": "coding"},
     {"icon": "⚡", "name": "Replit", "desc": "Live Python code execution",
-     "url": "https://replit.com/@Aajukubaa"},
+     "url": "https://replit.com/@Aajukubaa", "category": "coding"},
+    # Music/Sports category
     {"icon": "▶️", "name": "YouTube", "desc": "Video edits & athletic highlights",
-     "url": "https://www.youtube.com/@Aajukubaa"},
+     "url": "https://www.youtube.com/@Aajukubaa", "category": "music-sports"},
+    # Socials category
     {"icon": "✍️", "name": "Medium", "desc": "Articles and analytical logs",
-     "url": "https://aajukubaa.medium.com/"},
+     "url": "https://aajukubaa.medium.com/", "category": "socials"},
     {"icon": "🦉", "name": "Duolingo", "desc": "Daily streak & language stats",
-     "url": "https://www.duolingo.com/profile/Aajukubaa"},
+     "url": "https://www.duolingo.com/profile/Aajukubaa", "category": "socials"},
     {"icon": "🏷️", "name": "Vinted", "desc": "Curated style storefront",
-     "url": "https://www.vinted.co.uk/member/284456392"},
+     "url": "https://www.vinted.co.uk/member/284456392", "category": "socials"},
     {"icon": "🏺", "name": "Pottery by RG", "desc": "Handmade ceramic works",
-     "url": "https://www.etsy.com/uk/shop/PotterybyRG"},
+     "url": "https://www.etsy.com/uk/shop/PotterybyRG", "category": "socials"},
     {"icon": "✉️", "name": "Gmail", "desc": "kabirbhuchar@gmail.com",
-     "url": "mailto:kabirbhuchar@gmail.com"},
+     "url": "mailto:kabirbhuchar@gmail.com", "category": "socials"},
+]
+
+# Order + display labels for the connect-section category filter tabs.
+# "All" shows every link regardless of category.
+CONNECT_CATEGORY_ORDER = [
+    ("all", "All"),
+    ("chess", "Chess"),
+    ("coding", "Coding/Tech"),
+    ("music-sports", "Music/Sports"),
+    ("socials", "Socials"),
 ]
 
 # "category" ties a card to its full-screen detail view in CATEGORIES below.

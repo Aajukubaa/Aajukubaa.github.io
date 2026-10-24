@@ -479,6 +479,7 @@ body.modal-active {
 }
 .highlight-card .media-placeholder { height: 200px; margin: 0; }
 
+/* Connect section — filterable, auto-rotating carousel of profile cards */
 .connect-section {
     padding: 70px 5vw;
     background: transparent;
@@ -487,47 +488,169 @@ body.modal-active {
     z-index: 1;
 }
 
-.connect-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
+.connect-filters {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+}
+.connect-filters::-webkit-scrollbar { display: none; }
+
+.filter-tab {
+    background: #121215;
+    border: 2px solid #28282d;
+    color: #86868b;
+    padding: 10px 20px;
+    border-radius: 980px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.filter-tab:hover { border-color: #666670; color: #ffffff; }
+.filter-tab.active {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* Carousel wrapper + track */
+.connect-carousel {
+    position: relative;
     max-width: 1300px;
     margin: 0 auto;
+    padding: 0 60px; /* room for prev/next arrows */
 }
+.connect-track {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 10px 0;
+}
+.connect-track::-webkit-scrollbar { display: none; }
 
 .connect-card {
     display: flex;
     align-items: center;
+    gap: 14px;
     background: #121215;
     border: 2px solid #28282d;
-    border-radius: 20px;
-    padding: 18px 22px;
+    border-radius: 28px;
+    padding: 18px 24px;
     text-decoration: none;
     color: #ffffff;
-    transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    flex: 0 0 auto;
+    width: 290px;
+    min-width: 290px;
+    scroll-snap-align: center;
+    outline: none;
+    position: relative;
+    overflow: hidden;
 }
 .connect-card:hover {
+    border-color: #666670;
     background: #1a1a1e;
-    border-color: #ffffff;
     transform: translateY(-4px);
 }
-
-.connect-icon {
-    font-size: 1.5rem;
-    margin-right: 16px;
-    width: 44px; height: 44px;
-    display: flex; align-items: center; justify-content: center;
-    background: #1e1e23;
-    border-radius: 12px;
-    flex-shrink: 0;
+.connect-card.active {
+    border-color: #ffffff;
+    background: #1a1a1e;
+    transform: scale(1.05);
+    z-index: 2;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
 }
 
-.connect-details { flex-grow: 1; }
-.connect-details h4 { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px 0; }
-.connect-details p { margin: 0; color: #86868b; font-size: 0.8rem; }
+/* Category pill inside each card */
+.connect-card .card-pill {
+    align-self: flex-start;
+    padding: 5px 12px;
+    background: #222226;
+    border-radius: 980px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #86868b;
+}
+.connect-card.active .card-pill { color: #ffffff; background: #333338; }
 
-.connect-arrow { font-size: 1.1rem; color: #86868b; transition: color 0.2s, transform 0.2s; }
+.connect-icon {
+    font-size: 1.7rem;
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    background: #1e1e23;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+.connect-card.active .connect-icon { background: #ffffff; color: #000000; }
+
+.connect-details { flex-grow: 1; }
+.connect-details h4 { font-size: 1.1rem; font-weight: 700; margin: 0 0 2px 0; color: #ffffff; }
+.connect-details p { margin: 0; color: #86868b; font-size: 0.82rem; line-height: 1.4; }
+
+.connect-arrow {
+    font-size: 1.1rem;
+    color: #86868b;
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+}
 .connect-card:hover .connect-arrow { color: #ffffff; transform: translateX(3px); }
+.connect-card.active .connect-arrow { color: #ffffff; }
+
+/* Hidden state (used by category filter) */
+.connect-track .hidden { display: none !important; }
+
+/* Prev / Next arrows */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e1e23;
+    border: 2px solid #38383e;
+    color: #ffffff;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    z-index: 3;
+}
+.carousel-nav:hover { background: #2e2e34; border-color: #666670; }
+.carousel-nav:disabled { opacity: 0.4; cursor: default; border-color: #28282d; }
+.carousel-prev { left: 0; }
+.carousel-next { right: 0; }
+
+/* Hide arrows when there isn't enough content to scroll */
+.connect-carousel .carousel-nav { display: flex; }
+@media (max-width: 700px) {
+    .connect-card { width: 250px; min-width: 250px; padding: 16px 20px; }
+    .connect-carousel { padding: 0 50px; }
+}
+@media (max-width: 500px) {
+    .connect-card { width: 220px; min-width: 220px; padding: 14px 18px; }
+    .connect-carousel { padding: 0 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .connect-track { scroll-behavior: auto; }
+    .connect-card { transition: none; }
+    .filter-tab.active { transform: none; }
+}
+
+/* Preserve existing connect-grid rule removal — the old .connect-grid
+   declaration block is replaced above; nothing else references it. */
 
 /* Goal Progress Bars */
 .goal-bar-card {
