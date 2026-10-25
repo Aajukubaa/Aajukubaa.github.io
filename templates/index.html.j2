@@ -38,8 +38,35 @@
         {% for tab in nav_tabs %}
         <button class="nav-tab{% if loop.first %} active{% endif %}" data-target="{{ tab.id }}"><span class="nav-icon">{{ tab.icon|safe }}</span><span class="nav-label">{{ tab.label }}</span></button>
         {% endfor %}
-        <button class="nav-tab search-toggle" id="search-toggle" aria-label="Search (Ctrl+K)" title="Search (Ctrl+K)"><span class="nav-icon"><svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span class="nav-label">Search</span></button>
     </nav>
+
+    <button id="assistant-launcher" class="assistant-launcher" type="button" aria-label="{{ assistant.launcher_label }}" title="{{ assistant.launcher_label }}">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-5.5A7.5 7.5 0 1 1 20 11.5Z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></svg>
+        <span class="assistant-launcher-label">{{ assistant.launcher_label }}</span>
+    </button>
+    <section id="assistant-panel" class="assistant-panel" role="dialog" aria-modal="false" aria-labelledby="assistant-title" aria-hidden="true">
+        <header class="assistant-header">
+            <div class="assistant-avatar">{{ assistant.avatar }}</div>
+            <div class="assistant-heading">
+                <h2 id="assistant-title">{{ assistant.title }}</h2>
+                <span class="assistant-status">{{ assistant.status }}</span>
+            </div>
+            <button type="button" id="assistant-close" class="assistant-close" aria-label="{{ assistant.close_label }}">×</button>
+        </header>
+        <div id="assistant-messages" class="assistant-messages" aria-live="polite">
+            <div class="assistant-message assistant-message-assistant">{{ assistant.greeting }}</div>
+        </div>
+        <div class="assistant-suggestions" role="group" aria-label="{{ assistant.suggestions_label }}">
+            {% for suggestion in assistant.suggestions %}
+            <button type="button" class="assistant-suggestion" data-assistant-suggestion="{{ suggestion }}">{{ suggestion }}</button>
+            {% endfor %}
+        </div>
+        <form id="assistant-form" class="assistant-form">
+            <input id="assistant-input" type="text" aria-label="{{ assistant.input_label }}" placeholder="{{ assistant.input_placeholder }}" autocomplete="off">
+            <button type="submit" class="assistant-send" aria-label="{{ assistant.send_label }}">{{ assistant.send_label }}</button>
+        </form>
+        <p class="assistant-disclaimer">{{ assistant.disclaimer }}</p>
+    </section>
 
     <div id="tab-overview" class="tab-content active-view">
         <main class="hero-container">
@@ -180,6 +207,37 @@
         </section>
     </div>
 
+    <div id="tab-search" class="tab-content">
+        <main class="search-page section-container"
+            data-status-empty="{{ search.status_empty }}"
+            data-status-minimum="{{ search.status_minimum }}"
+            data-status-results-one="{{ search.status_results_one }}"
+            data-status-results-many="{{ search.status_results_many }}"
+            data-status-no-results="{{ search.status_no_results }}">
+            <header class="search-page-header">
+                <h1>{{ search.title }}</h1>
+                <p>{{ search.subtitle }}</p>
+            </header>
+            <div class="search-page-input-wrap">
+                <svg class="search-page-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+                <input id="search-input" type="search" aria-label="{{ search.title }}" placeholder="{{ search.placeholder }}" autocomplete="off" spellcheck="false">
+                <button id="search-clear" class="search-clear" type="button" aria-label="{{ search.clear_label }}" hidden><span aria-hidden="true">✕</span></button>
+            </div>
+            <p id="search-status" aria-live="polite">{{ search.status_empty }}</p>
+            <div id="search-suggestions" class="search-suggestions" role="group" aria-label="{{ search.suggestions_label }}">
+                {% for suggestion in search.suggestions %}
+                <button type="button" class="search-suggestion" data-search-suggestion="{{ suggestion }}">{{ suggestion }}</button>
+                {% endfor %}
+            </div>
+            <div id="search-results" class="search-result-groups"></div>
+            <p class="search-keyboard-hint">{{ search.keyboard_hint }}</p>
+            <aside class="search-assistant-card">
+                <p>{{ search.assistant_prompt }}</p>
+                <button type="button" id="search-assistant-cta" class="interactive-btn">{{ search.assistant_button }}</button>
+            </aside>
+        </main>
+    </div>
+
     <div id="detail-view">
         <div class="bento-hero">
             <div class="bento-header-wrapper">
@@ -203,21 +261,9 @@
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Domains</span><span><kbd class="kbd">2</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Projects</span><span><kbd class="kbd">3</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Switch to Archive</span><span><kbd class="kbd">4</kbd></span></div>
-            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search the Site</span><span><kbd class="kbd">Ctrl</kbd> <kbd class="kbd">K</kbd></span></div>
+            <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Search</span><span><kbd class="kbd">5</kbd> <kbd class="kbd">Ctrl</kbd> <kbd class="kbd">K</kbd></span></div>
             <div class="shortcut-row" style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:2px solid #222226; font-size:0.95rem;"><span>Close Modal / Overlay</span><span><kbd class="kbd">Esc</kbd></span></div>
             <button class="interactive-btn" style="width:100%; margin-top:20px;" data-action="close-shortcuts">Got It</button>
-        </div>
-    </div>
-
-    <div id="search-modal" data-action="close-search">
-        <div class="search-box">
-            <div class="search-input-row">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" class="search-input" placeholder="Search the site…" autocomplete="off" spellcheck="false">
-                <button class="search-close" data-action="close-search" aria-label="Close search">✕</button>
-            </div>
-            <div id="search-results" class="search-results"></div>
-            <p class="search-hint">↑↓ to navigate · Enter to open · Esc to close</p>
         </div>
     </div>
 
@@ -230,8 +276,10 @@
     </div>
 
     <script type="application/json" id="categories-data">{{ categories_json | safe }}</script>
+    <script type="application/json" id="assistant-data">{{ assistant_json | safe }}</script>
     <script src="assets/main.js?v={{ asset_versions['main.js'] }}"></script>
     <script src="assets/chess-dashboard.js?v={{ asset_versions['chess-dashboard.js'] }}"></script>
+    <script src="assets/assistant.js?v={{ asset_versions['assistant.js'] }}"></script>
     <script src="assets/search.js?v={{ asset_versions['search.js'] }}"></script>
 
     <footer class="site-footer">
