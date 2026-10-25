@@ -4,6 +4,7 @@
     const BLOCK_SELECTOR = "h1, h2, h3, h4, h5, p, li, figcaption, blockquote";
     const SEARCH_EXCLUSIONS = ".connect-carousel, #tab-search, [aria-hidden='true'], .chess-dashboard-loading, script, style";
     const searchInput = document.getElementById("search-input");
+    const searchClearButton = document.getElementById("search-clear");
     const searchView = document.querySelector("#tab-search .search-page");
     const searchStatus = document.getElementById("search-status");
     const suggestions = document.getElementById("search-suggestions");
@@ -235,6 +236,7 @@
         if (!searchInput || !searchStatus || !suggestions || !resultsContainer || !searchView) return;
         const value = String(query || "").trim();
         const data = runSearch(value);
+        if (searchClearButton) searchClearButton.hidden = !searchInput.value;
         const previousActiveIndex = activeResultIndex;
         const preserveActiveIndex = value === lastRenderedQuery;
         currentResults = data.groups.flatMap((group) => group.results);
@@ -382,6 +384,7 @@
 
     if (searchInput) {
         searchInput.addEventListener("input", () => {
+            if (searchClearButton) searchClearButton.hidden = !searchInput.value;
             window.clearTimeout(debounceTimer);
             debounceTimer = window.setTimeout(() => renderSearch(searchInput.value), 120);
         });
@@ -404,6 +407,14 @@
             }
         });
     }
+
+    searchClearButton?.addEventListener("click", () => {
+        if (!searchInput) return;
+        window.clearTimeout(debounceTimer);
+        searchInput.value = "";
+        renderSearch("");
+        searchInput.focus();
+    });
 
     if (suggestions) {
         suggestions.addEventListener("click", (event) => {

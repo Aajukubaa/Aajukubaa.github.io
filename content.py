@@ -43,6 +43,7 @@ SEARCH = {
     "title": "Search",
     "subtitle": "Find anything across Kabir's chess, basketball, coding and music pages.",
     "placeholder": "Search the site…",
+    "clear_label": "Clear search",
     "suggestions": ["Suzuki", "Mediterranean Cup", "Python", "1.e4", "FIDE", "Strings Ensemble"],
     "suggestions_label": "Suggested searches",
     "status_empty": "Type at least 2 characters, or choose a suggestion.",

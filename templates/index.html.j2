@@ -221,6 +221,7 @@
             <div class="search-page-input-wrap">
                 <svg class="search-page-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
                 <input id="search-input" type="search" aria-label="{{ search.title }}" placeholder="{{ search.placeholder }}" autocomplete="off" spellcheck="false">
+                <button id="search-clear" class="search-clear" type="button" aria-label="{{ search.clear_label }}" hidden><span aria-hidden="true">✕</span></button>
             </div>
             <p id="search-status" aria-live="polite">{{ search.status_empty }}</p>
             <div id="search-suggestions" class="search-suggestions" role="group" aria-label="{{ search.suggestions_label }}">
